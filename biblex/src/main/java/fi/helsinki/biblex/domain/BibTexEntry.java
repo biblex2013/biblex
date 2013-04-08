@@ -1,5 +1,6 @@
 package fi.helsinki.biblex.domain;
 
+import java.util.Iterator;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -8,7 +9,7 @@ import java.util.TreeMap;
  *
  * @author rodde
  */
-public class BibTexEntry {
+public class BibTexEntry implements Iterable<Map.Entry<String,String>> {
     private String name;
     private BibTexStyle style;
     private Map<String, String> m;
@@ -29,6 +30,14 @@ public class BibTexEntry {
         // TreeMap guarantees lexicographic order of fields while iterating
         // over the fields.
         m = new TreeMap<String, String>();
+    }
+
+    public BibTexEntry(String name, String style) {
+        this(name, BibTexStyle.valueOf(style.toUpperCase()));
+    }
+
+    public Iterator<Map.Entry<String,String>> iterator() {
+        return m.entrySet().iterator();
     }
 
     public String put(String fieldName, String value) {
@@ -71,7 +80,7 @@ public class BibTexEntry {
 
         sb.append(name);
 
-        for (Map.Entry<String, String> e : m.entrySet()) {
+        for (Map.Entry<String, String> e : this) {
             sb.append(",\n");
             sb.append(intro);
             sb.append(e.getKey());
