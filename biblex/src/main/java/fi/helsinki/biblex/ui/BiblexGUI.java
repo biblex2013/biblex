@@ -24,7 +24,7 @@ public class BiblexGUI {
     private JScrollPane p_scrollPane;
     private JMenuBar p_menu;
 
-    private JComboBox<BibTexStyle> p_entryStyleInput;
+    private JComboBox p_entryStyleInput;
     private JTextField p_entryNameInput;
     private JTextField p_fieldNameInput;
 
@@ -64,7 +64,7 @@ public class BiblexGUI {
         p_window.setJMenuBar(p_menu);
 
         JPanel topPane = new JPanel();
-        p_entryStyleInput = new JComboBox<BibTexStyle>();
+        p_entryStyleInput = new JComboBox();
         p_entryNameInput = new JTextField();
 
         topPane.setLayout(new BoxLayout(topPane, BoxLayout.X_AXIS));
