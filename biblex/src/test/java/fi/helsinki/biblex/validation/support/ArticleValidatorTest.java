@@ -67,18 +67,19 @@ public class ArticleValidatorTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void testNullField() {
-        v.isValid(null, "value");
+        v.validateAndGetErrorMessage(null, "value");
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testNullValue() {
-        v.isValid("author", null);
+        v.validateAndGetErrorMessage("author", null);
     }
 
     @Test
     public void testValidation() {
-        assertTrue(v.isValid("author", "Thor"));
-        assertTrue(v.isValid("volume", "I"));
-        assertFalse(v.isValid("epic", "fail"));
+        assertNull(v.validateAndGetErrorMessage("author", "Thor"));
+        assertNull(v.validateAndGetErrorMessage("volume", "I"));
+        assertNotNull(v.validateAndGetErrorMessage("epic", "fail"));
+        assertNotNull(v.validateAndGetErrorMessage("author", ""));
     }
 }

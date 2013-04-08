@@ -27,13 +27,15 @@ public class ValidationService {
                               String fieldName,
                               String value) throws ValidationException {
         if (!m.containsKey(style)) {
-            throw new ValidationException("Reference type unknown: " + style);
+            throw new ValidationException("Reference style unknown: " + style);
         }
 
-        if (!m.get(style).isValid(fieldName, value)) {
-            throw new ValidationException(
-                    "Reference type '" + style + "' did not accept '"
-                    + value + "' on field '" + fieldName + "'.");
+        String errorMsg = m.get(style).validateAndGetErrorMessage(fieldName, value);
+
+        if (errorMsg != null) {
+            throw new ValidationException(errorMsg);
         }
+
+        // Once here, everything's fine.
     }
 }

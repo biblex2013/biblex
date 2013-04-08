@@ -32,13 +32,21 @@ public class InproceedingsValidator extends AbstractValidator {
         super(STYLE, REQUIRED_FIELDS, OPTIONAL_FIELDS);
     }
 
-    public boolean isValid(String fieldName, String value) {
+    public String validateAndGetErrorMessage(String fieldName, String value) {
         String s = fieldName; // Shortcut.
         checkArguments(s, value);
 
-        // Simply check whether the field is standard for style 'inproceedings';
+        if (super.getSetOfRequiredFields().contains(s) && value.isEmpty()) {
+            return "Field '" + s
+                    + "' is a required field, yet its value is empty.";
+        }
+
+        // Simply check whether the field is standard for style 'article';
         // ignore the value.
-        return super.getSetOfRequiredFields().contains(s)
-                || super.getSetOfOptionalFields().contains(s);
+        return (super.getSetOfRequiredFields().contains(s)
+                || super.getSetOfOptionalFields().contains(s)) ?
+                null :
+                "Reference style 'inproceedings' does not support field '"
+                + s + "'";
     }
 }

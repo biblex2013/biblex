@@ -23,7 +23,17 @@ public abstract class AbstractValidator {
         java.util.Collections.addAll(optionalFieldsSet, optionalFields);
     }
 
-    public abstract boolean isValid(String fieldName, String value);
+    /**
+     * Validates the <code>fieldName</code> and <code>value</code> against
+     * this target style.
+     *
+     * @param fieldName the name of a field (the key).
+     * @param value the value of a field.
+     * @return <code>null</code> if validation was successful, or an error
+     * message for <code>ValidationException</code>-object.
+     */
+    public abstract String validateAndGetErrorMessage(String fieldName,
+                                                      String value);
 
     public BibTexStyle getTargetStyle() {
         return targetStyle;
