@@ -2,17 +2,15 @@ package fi.helsinki.biblex.exporter;
 
 import fi.helsinki.biblex.domain.BibTexEntry;
 import fi.helsinki.biblex.domain.BibTexStyle;
-import fi.helsinki.biblex.storage.Storage;
 import fi.helsinki.biblex.storage.SQLiteStorage;
-import java.io.File;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import static org.junit.Assert.*;
+import fi.helsinki.biblex.storage.Storage;
+import java.io.*;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+import org.junit.*;
+
 
 /**
  *
@@ -32,7 +30,22 @@ public class ExportToFileTest {
     }
     
     @AfterClass
-    public static void tearDownClass() {
+    public static void tearDownClass() throws FileNotFoundException, IOException {
+        File file1 = new File("test1.txt");
+        File file2 = new File("test2.txt");
+        BufferedReader reader1 = new BufferedReader(new FileReader(file1));
+        BufferedReader reader2 = new BufferedReader(new FileReader(file2));
+        String read1 = "", read2 = "";
+        while(read1 != null && read2 != null) {
+            read1 = reader1.readLine();
+            read2 = reader2.readLine();
+            assertEquals(read1,read2);
+        }
+        
+        assertNull(read1);
+        assertNull(read2);
+        file1.delete();
+        file2.delete();
     }
     
     @Before
@@ -54,7 +67,7 @@ public class ExportToFileTest {
         entry2.put("title", "title2");
         entry2.put("booktitle", "booktitle2");
         entry2.put("year", "1900");
-        exporter = new ExportToFile();
+        exporter = new ExportToFile(stor);
         try {
             stor.add(entry1);
             stor.add(entry2);
@@ -66,27 +79,36 @@ public class ExportToFileTest {
     
     @After
     public void tearDown() {
-        File file = new File("test1.txt");
-        file.delete();
+ 
     }
 
     /**
      * Test of write method, of class ExportToFile.
      */
     @Test
-    public void testWrite_String_Storage() throws Exception {
+    public void testWrite_String() throws Exception {
         String filename = "test1.txt";
         
-        exporter.write(filename, stor);
+        exporter.write(filename);
+        
+        File file = new File("test1.txt");
+        
+        assertTrue(file.exists());
+        assertTrue(file.length() > 10);
 
-        fail("Test not implemented yet.");
     }
 
     /**
      * Test of write method, of class ExportToFile.
      */
     @Test
-    public void testWrite_File_Storage() {
-        fail("Test not implemented yet.");
+    public void testWrite_File() throws IOException {
+        File file = new File("test2.txt");
+        
+        exporter.write(file);
+        
+        assertTrue(file.exists());
+        assertTrue(file.length() > 10);
+        
     }
 }

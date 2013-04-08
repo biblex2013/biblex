@@ -12,18 +12,48 @@ import java.util.Iterator;
  *
  * @author jtmikkon
  */
-public class ExportToFile implements Exporter {
+public class ExportToFile extends Exporter {
 
-    private String endOfLine;
+    public enum OS {UNIX, WIN, MAC};
     
-    public ExportToFile() {
+    private String endOfLine;
+    private BufferedWriter outWriter;
+
+    
+    protected ExportToFile() {}
+    
+    public ExportToFile(Storage s) {
+        super(s);
         endOfLine = System.getProperty("line.separator");
     }
     
+    /*
+    public void setStorage(Storage s) {
+        storage = s;
+    }
+    */
+    
+    private BufferedWriter setOutWriter(File file) throws IOException {
+        return new BufferedWriter(new FileWriter(file));
+    }
+    
+    private BufferedWriter setOutWriter(String filename) throws IOException {
+        return new BufferedWriter(new FileWriter(filename));
+    }
+    
     @Override
-    public void write(String filename, Storage storage) throws IOException {
+    public void write(File file) throws IOException {
+        outWriter = setOutWriter(file);
+        writeToFile();
+    }
 
-        BufferedWriter outWriter = new BufferedWriter(new FileWriter(filename));
+    @Override
+    public void write(String filename) throws IOException {
+        outWriter = setOutWriter(filename);
+        writeToFile();
+    }
+    
+    private void writeToFile() throws IOException {
         Iterator<BibTexEntry> bibtexIterator = storage.iterator();
         
         while(bibtexIterator.hasNext()) {
@@ -32,10 +62,15 @@ public class ExportToFile implements Exporter {
         }
         outWriter.close();
     }
-
-    @Override
-    public void write(File file, Storage storage) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    
+    public void setNewLineFormat(OS os) {
+        if(os == OS.UNIX || os == OS.MAC) {
+            endOfLine = "\n";
+        }
+        //Heretics from Redmond do it differently!
+        else if(os == OS.WIN) {
+            endOfLine = "\r\n";
+        }
     }
     
 }
