@@ -44,8 +44,9 @@ public class BibTexEntryTest {
     public void testToString() {
         System.out.println(e);
         String target = "@article{ king,\n"
-                      + "          author = \"Stephen King\",\n"
-                      + "          title = \"On Fear Distribution\" }";
+                      + "          author = {Stephen King},\n"
+                      + "          title = {On Fear Distribution},\n"
+                      + "}";
         assertEquals(e.toString(), target);
     }
 }

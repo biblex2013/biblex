@@ -84,12 +84,12 @@ public class BibTexEntry implements Iterable<Map.Entry<String,String>> {
             sb.append(",\n");
             sb.append(intro);
             sb.append(e.getKey());
-            sb.append(" = \"");
+            sb.append(" = {");
             sb.append(e.getValue());
-            sb.append('"');
+            sb.append('}');
         }
 
-        sb.append(" }");
+        sb.append(",\n}");
 
         return sb.toString();
     }
