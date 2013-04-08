@@ -25,6 +25,10 @@ Ohjelmistotuotanto 2013
 
 ### Backlog
 
-Product login kolme ensimmäistä kohtaa.
+https://docs.google.com/spreadsheet/ccc?key=0Ap3BGGgjHEP8dHBmUDA2dk1USGFSQzhpSWJ5aEhQV1E#gid=0
 
+
+## Jenkins osoite
+
+http://t-jtmikkon.users.cs.helsinki.fi/jenkins/
 

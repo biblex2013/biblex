@@ -1,0 +1,12 @@
+@article{ name1,
+          author = {author1},
+          journal = {journal1},
+          title = {title1},
+          year = {1600},
+}
+@inproceedings{ name2,
+                author = {author2},
+                booktitle = {booktitle2},
+                title = {title2},
+                year = {1900},
+}
