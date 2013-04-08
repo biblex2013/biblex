@@ -14,9 +14,10 @@ import java.util.Iterator;
  */
 public class ExportToFile implements Exporter {
 
-    private String endOfLine = System.getProperty("line.separator");
+    private String endOfLine;
+    
     public ExportToFile() {
-        
+        endOfLine = System.getProperty("line.separator");
     }
     
     @Override
