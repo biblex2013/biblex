@@ -1,8 +1,10 @@
 package fi.helsinki.biblex.ui;
 
+import fi.helsinki.biblex.App;
 import fi.helsinki.biblex.domain.BibTexEntry;
 import fi.helsinki.biblex.domain.BibTexStyle;
 import fi.helsinki.biblex.validation.AbstractValidator;
+import fi.helsinki.biblex.validation.ValidationException;
 import fi.helsinki.biblex.validation.support.ArticleValidator;
 
 import java.awt.*;
@@ -44,7 +46,7 @@ public class BiblexGUI {
 
         p_window.setSize(550, 350);
         p_window.setMinimumSize(new Dimension(450, 300));
-        p_window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        p_window.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         createActions();
         populate();
@@ -143,7 +145,7 @@ public class BiblexGUI {
         deleteButton.setActionCommand(name);
         pane.add(deleteButton);
 
-        p_fieldMap.add(new AbstractMap.SimpleEntry(name, pane));
+        p_fieldMap.add(new AbstractMap.SimpleEntry<String, JPanel>(name, pane));
         p_entry.put(name, "");
 
         p_pane.add(pane);
@@ -159,8 +161,9 @@ public class BiblexGUI {
      */
     private void deleteField(String name) {
         for (int i = 0; i < p_fieldMap.size(); i++) {
-            if (p_fieldMap.get(i).getKey() == name) {
+            if (p_fieldMap.get(i).getKey().equals(name)) {
                 p_pane.remove(p_fieldMap.get(i).getValue());
+				p_entry.remove(name);
                 p_fieldMap.remove(i);
 
                 p_pane.revalidate();
@@ -201,11 +204,11 @@ public class BiblexGUI {
 
         p_scrollPane.setBorder(BorderFactory.createTitledBorder(style.name() + " - " + name));
 
-        // TODO: ValidatorService --> Get correct validator
-        AbstractValidator validator = new ArticleValidator();
-        for (String field : validator.getSetOfRequiredFields()) {
-            addField(field);
-        }
+		// TODO: ValidatorService --> Get correct validator
+		AbstractValidator validator = new ArticleValidator();
+		for (String field : validator.getSetOfRequiredFields()) {
+			addField(field);
+		}
 
         p_pane.repaint();
     }
@@ -215,11 +218,19 @@ public class BiblexGUI {
         if (p_entry == null)
             return;
 
-        for (Map.Entry<String, JPanel> field : p_fieldMap) {
-            // melko ruma tapa etsiä oikea tekstikenttä...
-            String value = ((JTextField) field.getValue().getComponent(2)).getText();
-            p_entry.put(field.getKey(), value);
-        }
+		try {
+			for (Map.Entry<String, JPanel> field : p_fieldMap) {
+				// melko ruma tapa etsiä oikea tekstikenttä...
+				String value = ((JTextField) field.getValue().getComponent(2)).getText();
+
+				p_entry.put(field.getKey(), value);
+				App.getValidationService().checkValidity(p_entry.getStyle(), field.getKey(), value);
+			}
+
+		} catch (ValidationException e) {
+			displayException(e, "Validation failed");
+			return;
+		}
 
         // TODO: Actually do something with the entry
         System.out.println(p_entry.toString());
@@ -233,6 +244,11 @@ public class BiblexGUI {
             p_window.setTitle("Biblex - '" + p_entry.getName() + "'");
         }
     }
+
+
+	private void displayException(Throwable exp, String title) {
+		JOptionPane.showMessageDialog(p_window, exp.getMessage(), title, JOptionPane.ERROR_MESSAGE);
+	}
 
 
     /**
