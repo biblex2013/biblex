@@ -7,33 +7,33 @@ import org.junit.Before;
 import org.junit.Test;
 
 /**
- * The test for ArticleValidator.
+ * The test for BookValidator.
  */
-public class ArticleValidatorTest {
+public class BookValidatorTest {
 
     private AbstractValidator v;
 
     @Before
     public void setUp() {
-        v = new ArticleValidator();
+        v = new BookValidator();
     }
 
     @Test
     public void testGetStyle() {
-        assertTrue(v.getTargetStyle() == BibTexStyle.ARTICLE);
+        assertTrue(v.getTargetStyle() == BibTexStyle.BOOK);
     }
 
     @Test
     public void testRequiredFields() {
-        assertEquals(4, v.getSetOfRequiredFields().size());
+        assertEquals(5, v.getSetOfRequiredFields().size());
         assertTrue(v.getSetOfRequiredFields().contains("author"));
         assertFalse(v.getSetOfRequiredFields().contains("fdsafds"));
     }
 
     @Test
     public void testOptionalFields() {
-        assertEquals(5, v.getSetOfOptionalFields().size());
-        assertTrue(v.getSetOfOptionalFields().contains("volume"));
+        assertEquals(7, v.getSetOfOptionalFields().size());
+        assertTrue(v.getSetOfOptionalFields().contains("edition"));
         assertFalse(v.getSetOfOptionalFields().contains("fdsafds"));
     }
 
@@ -70,7 +70,7 @@ public class ArticleValidatorTest {
     @Test
     public void testValidation() {
         assertNull(v.validateAndGetErrorMessage("author", "Thor"));
-        assertNull(v.validateAndGetErrorMessage("volume", "I"));
+        assertNull(v.validateAndGetErrorMessage("edition", "2nd"));
         assertNotNull(v.validateAndGetErrorMessage("epic", "fail"));
         assertNotNull(v.validateAndGetErrorMessage("author", ""));
     }

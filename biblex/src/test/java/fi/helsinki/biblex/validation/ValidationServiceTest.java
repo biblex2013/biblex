@@ -52,4 +52,11 @@ public class ValidationServiceTest {
     public void testThrowsOnNullValue() throws ValidationException {
         service.checkValidity(BibTexStyle.ARTICLE, "author", null);
     }
+
+    @Test
+    public void testDoesNotThrowOnAccept()
+            throws ValidationException {
+        service.checkValidity(BibTexStyle.ARTICLE, "author", "Thor");
+        assertTrue(true);
+    }
 }

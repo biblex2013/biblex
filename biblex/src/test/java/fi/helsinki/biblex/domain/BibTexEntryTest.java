@@ -49,4 +49,9 @@ public class BibTexEntryTest {
                       + "}";
         assertEquals(e.toString(), target);
     }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void nullNameThrowsException() {
+        new BibTexEntry(null, BibTexStyle.BOOK);
+    }
 }

@@ -7,20 +7,20 @@ import org.junit.Before;
 import org.junit.Test;
 
 /**
- * The test for ArticleValidator.
+ * The test for InproceedingsValidator.
  */
-public class ArticleValidatorTest {
+public class InproceedingsValidatorTest {
 
     private AbstractValidator v;
 
     @Before
     public void setUp() {
-        v = new ArticleValidator();
+        v = new InproceedingsValidator();
     }
 
     @Test
     public void testGetStyle() {
-        assertTrue(v.getTargetStyle() == BibTexStyle.ARTICLE);
+        assertTrue(v.getTargetStyle() == BibTexStyle.INPROCEEDINGS);
     }
 
     @Test
@@ -32,7 +32,7 @@ public class ArticleValidatorTest {
 
     @Test
     public void testOptionalFields() {
-        assertEquals(5, v.getSetOfOptionalFields().size());
+        assertEquals(10, v.getSetOfOptionalFields().size());
         assertTrue(v.getSetOfOptionalFields().contains("volume"));
         assertFalse(v.getSetOfOptionalFields().contains("fdsafds"));
     }
