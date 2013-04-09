@@ -1,0 +1,316 @@
+package fi.helsinki.biblex.ui;
+
+import fi.helsinki.biblex.domain.BibTexStyle;
+
+import javax.swing.*;
+import java.awt.*;
+import java.util.*;
+import java.util.List;
+
+/**
+ * This class handles the visual appearance of the graphical UI
+ * All handling of user input and actions is done elsewhere.
+ */
+public class Window implements Iterable<Map.Entry<String, String>> {
+	public static enum UIAction {
+		SUBMIT,
+		ADD_FIELD,
+		DELETE_FIELD,
+		SET_ENTRY
+	}
+
+
+	public static class EntryIterator implements Iterator<Map.Entry<String, String>> {
+		private int p_pos;
+		private Window p_win;
+
+		private EntryIterator(Window win) {
+			p_pos = 0;
+			p_win = win;
+		}
+
+		public boolean hasNext() {
+			return (p_pos < p_win.p_fieldMap.size());
+		}
+
+		public Map.Entry<String, String> next() {
+			if (!hasNext())
+				throw new IndexOutOfBoundsException("Iterator out of bounds");
+
+			Map.Entry<String, JPanel> fieldEntry = p_win.p_fieldMap.get(p_pos++);
+
+			return new AbstractMap.SimpleEntry<String, String>(
+					fieldEntry.getKey(),
+					((JTextField) fieldEntry.getValue().getComponent(FIELD_PANE_TEXT_ID)).getText()
+			);
+		}
+
+		public void remove() {}
+	}
+
+
+	private static final String APP_NAME = "Biblex";
+
+	// Ugly way to access the correct component in the field JPanel...
+	private static final int FIELD_PANE_TEXT_ID = 2;
+	private static final int FIELD_PANE_BUTTON_ID = 4;
+
+	private JFrame p_window;
+
+	private JPanel p_pane;
+	private JScrollPane p_scrollPane;
+	private JMenuBar p_menu;
+
+	private JComboBox p_entryStyleInput;
+	private JTextField p_entryNameInput;
+	private JTextField p_fieldNameInput;
+
+	private JButton p_submitButton;
+	private JButton p_addFieldButton;
+	private JButton p_setEntryButton;
+
+	// Need to keep track of this, as each field has it's own button
+	private Action p_deleteAction;
+
+	// Keep track of field name -> UI element pairs
+	private List<Map.Entry<String, JPanel>> p_fieldMap;
+
+
+	public Window() {
+		p_window = new JFrame();
+
+		p_fieldMap = new ArrayList<Map.Entry<String, JPanel>>();
+
+		p_window.setSize(550, 350);
+		p_window.setMinimumSize(new Dimension(475, 350));
+		p_window.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+
+		populate();
+
+		p_window.setVisible(true);
+	}
+
+
+	/**
+	 * Register action handler for a specific UI action
+	 *
+	 * @param uiAction Action ID, for which the action handler is set
+	 * @param action Action, to be set as the action handler
+	 */
+	public void registerAction(UIAction uiAction, Action action) {
+		switch (uiAction) {
+			case SUBMIT:
+				p_submitButton.setAction(action);
+				return;
+
+			case ADD_FIELD:
+				p_addFieldButton.setAction(action);
+				return;
+
+			case DELETE_FIELD:
+				p_deleteAction = action;
+				for (Map.Entry<String, JPanel> entry : p_fieldMap) {
+					((JButton) entry.getValue().getComponent(FIELD_PANE_BUTTON_ID)).setAction(action);
+				}
+				return;
+
+			case SET_ENTRY:
+				p_setEntryButton.setAction(action);
+				return;
+
+			default:
+				// action not supported
+				assert(false);
+		}
+	}
+
+
+	/**
+	 * Set window title
+	 *
+	 * @param name Name of the current entry
+	 */
+	public void setEntry(String style, String name) {
+		if (name.isEmpty()) {
+			p_window.setTitle(APP_NAME);
+		} else {
+			p_window.setTitle(APP_NAME + " - '" + name + "'");
+		}
+
+		p_pane.removeAll();
+		p_scrollPane.setBorder(BorderFactory.createTitledBorder(style + " - " + name));
+	}
+
+
+	/**
+	 * Add a new style to the style selection combo-box
+	 *
+	 * @param style Style to be added
+	 */
+	public void addEntryStyle(BibTexStyle style) {
+		p_entryStyleInput.addItem(style);
+	}
+
+
+	/**
+	 * Add a new field to the current entry
+	 *
+	 * @param name Name/ID of the field to add
+	 */
+	public void addField(String name, String content) {
+		JPanel pane = new JPanel();
+		pane.setLayout(new BoxLayout(pane, BoxLayout.X_AXIS));
+
+		JLabel nameLabel = new JLabel(name.trim().toLowerCase());
+		JTextField nameField = new JTextField(content);
+
+		nameLabel.setMinimumSize(new Dimension(150, 20));
+		nameLabel.setPreferredSize(new Dimension(150, 20));
+		nameLabel.setMaximumSize(new Dimension(225, 20));
+		nameField.setMinimumSize(new Dimension(225, 20));
+		nameField.setPreferredSize(new Dimension(225, 20));
+		nameField.setMaximumSize(new Dimension(Short.MAX_VALUE, 20));
+
+		pane.add(nameLabel);
+		pane.add(Box.createRigidArea(new Dimension(10, 0)));
+		pane.add(nameField);
+		pane.add(Box.createRigidArea(new Dimension(3, 0)));
+
+		JButton deleteButton = new JButton();
+		deleteButton.setAction(p_deleteAction); // null check not needed
+		deleteButton.setActionCommand(name);
+		pane.add(deleteButton);
+
+		p_fieldMap.add(new AbstractMap.SimpleEntry<String, JPanel>(name, pane));
+
+		p_pane.add(pane);
+		p_pane.validate();
+		p_scrollPane.validate();
+	}
+
+
+	/**
+	 * Remove a field from the current entry
+	 *
+	 * @param name Name/ID of the field to be removed
+	 */
+	public void deleteField(String name) {
+		for (int i = 0; i < p_fieldMap.size(); i++) {
+			if (p_fieldMap.get(i).getKey().equals(name)) {
+				p_pane.remove(p_fieldMap.get(i).getValue());
+				p_fieldMap.remove(i);
+
+				p_pane.revalidate();
+				p_pane.repaint();
+
+				return;
+			}
+		}
+
+		// Tänne ei pitäisi ikinä päästä...
+		throw new RuntimeException("Delete field failed, field not found (" + name + ")");
+	}
+
+
+	public String getFieldNameEntry() {
+		return p_fieldNameInput.getText();
+	}
+
+
+	public void clearFieldNameEntry() {
+		p_fieldNameInput.setText("");
+	}
+
+
+	public String getEntryNameInput() {
+		return p_entryNameInput.getText();
+	}
+
+
+	public void clearEntryNameInput() {
+		p_entryNameInput.setText("");
+	}
+
+
+	public BibTexStyle getEntryStyleInput() {
+		return (BibTexStyle) p_entryStyleInput.getSelectedItem();
+	}
+
+
+	/**
+	 * Display an error dialog for the given exception
+	 *
+	 * @param exp Exception to display
+	 * @param title Title of the error dialog window
+	 */
+	public void displayException(Throwable exp, String title) {
+		JOptionPane.showMessageDialog(p_window, exp.getMessage(), title, JOptionPane.ERROR_MESSAGE);
+	}
+
+
+	/**
+	 * Allow iteration through the entry fields
+	 *
+	 * @return Iterator for the field-value pairs in the window
+	 */
+	public EntryIterator iterator() {
+		return new EntryIterator(this);
+	}
+
+
+	/**
+	 * Add UI elements to the window, and setup action handling
+	 */
+	private void populate() {
+		p_menu = new JMenuBar();
+		p_window.setJMenuBar(p_menu);
+
+		JPanel topPane = new JPanel();
+		p_entryStyleInput = new JComboBox();
+		p_entryNameInput = new JTextField();
+		p_setEntryButton = new JButton();
+
+		topPane.setLayout(new BoxLayout(topPane, BoxLayout.X_AXIS));
+		topPane.setBorder(BorderFactory.createEmptyBorder(3, 3, 3, 3));
+		topPane.add(new JLabel("Viitteen tyyppi:"));
+		topPane.add(Box.createRigidArea(new Dimension(5, 0)));
+		topPane.add(p_entryStyleInput);
+		topPane.add(Box.createRigidArea(new Dimension(10, 0)));
+		topPane.add(new JLabel("Viitteen nimi:"));
+		topPane.add(Box.createRigidArea(new Dimension(5, 0)));
+		topPane.add(p_entryNameInput);
+		topPane.add(Box.createRigidArea(new Dimension(5, 0)));
+		topPane.add(p_setEntryButton);
+
+		JPanel bottomSubPane = new JPanel();
+		p_fieldNameInput = new JTextField();
+		p_addFieldButton = new JButton();
+
+		bottomSubPane.setLayout(new BoxLayout(bottomSubPane, BoxLayout.X_AXIS));
+		bottomSubPane.add(Box.createHorizontalGlue());
+		bottomSubPane.add(p_fieldNameInput);
+		bottomSubPane.add(Box.createRigidArea(new Dimension(3, 0)));
+		bottomSubPane.add(p_addFieldButton);
+
+		JPanel bottomPane = new JPanel();
+		p_submitButton = new JButton();
+
+		GridLayout bottomLayout = new GridLayout(0, 1);
+		bottomLayout.setVgap(3);
+		bottomPane.setLayout(bottomLayout);
+		bottomPane.setBorder(BorderFactory.createEmptyBorder(3, 3, 3, 3));
+		bottomPane.add(bottomSubPane);
+		bottomPane.add(p_submitButton);
+
+		p_pane = new JPanel();
+		p_pane.setLayout(new BoxLayout(p_pane, BoxLayout.Y_AXIS));
+
+		p_scrollPane = new JScrollPane(p_pane);
+		p_scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+		p_scrollPane.setBorder(BorderFactory.createEmptyBorder(0, 3, 0, 3));
+
+		p_window.getContentPane().add(topPane, BorderLayout.NORTH);
+		p_window.getContentPane().add(p_scrollPane, BorderLayout.CENTER);
+		p_window.getContentPane().add(bottomPane, BorderLayout.SOUTH);
+	}
+}

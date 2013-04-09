@@ -2,7 +2,7 @@
 
 package fi.helsinki.biblex;
 
-import fi.helsinki.biblex.ui.BiblexGUI;
+import fi.helsinki.biblex.ui.GUI;
 import fi.helsinki.biblex.validation.*;
 import fi.helsinki.biblex.validation.support.*;
 
@@ -12,12 +12,12 @@ import fi.helsinki.biblex.validation.support.*;
 public class App {
 	private static App p_instance;
 
-	private BiblexGUI p_gui;
+	private GUI p_gui;
 	private ValidationService p_validation;
 
 
 	private App() {
-		p_gui = new BiblexGUI();
+		p_gui = new GUI();
 		p_validation = new ValidationService();
 
 		// register the individual validators
