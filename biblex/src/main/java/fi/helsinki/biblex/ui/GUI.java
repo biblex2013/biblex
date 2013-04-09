@@ -17,14 +17,14 @@ import javax.swing.*;
  * The appearance of the interface is handled by the Window class.
 */
 public class GUI {
-	private Window p_window;
+    private Window p_window;
     private BibTexEntry p_entry;
 
 
     public GUI() {
-		p_window = new Window();
+        p_window = new Window();
 
-		populateEntryStyles();
+        populateEntryStyles();
         createActions();
     }
 
@@ -46,17 +46,18 @@ public class GUI {
      * and adds all required fields for the selected entry style.
      */
     private void setEntry(BibTexStyle style, String name) {
-        if (style == null || name.isEmpty())
+        if (style == null || name.trim().isEmpty()) {
+            p_window.displayError("Reference name or type is invalid", "Reference creation failed");
             return;
+        }
 
         p_entry = new BibTexEntry(name, style);
-		p_window.setEntry(style.name(), name);
+        p_window.setEntry(style.name(), name);
 
-		// TODO: ValidatorService --> Get correct validator
-		AbstractValidator validator = new ArticleValidator();
-		for (String field : validator.getSetOfRequiredFields()) {
-			p_window.addField(field, "");
-		}
+        AbstractValidator validator = App.getValidationService().getValidator(style);
+        for (String field : validator.getSetOfRequiredFields()) {
+            p_window.addField(field, "");
+        }
     }
 
 
@@ -64,16 +65,17 @@ public class GUI {
         if (p_entry == null)
             return;
 
-		try {
-			for (Map.Entry<String, String> field : p_window) {
-				p_entry.put(field.getKey(), field.getValue());
-				App.getValidationService().checkValidity(p_entry.getStyle(), field.getKey(), field.getValue());
-			}
+        try {
+            for (Map.Entry<String, String> field : p_window) {
+                p_entry.put(field.getKey(), field.getValue());
+            }
 
-		} catch (ValidationException e) {
-			p_window.displayException(e, "Validation failed");
-			return;
-		}
+            App.getValidationService().checkEntry(p_entry);
+
+        } catch (ValidationException e) {
+            p_window.displayError(e.getMessage(), "Validation failed");
+            return;
+        }
 
         // TODO: Actually do something with the entry
         System.out.println(p_entry.toString());
@@ -87,45 +89,51 @@ public class GUI {
         // TODO: thread safety for action handlers
 
         p_window.registerAction(
-				Window.UIAction.SUBMIT,
-				new AbstractAction("Tallenna Viite", UIManager.getIcon("FileView.hardDriveIcon")) {
-					public void actionPerformed(ActionEvent e) {
-						submitEntry();
-					}
-				}
-		);
+                Window.UIAction.SUBMIT,
+                new AbstractAction("Save Reference", UIManager.getIcon("FileView.hardDriveIcon")) {
+                    public void actionPerformed(ActionEvent e) {
+                        submitEntry();
+                    }
+                }
+        );
 
-		p_window.registerAction(
-				Window.UIAction.ADD_FIELD,
-				new AbstractAction("Lisää Kenttä") {
-					public void actionPerformed(ActionEvent e) {
-						p_window.addField(p_window.getFieldNameEntry(), "");
-						p_entry.put(p_window.getFieldNameEntry(), "");
-						p_window.clearFieldNameEntry();
-					}
-        		}
-		);
+        p_window.registerAction(
+                Window.UIAction.ADD_FIELD,
+                new AbstractAction("Add Field") {
+                    public void actionPerformed(ActionEvent e) {
+                        String name = p_window.getFieldNameEntry();
+                        if (name.trim().isEmpty()) {
+                            p_window.displayError("Field name cannot be empty", "Failed to add field");
+                            return;
+                        }
 
-
-		p_window.registerAction(
-				Window.UIAction.DELETE_FIELD,
-				new AbstractAction("", UIManager.getIcon("InternalFrame.paletteCloseIcon")) {
-					public void actionPerformed(ActionEvent e) {
-						p_window.deleteField(e.getActionCommand());
-						p_entry.remove(e.getActionCommand());
-					}
-        		}
-		);
+                        p_window.addField(name, "");
+                        p_entry.put(name, "");
+                        p_window.clearFieldNameEntry();
+                    }
+                }
+        );
 
 
-		p_window.registerAction(
-				Window.UIAction.SET_ENTRY,
-				new AbstractAction("Luo") {
-					public void actionPerformed(ActionEvent e) {
-						setEntry(p_window.getEntryStyleInput(), p_window.getEntryNameInput());
-						p_window.clearEntryNameInput();
-					}
-				}
-		);
+        p_window.registerAction(
+                Window.UIAction.DELETE_FIELD,
+                new AbstractAction("", UIManager.getIcon("InternalFrame.paletteCloseIcon")) {
+                    public void actionPerformed(ActionEvent e) {
+                        p_window.deleteField(e.getActionCommand());
+                        p_entry.remove(e.getActionCommand());
+                    }
+                }
+        );
+
+
+        p_window.registerAction(
+                Window.UIAction.SET_ENTRY,
+                new AbstractAction("Create") {
+                    public void actionPerformed(ActionEvent e) {
+                        setEntry(p_window.getEntryStyleInput(), p_window.getEntryNameInput());
+                        p_window.clearEntryNameInput();
+                    }
+                }
+        );
     }
 }
