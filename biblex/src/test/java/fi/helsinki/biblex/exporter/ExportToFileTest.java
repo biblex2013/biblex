@@ -5,6 +5,8 @@ import fi.helsinki.biblex.domain.BibTexStyle;
 import fi.helsinki.biblex.storage.SQLiteStorage;
 import fi.helsinki.biblex.storage.Storage;
 import java.io.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.junit.Assert.assertEquals;
@@ -86,29 +88,69 @@ public class ExportToFileTest {
      * Test of write method, of class ExportToFile.
      */
     @Test
-    public void testWrite_String() throws Exception {
+    public void testWrite_String() {
         String filename = "test1.txt";
+        try {
+            exporter.write(filename);
+        } catch (IOException ex) {
+            fail("Caught unexpected exception: " + ex.getMessage());
+        }
         
-        exporter.write(filename);
+        String filename2 = null;
+        boolean thrown = false;
+        try {
+            exporter.write(filename2);
+            fail("Should have thrown exception!");
+        } catch (Exception ex) {
+            thrown = true;
+        }
+        
+        assertTrue(thrown);
         
         File file = new File("test1.txt");
         
         assertTrue(file.exists());
         assertTrue(file.length() > 10);
-
     }
 
     /**
      * Test of write method, of class ExportToFile.
      */
     @Test
-    public void testWrite_File() throws IOException {
+    public void testWrite_File() {
         File file = new File("test2.txt");
+        try {
+            exporter.write(file);
+        } catch (IOException ex) {
+            fail("Caught undesired exception: " + ex.getMessage());
+        }
         
-        exporter.write(file);
+        File file2 = null;
+        boolean thrown = false;
+        try {
+            exporter.write(file2);
+            fail("Should have thrown exception!");
+        } catch (Exception ex) {
+            thrown = true;
+        }
         
+        assertTrue(thrown);
         assertTrue(file.exists());
         assertTrue(file.length() > 10);
+        
+    }
+    
+    @Test
+    public void testEndOfLine() {
+        ExportToFile exp = (ExportToFile) exporter;
+        exp.setNewLineFormat(ExportToFile.OS.WIN);
+        assertTrue(exp.getNewLineFormat().equals("\r\n"));
+        exp.setNewLineFormat(ExportToFile.OS.UNIX);
+        assertTrue(exp.getNewLineFormat().equals("\n"));
+        exp.setNewLineFormat(ExportToFile.OS.MAC);
+        assertTrue(exp.getNewLineFormat().equals(("\n")));
+        
+        exp.setNewLineFormat(null);
         
     }
 }

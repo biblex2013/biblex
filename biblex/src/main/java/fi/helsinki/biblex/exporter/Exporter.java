@@ -11,9 +11,7 @@ import java.io.IOException;
 public abstract class Exporter {
     
     protected Storage storage;
-    
-    protected Exporter() {}
-    
+        
     /**
      * Create Exporter with storage.
      * @param s storage object

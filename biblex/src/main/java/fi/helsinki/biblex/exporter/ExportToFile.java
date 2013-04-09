@@ -20,7 +20,7 @@ public class ExportToFile extends Exporter {
     private BufferedWriter outWriter;
 
     
-    protected ExportToFile() {}
+   
     
     public ExportToFile(Storage s) {
         super(s);
@@ -68,9 +68,13 @@ public class ExportToFile extends Exporter {
             endOfLine = "\n";
         }
         //Heretics from Redmond do it differently!
-        else if(os == OS.WIN) {
+        else {
             endOfLine = "\r\n";
         }
+    }
+    
+    public String getNewLineFormat() {
+        return endOfLine;
     }
     
 }
