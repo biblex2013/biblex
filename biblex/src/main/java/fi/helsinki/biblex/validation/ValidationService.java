@@ -23,6 +23,10 @@ public class ValidationService {
         return m.containsKey(style);
     }
 
+    public AbstractValidator getValidator(BibTexStyle style) {
+        return m.get(style);
+    }
+
     public void checkValidity(BibTexStyle style,
                               String fieldName,
                               String value) throws ValidationException {
