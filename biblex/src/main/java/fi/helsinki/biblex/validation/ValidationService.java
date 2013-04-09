@@ -42,4 +42,12 @@ public class ValidationService {
 
         // Once here, everything's fine.
     }
+
+    public void checkEntry(BibTexEntry entry) throws ValidationException {
+        for (Map.Entry<String, String> mapping : entry) {
+            checkValidity(entry.getStyle(),
+                          mapping.getKey(),
+                          mapping.getValue());
+        }
+    }
 }
