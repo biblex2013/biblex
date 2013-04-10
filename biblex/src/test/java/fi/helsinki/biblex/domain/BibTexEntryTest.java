@@ -13,6 +13,7 @@ public class BibTexEntryTest {
         e = new BibTexEntry("king", BibTexStyle.ARTICLE);
         e.put("author", "Stephen King");
         e.put("title", "On Fear Distribution");
+        e.put("journal", "Äöå!");
     }
 
     @Test
@@ -45,6 +46,7 @@ public class BibTexEntryTest {
         System.out.println(e);
         String target = "@article{ king,\n"
                       + "          author = {Stephen King},\n"
+                      + "          journal = {\\\"{A}\\\"{o}\\aa!},\n"
                       + "          title = {On Fear Distribution},\n"
                       + "}";
         assertEquals(e.toString(), target);

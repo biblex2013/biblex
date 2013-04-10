@@ -67,9 +67,9 @@ public class BibTexEntry implements Iterable<Map.Entry<String,String>> {
     public String toString() {
         StringBuilder sb = new StringBuilder();
 
-        sb.append('@');
-        sb.append(style);
-        sb.append("{ ");
+        sb.append('@')
+                .append(style)
+                .append("{ ");
 
         final int indent = sb.length();
         final char[] intro = new char[indent];
@@ -85,7 +85,7 @@ public class BibTexEntry implements Iterable<Map.Entry<String,String>> {
             sb.append(intro);
             sb.append(e.getKey());
             sb.append(" = {");
-            sb.append(e.getValue());
+            sb.append(SpecialCharUtils.bibtexify(e.getValue()));
             sb.append('}');
         }
 

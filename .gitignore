@@ -5,4 +5,6 @@ paper.aux
 paper.bbl
 paper.blg
 paper.log
+texput.log
+database.dat
 nb-configuration.xml
