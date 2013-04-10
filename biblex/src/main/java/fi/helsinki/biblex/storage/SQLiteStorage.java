@@ -6,6 +6,8 @@ import java.util.Iterator;
 import java.util.Map;
 import java.io.*;
 import java.sql.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * This class implements persistent storage using SQLite
@@ -30,7 +32,6 @@ public class SQLiteStorage extends Storage {
         try {
             Statement st = conn.createStatement();
             rs = st.executeQuery("SELECT id,name,style FROM Entries;");
-            rs.next();
         } catch (SQLException e) {
             System.err.println(e);
         }
@@ -208,8 +209,16 @@ public class SQLiteStorage extends Storage {
         private ResultSet rs;
 
         public SQLiteStorageIterator(ResultSet rs) {
-            if (rs == null)
+            try {
+                if(!rs.next()) {
+                    nextp = false;
+                }
+                else {
+                    nextp = true;
+                }
+            } catch (SQLException ex) {
                 nextp = false;
+            }
             this.rs = rs;
         }
 
