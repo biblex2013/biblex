@@ -7,4 +7,6 @@ paper.blg
 paper.log
 texput.log
 database.dat
+exported.txt
+exported.bib
 nb-configuration.xml
