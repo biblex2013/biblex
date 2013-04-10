@@ -27,7 +27,8 @@ public class WindowTest {
 
     @After
     public void tearDown() {
-        win.dispose();
+        if (win != null)
+            win.dispose();
     }
 
 
