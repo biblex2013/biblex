@@ -1,11 +1,17 @@
 package fi.helsinki.biblex.ui;
 
+import fi.helsinki.biblex.App;
 import fi.helsinki.biblex.domain.BibTexStyle;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.util.*;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * This class handles the visual appearance of the graphical UI
@@ -16,7 +22,9 @@ public class Window implements Iterable<Map.Entry<String, String>> {
         SUBMIT,
         ADD_FIELD,
         DELETE_FIELD,
-        SET_ENTRY
+        SET_ENTRY,
+        MENU_EXPORT,
+        MENU_QUIT
     }
 
 
@@ -60,6 +68,8 @@ public class Window implements Iterable<Map.Entry<String, String>> {
     private JPanel p_pane;
     private JScrollPane p_scrollPane;
     private JMenuBar p_menu;
+    private JMenuItem p_menu_export;
+    private JMenuItem p_menu_quit;
 
     private JComboBox p_entryStyleInput;
     private JTextField p_entryNameInput;
@@ -118,6 +128,14 @@ public class Window implements Iterable<Map.Entry<String, String>> {
                 p_setEntryButton.setAction(action);
                 return;
 
+            case MENU_QUIT:
+                p_menu_quit.setAction(action);
+                return;
+                
+            case MENU_EXPORT:
+                p_menu_export.setAction(action);
+                return; 
+               
             default:
                 // action not supported
                 assert(false);
@@ -266,7 +284,16 @@ public class Window implements Iterable<Map.Entry<String, String>> {
     private void populate() {
         p_menu = new JMenuBar();
         p_window.setJMenuBar(p_menu);
+        JMenu p_menu2 = new JMenu("File");
+        p_menu.add(p_menu2);
+        
+        p_menu_export = new JMenuItem("Export");
+        p_menu2.add(p_menu_export);
+        
+        p_menu_quit = new JMenuItem("Quit");
 
+        p_menu2.add(p_menu_quit);
+        
         JPanel topPane = new JPanel();
         p_entryStyleInput = new JComboBox();
         p_entryNameInput = new JTextField();
