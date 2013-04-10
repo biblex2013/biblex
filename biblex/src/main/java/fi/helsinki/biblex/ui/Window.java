@@ -1,17 +1,11 @@
 package fi.helsinki.biblex.ui;
 
-import fi.helsinki.biblex.App;
 import fi.helsinki.biblex.domain.BibTexStyle;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.IOException;
 import java.util.*;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * This class handles the visual appearance of the graphical UI
@@ -178,10 +172,12 @@ public class Window implements Iterable<Map.Entry<String, String>> {
      * @param name Name/ID of the field to add
      */
     public void addField(String name, String content) {
+        name = name.trim().toLowerCase();
+
         JPanel pane = new JPanel();
         pane.setLayout(new BoxLayout(pane, BoxLayout.X_AXIS));
 
-        JLabel nameLabel = new JLabel(name.trim().toLowerCase());
+        JLabel nameLabel = new JLabel(name);
         JTextField nameField = new JTextField(content);
 
         nameLabel.setMinimumSize(new Dimension(150, 20));
@@ -275,6 +271,14 @@ public class Window implements Iterable<Map.Entry<String, String>> {
      */
     public EntryIterator iterator() {
         return new EntryIterator(this);
+    }
+
+
+    /**
+     * Dispose of the window
+     */
+    public void dispose() {
+        p_window.dispose();
     }
 
 
