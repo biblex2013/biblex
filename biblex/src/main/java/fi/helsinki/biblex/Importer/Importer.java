@@ -1,4 +1,4 @@
-package fi.helsinki.biblex.importer;
+package fi.helsinki.biblex.Importer;
 
 import fi.helsinki.biblex.domain.BibTexEntry;
 import fi.helsinki.biblex.domain.BibTexStyle;
@@ -19,7 +19,7 @@ public class Importer {
         storage = s;
     }
     /**Import .bib file to the database. */
-    public void importFromFile(String path) throws FileNotFoundException {
+    public void importFromFile(String path) throws FileNotFoundException, Exception {
         String fileAsString = "";
         try{
             Scanner reader = new Scanner(new File(path));
