@@ -5,7 +5,7 @@ import java.io.File;
 import java.io.IOException;
 
 /**
- *
+ * Export bibtex.
  * @author jtmikkon
  */
 public abstract class Exporter {

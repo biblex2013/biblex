@@ -9,50 +9,41 @@ import java.io.IOException;
 import java.util.Iterator;
 
 /**
- *
+ * Exports bibtex from Storage to file.
  * @author jtmikkon
  */
 public class ExportToFile extends Exporter {
 
+    /**
+     * Enum for OS type (needed for setNewLineFormat).
+     */
     public enum OS {UNIX, WIN, MAC};
     
     private String endOfLine;
     private BufferedWriter outWriter;
 
     
-   
-    
     public ExportToFile(Storage s) {
         super(s);
         endOfLine = System.getProperty("line.separator");
     }
     
-    /*
-    public void setStorage(Storage s) {
-        storage = s;
-    }
-    */
-    
-    private BufferedWriter setOutWriter(File file) throws IOException {
-        return new BufferedWriter(new FileWriter(file));
-    }
-    
-    private BufferedWriter setOutWriter(String filename) throws IOException {
-        return new BufferedWriter(new FileWriter(filename));
-    }
-    
     @Override
     public void write(File file) throws IOException {
-        outWriter = setOutWriter(file);
+        outWriter = new BufferedWriter(new FileWriter(file));
         writeToFile();
     }
 
     @Override
     public void write(String filename) throws IOException {
-        outWriter = setOutWriter(filename);
+        outWriter = new BufferedWriter(new FileWriter(filename));
         writeToFile();
     }
     
+    /**
+     * Does all the writing to file.
+     * @throws IOException 
+     */
     private void writeToFile() throws IOException {
         Iterator<BibTexEntry> bibtexIterator = storage.iterator();
         
@@ -63,6 +54,10 @@ public class ExportToFile extends Exporter {
         outWriter.close();
     }
     
+    /**
+     * Change line separator of file to be exported.
+     * @param os ExportToFile.OS.WIN (\r\n) / ExportToFile.OS.UNIX (\n)
+     */
     public void setNewLineFormat(OS os) {
         if(os == OS.UNIX || os == OS.MAC) {
             endOfLine = "\n";
@@ -73,8 +68,11 @@ public class ExportToFile extends Exporter {
         }
     }
     
+    /**
+     * Here for test cases. Hooray.
+     * @return 
+     */
     public String getNewLineFormat() {
         return endOfLine;
     }
-    
 }
