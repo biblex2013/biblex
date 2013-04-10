@@ -148,21 +148,21 @@ public class GUI {
                     /* Maybesti needs some fileselector thingie to select the outputfile */
                     public void actionPerformed(ActionEvent e) {
                         try {
-                            App.getExporter().write("exported.txt");
+                            App.getExporter().write("exported.bib");
                         } catch (IOException ex) {
                             p_window.displayError(ex.getMessage(), "Export failed");
                         }
                     }
                 });
-        
+
         p_window.registerAction(
-                Window.UIAction.MENU_QUIT, 
+                Window.UIAction.MENU_QUIT,
                 new AbstractAction("Quit") {
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         System.exit(0);
                     }
-            
+
         });
     }
 }

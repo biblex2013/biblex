@@ -10,7 +10,7 @@
 
     <name>biblex</name>
     <url>http://maven.apache.org</url>
-  
+
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
@@ -28,9 +28,14 @@
             <artifactId>sqlite-jdbc</artifactId>
             <version>3.7.2</version>
         </dependency>
+        <dependency>
+            <groupId>commons-collections</groupId>
+            <artifactId>commons-collections</artifactId>
+            <version>3.2.1</version>
+        </dependency>
     </dependencies>
-    
-    
+
+
     <build>
         <plugins>
             <plugin>
