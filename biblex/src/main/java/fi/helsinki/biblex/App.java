@@ -25,8 +25,8 @@ public class App {
         try {
             p_storage = new SQLiteStorage("database.dat");  
         } catch (Exception ex) {
-            System.out.println("Failed to init/load the database.");
-            System.exit(-1);
+            System.out.println("Failed to init/load the database: " + ex.toString());
+            System.exit(1);
         }
         p_exporter = new ExportToFile(p_storage);
         p_gui = new GUI();
