@@ -59,6 +59,23 @@ public class GUI {
         }
     }
 
+    /**
+     * Open an existing entry
+     *
+     * @param entry Entry to open
+     */
+    private void openEntry(BibTexEntry entry) {
+        if (entry == null)
+            throw new RuntimeException("Internal error, tried to open null reference");
+
+        p_entry = entry;
+        p_window.setEntry(entry.getStyle().name(), p_entry.getName());
+
+        for (Map.Entry<String, String> e : entry) {
+            p_window.addField(e.getKey(), e.getValue());
+        }
+    }
+
     private void submitEntry() {
         if (p_entry == null) {
             return;
