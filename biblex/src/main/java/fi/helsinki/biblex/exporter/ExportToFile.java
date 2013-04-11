@@ -21,11 +21,13 @@ public class ExportToFile extends Exporter {
     
     private String endOfLine;
     private BufferedWriter outWriter;
+    private OS os;
 
     
     public ExportToFile(Storage s) {
         super(s);
         endOfLine = System.getProperty("line.separator");
+        os = endOfLine.equals("\r\n") ? OS.WIN : OS.UNIX;
     }
     
     @Override
@@ -48,7 +50,8 @@ public class ExportToFile extends Exporter {
         Iterator<BibTexEntry> bibtexIterator = storage.iterator();
         
         while(bibtexIterator.hasNext()) {
-            outWriter.write(bibtexIterator.next().toString());
+            outWriter.write((os == OS.WIN) ? bibtexIterator.next().toString().replaceAll("[^\r]\n", endOfLine) :
+                    bibtexIterator.next().toString().replaceAll("\r\n", endOfLine));
             outWriter.write(endOfLine);
         }
         outWriter.close();

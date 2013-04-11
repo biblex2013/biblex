@@ -6,8 +6,6 @@ import java.util.Iterator;
 import java.util.Map;
 import java.io.*;
 import java.sql.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * This class implements persistent storage using SQLite
