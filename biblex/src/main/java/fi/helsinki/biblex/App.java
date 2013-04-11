@@ -16,6 +16,7 @@ import java.util.logging.Logger;
 public class App {
 
     private static App p_instance;
+
     private GUI p_gui;
     private ValidationService p_validation;
     private Storage p_storage;
@@ -28,50 +29,42 @@ public class App {
             System.out.println("Failed to init/load the database: " + ex.toString());
             System.exit(1);
         }
+
         p_exporter = new ExportToFile(p_storage);
-        p_gui = new GUI();
         p_validation = new ValidationService();
-        
 
         // register the individual validators
         p_validation.attach(new ArticleValidator());
         p_validation.attach(new BookValidator());
         p_validation.attach(new InproceedingsValidator());
+
+        p_gui = new GUI();
+    }
+
+    private void run() {
+        p_gui.init();
     }
 
     public static void main(String[] args) {
-        App.getInstance();
+        p_instance = new App();
+        p_instance.run();
     }
 
     public static Storage getStorage() {
-        if(p_instance == null) {
-            System.out.println("No App instance!?");
-            System.exit(-1);
-        }
-
-        return p_instance.p_storage;
+        return getInstance().p_storage;
     }
     
     public static Exporter getExporter() {
-        if(p_instance == null) {
-            System.out.println("No App instance!?");
-            System.exit(-1);
-        }
-        
-        return p_instance.p_exporter;
+        return getInstance().p_exporter;
     }
     
     public static ValidationService getValidationService() {
-        if (p_instance == null) {
-            throw new RuntimeException("No App instance available");
-        }
-
-        return p_instance.p_validation;
+        return getInstance().p_validation;
     }
 
     private static App getInstance() {
         if (p_instance == null) {
-            p_instance = new App();
+            throw new RuntimeException("No App instance available");
         }
 
         return p_instance;

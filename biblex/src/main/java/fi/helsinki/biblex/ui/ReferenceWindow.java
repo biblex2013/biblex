@@ -8,25 +8,23 @@ import java.util.*;
 import java.util.List;
 
 /**
- * This class handles the visual appearance of the graphical UI
+ * This class handles the visual appearance of the reference editor window
  * All handling of user input and actions is done elsewhere.
  */
-public class Window implements Iterable<Map.Entry<String, String>> {
+public class ReferenceWindow implements Iterable<Map.Entry<String, String>> {
     public static enum UIAction {
         SUBMIT,
         ADD_FIELD,
         DELETE_FIELD,
-        SET_ENTRY,
-        MENU_EXPORT,
-        MENU_QUIT
+        SET_ENTRY
     }
 
 
     public static class EntryIterator implements Iterator<Map.Entry<String, String>> {
         private int p_pos;
-        private Window p_win;
+        private ReferenceWindow p_win;
 
-        private EntryIterator(Window win) {
+        private EntryIterator(ReferenceWindow win) {
             p_pos = 0;
             p_win = win;
         }
@@ -51,8 +49,6 @@ public class Window implements Iterable<Map.Entry<String, String>> {
     }
 
 
-    private static final String APP_NAME = "Biblex";
-
     // Ugly way to access the correct component in the field JPanel...
     private static final int FIELD_PANE_TEXT_ID = 2;
     private static final int FIELD_PANE_BUTTON_ID = 4;
@@ -61,9 +57,6 @@ public class Window implements Iterable<Map.Entry<String, String>> {
 
     private JPanel p_pane;
     private JScrollPane p_scrollPane;
-    private JMenuBar p_menu;
-    private JMenuItem p_menu_export;
-    private JMenuItem p_menu_quit;
 
     private JComboBox p_entryStyleInput;
     private JTextField p_entryNameInput;
@@ -80,18 +73,20 @@ public class Window implements Iterable<Map.Entry<String, String>> {
     private List<Map.Entry<String, JPanel>> p_fieldMap;
 
 
-    public Window() {
+    public ReferenceWindow() {
         p_window = new JFrame();
 
         p_fieldMap = new ArrayList<Map.Entry<String, JPanel>>();
 
         p_window.setSize(550, 350);
         p_window.setMinimumSize(new Dimension(475, 350));
-        p_window.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        p_window.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
 
         populate();
+    }
 
-        p_window.setVisible(true);
+    public void setVisible(boolean visible) {
+        p_window.setVisible(visible);
     }
 
 
@@ -121,14 +116,6 @@ public class Window implements Iterable<Map.Entry<String, String>> {
             case SET_ENTRY:
                 p_setEntryButton.setAction(action);
                 return;
-
-            case MENU_QUIT:
-                p_menu_quit.setAction(action);
-                return;
-                
-            case MENU_EXPORT:
-                p_menu_export.setAction(action);
-                return; 
                
             default:
                 // action not supported
@@ -143,16 +130,16 @@ public class Window implements Iterable<Map.Entry<String, String>> {
      * @param name Name of the current entry
      */
     public void setEntry(String style, String name) {
-        if (name.isEmpty()) {
-            p_window.setTitle(APP_NAME);
-        } else {
-            p_window.setTitle(APP_NAME + " - '" + name + "'");
-        }
-
         p_pane.removeAll();
         p_fieldMap.clear();
 
-        p_scrollPane.setBorder(BorderFactory.createTitledBorder(style + " - " + name));
+        if (name.isEmpty()) {
+            p_window.setTitle(GUI.APP_NAME + " - Reference Editor");
+            p_scrollPane.setBorder(BorderFactory.createEmptyBorder(0, 3, 0, 3));
+        } else {
+            p_window.setTitle(GUI.APP_NAME + " - Reference Editor - '" + name + "'");
+            p_scrollPane.setBorder(BorderFactory.createTitledBorder(style + " - " + name));
+        }
     }
 
 
@@ -286,18 +273,6 @@ public class Window implements Iterable<Map.Entry<String, String>> {
      * Add UI elements to the window, and setup action handling
      */
     private void populate() {
-        p_menu = new JMenuBar();
-        p_window.setJMenuBar(p_menu);
-        JMenu p_menu2 = new JMenu("File");
-        p_menu.add(p_menu2);
-        
-        p_menu_export = new JMenuItem("Export");
-        p_menu2.add(p_menu_export);
-        
-        p_menu_quit = new JMenuItem("Quit");
-
-        p_menu2.add(p_menu_quit);
-        
         JPanel topPane = new JPanel();
         p_entryStyleInput = new JComboBox();
         p_entryNameInput = new JTextField();

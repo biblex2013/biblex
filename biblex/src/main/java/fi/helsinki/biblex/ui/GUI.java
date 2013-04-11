@@ -5,7 +5,6 @@ import fi.helsinki.biblex.domain.BibTexEntry;
 import fi.helsinki.biblex.domain.BibTexStyle;
 import fi.helsinki.biblex.validation.AbstractValidator;
 import fi.helsinki.biblex.validation.ValidationException;
-import fi.helsinki.biblex.validation.support.ArticleValidator;
 
 import java.awt.event.ActionEvent;
 import java.io.IOException;
@@ -14,17 +13,25 @@ import java.util.*;
 import javax.swing.*;
 
 /**
- * This class handles the application GUI The appearance of the interface is
- * handled by the Window class.
+ * This class handles the application GUI.
  */
 public class GUI {
+    static final String APP_NAME = "Biblex";
 
-    private Window p_window;
+    private MainWindow p_mainWindow;
+    private ReferenceWindow p_refWindow;
     private BibTexEntry p_entry;
 
     public GUI() {
-        p_window = new Window();
+        p_mainWindow = new MainWindow();
+        p_refWindow = new ReferenceWindow();
+    }
 
+    public void init() {
+        // Populate MainWindow
+        populateEntryList();
+
+        // Populate ReferenceWindow
         populateEntryStyles();
         createActions();
     }
@@ -32,10 +39,24 @@ public class GUI {
     /**
      * Add all known entry styles to the style selection combo-box
      */
+    private void populateEntryList() {
+        for (BibTexEntry entry : App.getStorage()) {
+            p_mainWindow.addEntry(entry.getName());
+        }
+    }
+
+    /**
+     * Add all known entry styles to the style selection combo-box
+     */
     private void populateEntryStyles() {
         for (BibTexStyle style : BibTexStyle.values()) {
-            p_window.addEntryStyle(style);
+            p_refWindow.addEntryStyle(style);
         }
+    }
+
+    private void newEntry() {
+        p_entry = null;
+        p_refWindow.setEntry("", "");
     }
 
     /**
@@ -46,16 +67,16 @@ public class GUI {
      */
     private void setEntry(BibTexStyle style, String name) {
         if (style == null || name.trim().isEmpty()) {
-            p_window.displayError("Reference name or type is invalid", "Reference creation failed");
+            p_refWindow.displayError("Reference name or type is invalid", "Reference creation failed");
             return;
         }
 
         p_entry = new BibTexEntry(name, style);
-        p_window.setEntry(style.name(), name);
+        p_refWindow.setEntry(style.name(), name);
 
         AbstractValidator validator = App.getValidationService().getValidator(style);
         for (String field : validator.getSetOfRequiredFields()) {
-            p_window.addField(field, "");
+            p_refWindow.addField(field, "");
         }
     }
 
@@ -69,10 +90,10 @@ public class GUI {
             throw new RuntimeException("Internal error, tried to open null reference");
 
         p_entry = entry;
-        p_window.setEntry(entry.getStyle().name(), p_entry.getName());
+        p_refWindow.setEntry(entry.getStyle().name(), p_entry.getName());
 
         for (Map.Entry<String, String> e : entry) {
-            p_window.addField(e.getKey(), e.getValue());
+            p_refWindow.addField(e.getKey(), e.getValue());
         }
     }
 
@@ -82,21 +103,21 @@ public class GUI {
         }
 
         try {
-            for (Map.Entry<String, String> field : p_window) {
+            for (Map.Entry<String, String> field : p_refWindow) {
                 p_entry.put(field.getKey(), field.getValue());
             }
 
             App.getValidationService().checkEntry(p_entry);
 
         } catch (ValidationException e) {
-            p_window.displayError(e.getMessage(), "Validation failed");
+            p_refWindow.displayError(e.getMessage(), "Validation failed");
             return;
         }
 
         try {
             App.getStorage().add(p_entry);
         } catch (Exception ex) {
-            p_window.displayError(ex.getMessage(), "Saving failed");
+            p_refWindow.displayError(ex.getMessage(), "Saving failed");
             return;
         }
         System.out.println(p_entry.toString());
@@ -106,58 +127,57 @@ public class GUI {
      * Set up the actions to be used in the UI
      */
     private void createActions() {
-        // TODO: thread safety for action handlers
-
-        p_window.registerAction(
-                Window.UIAction.SUBMIT,
+        // ReferenceWindow
+        p_refWindow.registerAction(
+                ReferenceWindow.UIAction.SUBMIT,
                 new AbstractAction("Save Reference", UIManager.getIcon("FileView.hardDriveIcon")) {
-
                     public void actionPerformed(ActionEvent e) {
                         submitEntry();
                     }
-                });
+                }
+        );
 
-        p_window.registerAction(
-                Window.UIAction.ADD_FIELD,
+        p_refWindow.registerAction(
+                ReferenceWindow.UIAction.ADD_FIELD,
                 new AbstractAction("Add Field") {
-
                     public void actionPerformed(ActionEvent e) {
-                        String name = p_window.getFieldNameEntry();
+                        String name = p_refWindow.getFieldNameEntry();
                         if (name.trim().isEmpty()) {
-                            p_window.displayError("Field name cannot be empty", "Failed to add field");
+                            p_refWindow.displayError("Field name cannot be empty", "Failed to add field");
                             return;
                         }
 
-                        p_window.addField(name, "");
+                        p_refWindow.addField(name, "");
                         p_entry.put(name, "");
-                        p_window.clearFieldNameEntry();
+                        p_refWindow.clearFieldNameEntry();
                     }
-                });
+                }
+        );
 
-
-        p_window.registerAction(
-                Window.UIAction.DELETE_FIELD,
+        p_refWindow.registerAction(
+                ReferenceWindow.UIAction.DELETE_FIELD,
                 new AbstractAction("", UIManager.getIcon("InternalFrame.paletteCloseIcon")) {
-
                     public void actionPerformed(ActionEvent e) {
-                        p_window.deleteField(e.getActionCommand());
+                        p_refWindow.deleteField(e.getActionCommand());
                         p_entry.remove(e.getActionCommand());
                     }
-                });
+                }
+        );
 
-
-        p_window.registerAction(
-                Window.UIAction.SET_ENTRY,
+        p_refWindow.registerAction(
+                ReferenceWindow.UIAction.SET_ENTRY,
                 new AbstractAction("Create") {
 
                     public void actionPerformed(ActionEvent e) {
-                        setEntry(p_window.getEntryStyleInput(), p_window.getEntryNameInput());
-                        p_window.clearEntryNameInput();
+                        setEntry(p_refWindow.getEntryStyleInput(), p_refWindow.getEntryNameInput());
+                        p_refWindow.clearEntryNameInput();
                     }
-                });
+                }
+        );
 
-        p_window.registerAction(
-                Window.UIAction.MENU_EXPORT,
+        // MainWindow
+        p_mainWindow.registerAction(
+                MainWindow.UIAction.MENU_EXPORT,
                 new AbstractAction("Export") {
                     @Override
                     /* Maybesti needs some fileselector thingie to select the outputfile */
@@ -165,19 +185,31 @@ public class GUI {
                         try {
                             App.getExporter().write("exported.bib");
                         } catch (IOException ex) {
-                            p_window.displayError(ex.getMessage(), "Export failed");
+                            p_refWindow.displayError(ex.getMessage(), "Export failed");
                         }
                     }
-                });
+                }
+        );
 
-        p_window.registerAction(
-                Window.UIAction.MENU_QUIT,
+        p_mainWindow.registerAction(
+                MainWindow.UIAction.MENU_QUIT,
                 new AbstractAction("Quit") {
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         System.exit(0);
                     }
+                }
+        );
 
-        });
+        p_mainWindow.registerAction(
+                MainWindow.UIAction.MENU_NEW_ENTRY,
+                new AbstractAction("New Reference") {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        p_refWindow.setVisible(true);
+                        newEntry();
+                    }
+                }
+        );
     }
 }
