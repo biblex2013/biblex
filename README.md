@@ -5,25 +5,24 @@ Ohjelmistotuotanto 2013
 ## Product backlog
 
 1. *Book*-, *article*- ja *inproceednigs*-tyyppisten viitteiden vieminen BibTeXinä
- - Fest / EasyB testauksen lisääminen työprosessiin (Definition-of-Done)
-***
- - Virheellisessä muodossa olevan syötteen käsitteleminen
- - BibTeX-muodossa olevan data lisääminen
- - Viitteiden hakeminen
- - Viitteen poistaminen
- - Viitten muokkaaminen
- - Viitteiden synkronointi
- - Käyttäjä luo tagin
- - Käyttäjä merkkaa viitteen tagilla
- - Käyttäjä haluaa poistaa tagin
- - Viitteen tuominen ACM:stä
- - Uuden, minkä tahansa tyyppisen, viitteen lisääminen
+1. Fest / EasyB testauksen lisääminen työprosessiin (Definition-of-Done)
+1. Virheellisessä muodossa olevan syötteen käsitteleminen
+1. BibTeX-muodossa olevan data lisääminen
+1. Viitteiden hakeminen
+1. Viitteen poistaminen
+1. Viitten muokkaaminen
+1. Viitteiden synkronointi
+1. Käyttäjä luo tagin
+1. Käyttäjä merkkaa viitteen tagilla
+1. Käyttäjä haluaa poistaa tagin
+1. Viitteen tuominen ACM:stä
+1. Uuden, minkä tahansa tyyppisen, viitteen lisääminen
 
 ### Done
 
 1. Hyvin muotoillun *article*-tyyppisen viitteen lisääminen tyypillisillä kentillä
- - Viitteiden vieminen BibTeXinä
- - *Inproceedings*- ja *book*-tyyppisten viitteiden lisääminen
+1. Viitteiden vieminen BibTeXinä
+1. *Inproceedings*- ja *book*-tyyppisten viitteiden lisääminen
 
 
 ## Backlog
