@@ -33,6 +33,7 @@ public class MainWindowTest extends TestCase {
         
     @Before
     public void setUp() {
+        app = App.getInstance();
         gui = app.getP_gui();
         mainWindow = gui.getWindow();
         
@@ -41,7 +42,7 @@ public class MainWindowTest extends TestCase {
     
     @After
     public void tearDown() {
-        ":DDDD"
+        
     }
     
     @Test

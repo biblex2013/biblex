@@ -74,7 +74,7 @@ public class App {
         return getInstance().p_validation;
     }
 
-    private static App getInstance() {
+    public static App getInstance() {
         if (p_instance == null) {
             throw new RuntimeException("No App instance available");
         }
