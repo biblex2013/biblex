@@ -1,21 +1,48 @@
-
 package fi.helsinki.biblex.ui;
 
-import static org.junit.Assert.*;
-import static org.junit.Assume.*;
-
 import fi.helsinki.biblex.App;
+import javax.swing.JFrame;
+import junit.framework.TestCase;
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
+import static org.junit.Assert.*;
+import org.fest.util.*;
+import org.fest.assertions.*;
+import org.fest.swing.annotation.GUITest;
+import org.fest.swing.*;
+import org.fest.swing.fixture.FrameFixture;
 
 /**
  *
- * @author jesseimm
+ * @author jtmikkon
  */
-public class MainWindowTest {
-//    private App app = App().createInstance();
-//    
-//    GUI gui = app.getP_gui();
-//    MainWindow mainwindow = gui.getP_mainWindow();
+public class MainWindowTest extends TestCase {
+    
+    private GUI gui;
+    private EntryPane entryPane;
+    private JFrame mainWindow;
+    private ReferenceWindow refWindow;
+    private App app;
+    
+    private FrameFixture main;
+    
+    
+        
+    @Before
+    public void setUp() {
+        gui = app.getP_gui();
+        mainWindow = gui.getWindow();
+        
+        main = new FrameFixture(mainWindow);
+    }
+    
+    @After
+    public void tearDown() {
+        ":DDDD"
+    }
     
     @Test
     public void testTest() {
