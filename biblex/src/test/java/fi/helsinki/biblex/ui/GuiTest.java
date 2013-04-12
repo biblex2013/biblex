@@ -1,6 +1,7 @@
 package fi.helsinki.biblex.ui;
 
 import fi.helsinki.biblex.App;
+import fi.helsinki.biblex.category.SlowTest;
 import fi.helsinki.biblex.exporter.Exporter;
 import fi.helsinki.biblex.storage.Storage;
 import java.awt.GraphicsEnvironment;
@@ -25,12 +26,14 @@ import org.fest.swing.fixture.JOptionPaneFixture;
 import org.fest.swing.timing.Pause;
 import org.fest.swing.timing.Timeout;
 import org.junit.FixMethodOrder;
+import org.junit.experimental.categories.Category;
 import org.junit.runners.MethodSorters;
 
 /**
  *
  * @author jtmikkon
  */
+@Category(SlowTest.class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class GuiTest {
     
