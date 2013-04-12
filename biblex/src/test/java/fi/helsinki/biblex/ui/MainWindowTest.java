@@ -1,7 +1,11 @@
 
 package fi.helsinki.biblex.ui;
 
+import static org.junit.Assert.*;
+import static org.junit.Assume.*;
+
 import fi.helsinki.biblex.App;
+import org.junit.Test;
 
 /**
  *
@@ -13,4 +17,8 @@ public class MainWindowTest {
 //    GUI gui = app.getP_gui();
 //    MainWindow mainwindow = gui.getP_mainWindow();
     
+    @Test
+    public void testTest() {
+        assertTrue(true);
+    }
 }
