@@ -20,7 +20,7 @@ public class ReferenceWindowTest {
         // skipataan GUI testaus, jos ympäristö ei ole graafinen (esim. Jenkins)
         assumeTrue(!GraphicsEnvironment.isHeadless());
 
-        win = new ReferenceWindow();
+        win = new ReferenceWindow(new EntryPane());
         win.setEntry("Test", "Test");
     }
 

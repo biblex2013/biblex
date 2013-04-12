@@ -22,7 +22,7 @@ public class App {
     private Storage p_storage;
     private Exporter p_exporter;
 
-    public App() {
+    private App() {
         try {
             p_storage = new SQLiteStorage("database.dat");  
         } catch (Exception ex) {
@@ -51,6 +51,13 @@ public class App {
     }
 
     public static void main(String[] args) {
+        createInstance();
+    }
+    
+    public static void createInstance() {
+        if (p_instance != null)
+            throw new RuntimeException("App instance already exists");
+            
         p_instance = new App();
         p_instance.run();
     }
