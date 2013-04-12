@@ -19,14 +19,19 @@ import org.fest.assertions.*;
 import org.fest.swing.annotation.GUITest;
 import org.fest.swing.*;
 import org.fest.swing.core.matcher.DialogMatcher;
+import org.fest.swing.fixture.ContainerFixture;
 import org.fest.swing.fixture.FrameFixture;
+import org.fest.swing.fixture.JOptionPaneFixture;
 import org.fest.swing.timing.Pause;
 import org.fest.swing.timing.Timeout;
+import org.junit.FixMethodOrder;
+import org.junit.runners.MethodSorters;
 
 /**
  *
  * @author jtmikkon
  */
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class GuiTest {
     
     private GUI gui;
@@ -37,14 +42,20 @@ public class GuiTest {
     private Storage storage;
     private Exporter exporter;
     private FrameFixture testFrame;
-    private FrameFixture mainWindowFrameFixture;
     
+    /**
+     * Diipa.
+     * @throws InstantiationException
+     * @throws IllegalAccessException
+     */
     
     public GuiTest() throws InstantiationException, IllegalAccessException {
         app.createInstance();
         app = App.getInstance();
         gui = app.getP_gui();
         refWindow = gui.getWindow();
+        testFrame = new FrameFixture(refWindow);
+        testFrame.show();
         
     }
     
@@ -59,24 +70,47 @@ public class GuiTest {
     
     @Before
     public void setUp() {
-        
     }
     
     @After
     public void tearDown() {
+        testFrame.cleanUp();
+        testFrame = new FrameFixture(app.getP_gui().getWindow());
+        
     }
-    
+  
     @Test
-    public void refWindowTest() {
-        FrameFixture testFrame = new FrameFixture(refWindow);
-        testFrame.show();
-        
+    public void requireErrorMessageWhenTextBoxEmptyTest() {
+       
+        Pause.pause(500);
         testFrame.comboBox().selectItem("inproceedings");
+        Pause.pause(500);
         testFrame.comboBox().requireSelection("inproceedings");
-        
+        Pause.pause(500);
         //testFrame.textBox().enterText("lols");
+        testFrame.button("p_setEntryButton").click();
+        Pause.pause(500);
+        //testFrame.button("p_submitButton").click();
+        testFrame.optionPane().requireErrorMessage();
+        testFrame.optionPane().button().click();
+    }
+
+    /*
+    @Test
+    public void requireErrorMessageWhenClickingCreateWithEmptyFields() {
+        Pause.pause(500);
+        testFrame.comboBox().selectItem("article");
+        Pause.pause(500);
+        testFrame.comboBox().requireSelection("article");
+        Pause.pause(500);
+        testFrame.textBox("p_entryNameInput").enterText("omgtesti");
+        Pause.pause(500);
+        testFrame.button("p_setEntryButton").click();
+        Pause.pause(500);
         testFrame.button("p_submitButton").click();
         
-        
+        testFrame.optionPane().requireErrorMessage();
     }
+    */
 }
+
