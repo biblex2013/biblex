@@ -41,9 +41,18 @@ public class App {
         p_gui = new GUI();
     }
     
-    /** Getter for FEST TESTS. */
+    /* Getter for FEST TESTS. */
     public GUI getP_gui() {
         return p_gui;
+    }
+    
+    /* Delete instance for fest tests. */
+    public void deleteInstrance() {
+        p_instance = null;
+        p_gui = null;
+        p_validation = null;
+        p_storage = null;
+        p_exporter = null;
     }
 
     private void run() {

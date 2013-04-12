@@ -49,7 +49,20 @@ public class GuiTest {
      * @throws IllegalAccessException
      */
     
-    public GuiTest() throws InstantiationException, IllegalAccessException {
+//    public GuiTest() throws InstantiationException, IllegalAccessException {
+//        app.createInstance();
+//        app = App.getInstance();
+//        gui = app.getP_gui();
+//        refWindow = gui.getWindow();
+//        testFrame = new FrameFixture(refWindow);
+//        testFrame.show();
+//        
+//    }
+    
+    
+    
+    @Before
+    public void setUp() {
         app.createInstance();
         app = App.getInstance();
         gui = app.getP_gui();
@@ -59,30 +72,18 @@ public class GuiTest {
         
     }
     
-    @BeforeClass
-    public static void setUpClass() {
-        assumeTrue(!GraphicsEnvironment.isHeadless());
-    }
-    
-    @AfterClass
-    public static void tearDownClass() {
-    }
-    
-    @Before
-    public void setUp() {
-    }
-    
     @After
     public void tearDown() {
         testFrame.cleanUp();
-        testFrame = new FrameFixture(app.getP_gui().getWindow());
-        
+        app.deleteInstrance();
+        app = null;
+        gui = null;
+        refWindow = null;
+        testFrame = null;
     }
   
     @Test
     public void requireErrorMessageWhenTextBoxEmptyTest() {
-       
-        Pause.pause(500);
         testFrame.comboBox().selectItem("inproceedings");
         Pause.pause(500);
         testFrame.comboBox().requireSelection("inproceedings");
@@ -93,12 +94,12 @@ public class GuiTest {
         //testFrame.button("p_submitButton").click();
         testFrame.optionPane().requireErrorMessage();
         testFrame.optionPane().button().click();
+        
     }
 
-    /*
+    
     @Test
     public void requireErrorMessageWhenClickingCreateWithEmptyFields() {
-        Pause.pause(500);
         testFrame.comboBox().selectItem("article");
         Pause.pause(500);
         testFrame.comboBox().requireSelection("article");
@@ -110,7 +111,8 @@ public class GuiTest {
         testFrame.button("p_submitButton").click();
         
         testFrame.optionPane().requireErrorMessage();
+        
     }
-    */
+   
 }
 
