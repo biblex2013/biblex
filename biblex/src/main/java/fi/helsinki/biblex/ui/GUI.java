@@ -189,8 +189,10 @@ public class GUI {
                     @Override
                     /* Maybesti needs some fileselector thingie to select the outputfile */
                     public void actionPerformed(ActionEvent e) {
+                        FileChooser fc = new FileChooser();
                         try {
-                            App.getExporter().write("exported.bib");
+                            String filename = fc.getFileName();
+                            App.getExporter().write(filename);
                         } catch (IOException ex) {
                             p_refWindow.displayError(ex.getMessage(), "Export failed");
                         }
