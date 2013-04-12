@@ -22,7 +22,7 @@ public class App {
     private Storage p_storage;
     private Exporter p_exporter;
 
-    private App() {
+    public App() {
         try {
             p_storage = new SQLiteStorage("database.dat");  
         } catch (Exception ex) {
@@ -39,6 +39,11 @@ public class App {
         p_validation.attach(new InproceedingsValidator());
 
         p_gui = new GUI();
+    }
+    
+    /** Getter for FEST TESTS. */
+    public GUI getP_gui() {
+        return p_gui;
     }
 
     private void run() {

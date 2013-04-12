@@ -35,7 +35,13 @@ public class GUI {
         populateEntryStyles();
         createActions();
     }
-
+    /**
+     * Getter for FEST tests 
+     */
+    public MainWindow getP_mainWindow() {
+        return p_mainWindow;
+    }
+    
     /**
      * Add all known entry styles to the style selection combo-box
      */
