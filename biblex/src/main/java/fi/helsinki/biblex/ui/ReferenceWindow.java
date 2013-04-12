@@ -16,7 +16,10 @@ public class ReferenceWindow implements Iterable<Map.Entry<String, String>> {
         SUBMIT,
         ADD_FIELD,
         DELETE_FIELD,
-        SET_ENTRY
+        SET_ENTRY,
+        MENU_QUIT,
+        MENU_EXPORT,
+        MENU_NEW_ENTRY
     }
 
 
@@ -62,9 +65,15 @@ public class ReferenceWindow implements Iterable<Map.Entry<String, String>> {
     private JTextField p_entryNameInput;
     private JTextField p_fieldNameInput;
 
+    private JMenuBar p_menu;
+
     private JButton p_submitButton;
     private JButton p_addFieldButton;
     private JButton p_setEntryButton;
+
+    private JMenuItem p_menuNewEntry;
+    private JMenuItem p_menuExport;
+    private JMenuItem p_menuQuit;
 
     // Need to keep track of this, as each field has it's own button
     private Action p_deleteAction;
@@ -73,20 +82,18 @@ public class ReferenceWindow implements Iterable<Map.Entry<String, String>> {
     private List<Map.Entry<String, JPanel>> p_fieldMap;
 
 
-    public ReferenceWindow() {
+    public ReferenceWindow(JPanel entryPane) {
         p_window = new JFrame();
 
         p_fieldMap = new ArrayList<Map.Entry<String, JPanel>>();
 
-        p_window.setSize(550, 350);
+        p_window.setSize(550, 550);
         p_window.setMinimumSize(new Dimension(475, 350));
-        p_window.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
+        p_window.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
-        populate();
-    }
+        populate(entryPane);
 
-    public void setVisible(boolean visible) {
-        p_window.setVisible(visible);
+        p_window.setVisible(true);
     }
 
 
@@ -115,6 +122,18 @@ public class ReferenceWindow implements Iterable<Map.Entry<String, String>> {
 
             case SET_ENTRY:
                 p_setEntryButton.setAction(action);
+                return;
+
+            case MENU_QUIT:
+                p_menuQuit.setAction(action);
+                return;
+                
+            case MENU_EXPORT:
+                p_menuExport.setAction(action);
+                return;
+
+            case MENU_NEW_ENTRY:
+                p_menuNewEntry.setAction(action);
                 return;
                
             default:
@@ -269,26 +288,53 @@ public class ReferenceWindow implements Iterable<Map.Entry<String, String>> {
     }
 
 
+    public JFrame getWindow() {
+        return p_window;
+    }
+
+
     /**
      * Add UI elements to the window, and setup action handling
      */
-    private void populate() {
+    private void populate(JPanel entryPane) {
+        p_menu = new JMenuBar();
+        p_window.setJMenuBar(p_menu);
+
+        JMenu fileMenu = new JMenu("File");
+        p_menuNewEntry = new JMenuItem();
+        p_menuExport = new JMenuItem();
+        p_menuQuit = new JMenuItem();
+
+        fileMenu.add(p_menuNewEntry);
+        fileMenu.add(new JSeparator());
+        fileMenu.add(p_menuExport);
+        fileMenu.add(new JSeparator());
+        fileMenu.add(p_menuQuit);
+
+        p_menu.add(fileMenu);
+
         JPanel topPane = new JPanel();
+        topPane.setLayout(new BoxLayout(topPane, BoxLayout.Y_AXIS));
+
+        JPanel topSubPane = new JPanel();
         p_entryStyleInput = new JComboBox();
         p_entryNameInput = new JTextField();
         p_setEntryButton = new JButton();
 
-        topPane.setLayout(new BoxLayout(topPane, BoxLayout.X_AXIS));
-        topPane.setBorder(BorderFactory.createEmptyBorder(3, 3, 3, 3));
-        topPane.add(new JLabel("Reference type:"));
-        topPane.add(Box.createRigidArea(new Dimension(5, 0)));
-        topPane.add(p_entryStyleInput);
-        topPane.add(Box.createRigidArea(new Dimension(10, 0)));
-        topPane.add(new JLabel("Reference name:"));
-        topPane.add(Box.createRigidArea(new Dimension(5, 0)));
-        topPane.add(p_entryNameInput);
-        topPane.add(Box.createRigidArea(new Dimension(5, 0)));
-        topPane.add(p_setEntryButton);
+        topSubPane.setLayout(new BoxLayout(topSubPane, BoxLayout.X_AXIS));
+        topSubPane.setBorder(BorderFactory.createEmptyBorder(3, 3, 3, 3));
+        topSubPane.add(new JLabel("Reference type:"));
+        topSubPane.add(Box.createRigidArea(new Dimension(5, 0)));
+        topSubPane.add(p_entryStyleInput);
+        topSubPane.add(Box.createRigidArea(new Dimension(10, 0)));
+        topSubPane.add(new JLabel("Reference name:"));
+        topSubPane.add(Box.createRigidArea(new Dimension(5, 0)));
+        topSubPane.add(p_entryNameInput);
+        topSubPane.add(Box.createRigidArea(new Dimension(5, 0)));
+        topSubPane.add(p_setEntryButton);
+
+        topPane.add(entryPane);
+        topPane.add(topSubPane);
 
         JPanel bottomSubPane = new JPanel();
         p_fieldNameInput = new JTextField();

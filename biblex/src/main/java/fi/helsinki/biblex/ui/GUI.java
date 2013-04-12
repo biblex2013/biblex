@@ -18,17 +18,17 @@ import javax.swing.*;
 public class GUI {
     static final String APP_NAME = "Biblex";
 
-    private MainWindow p_mainWindow;
+    private EntryPane p_entryPane;
     private ReferenceWindow p_refWindow;
     private BibTexEntry p_entry;
 
     public GUI() {
-        p_mainWindow = new MainWindow();
-        p_refWindow = new ReferenceWindow();
+        p_entryPane = new EntryPane();
+        p_refWindow = new ReferenceWindow(p_entryPane);
     }
 
     public void init() {
-        // Populate MainWindow
+        // Populate EntryPane
         populateEntryList();
 
         // Populate ReferenceWindow
@@ -36,13 +36,17 @@ public class GUI {
         createActions();
     }
 
+    public JFrame getWindow() {
+        return p_refWindow.getWindow();
+    }
+
     /**
      * Add all known entry styles to the style selection combo-box
      */
     private void populateEntryList() {
-        p_mainWindow.clearEntryList();
+        p_entryPane.clearEntryList();
         for (BibTexEntry entry : App.getStorage()) {
-            p_mainWindow.addEntry(entry.getName());
+            p_entryPane.addEntry(entry.getName());
         }
     }
 
@@ -177,9 +181,9 @@ public class GUI {
                 }
         );
 
-        // MainWindow
-        p_mainWindow.registerAction(
-                MainWindow.UIAction.MENU_EXPORT,
+        // EntryPane
+        p_refWindow.registerAction(
+                ReferenceWindow.UIAction.MENU_EXPORT,
                 new AbstractAction("Export") {
                     @Override
                     /* Maybesti needs some fileselector thingie to select the outputfile */
@@ -193,8 +197,8 @@ public class GUI {
                 }
         );
 
-        p_mainWindow.registerAction(
-                MainWindow.UIAction.MENU_QUIT,
+        p_refWindow.registerAction(
+                ReferenceWindow.UIAction.MENU_QUIT,
                 new AbstractAction("Quit") {
                     @Override
                     public void actionPerformed(ActionEvent e) {
@@ -203,12 +207,11 @@ public class GUI {
                 }
         );
 
-        p_mainWindow.registerAction(
-                MainWindow.UIAction.MENU_NEW_ENTRY,
+        p_refWindow.registerAction(
+                ReferenceWindow.UIAction.MENU_NEW_ENTRY,
                 new AbstractAction("New Reference") {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        p_refWindow.setVisible(true);
                         newEntry();
                     }
                 }
