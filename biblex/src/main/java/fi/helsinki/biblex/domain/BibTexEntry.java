@@ -10,6 +10,7 @@ import java.util.TreeMap;
  * @author rodde
  */
 public class BibTexEntry implements Iterable<Map.Entry<String,String>> {
+    private long id;
     private String name;
     private BibTexStyle style;
     private Map<String, String> m;
@@ -36,6 +37,14 @@ public class BibTexEntry implements Iterable<Map.Entry<String,String>> {
         this(name, BibTexStyle.valueOf(style.toUpperCase()));
     }
 
+    public long getId() {
+        return id;
+    }
+    
+    public void setId(long id) {
+        this.id = id;
+    }
+    
     public Iterator<Map.Entry<String,String>> iterator() {
         return m.entrySet().iterator();
     }
