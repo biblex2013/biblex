@@ -4,6 +4,7 @@ import fi.helsinki.biblex.App;
 import fi.helsinki.biblex.exporter.Exporter;
 import fi.helsinki.biblex.storage.Storage;
 import java.awt.GraphicsEnvironment;
+import java.util.concurrent.TimeUnit;
 import javax.swing.JFrame;
 import junit.framework.TestCase;
 import org.junit.After;
@@ -17,7 +18,10 @@ import org.fest.util.*;
 import org.fest.assertions.*;
 import org.fest.swing.annotation.GUITest;
 import org.fest.swing.*;
+import org.fest.swing.core.matcher.DialogMatcher;
 import org.fest.swing.fixture.FrameFixture;
+import org.fest.swing.timing.Pause;
+import org.fest.swing.timing.Timeout;
 
 /**
  *
@@ -33,14 +37,14 @@ public class GuiTest {
     private Storage storage;
     private Exporter exporter;
     private FrameFixture testFrame;
+    private FrameFixture mainWindowFrameFixture;
+    
     
     public GuiTest() throws InstantiationException, IllegalAccessException {
         app.createInstance();
         app = App.getInstance();
         gui = app.getP_gui();
         refWindow = gui.getWindow();
-        
-        
         
     }
     
