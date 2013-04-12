@@ -153,10 +153,10 @@ public class ReferenceWindow implements Iterable<Map.Entry<String, String>> {
         p_fieldMap.clear();
 
         if (name.isEmpty()) {
-            p_window.setTitle(GUI.APP_NAME + " - Reference Editor");
+            p_window.setTitle(GUI.APP_NAME);
             p_scrollPane.setBorder(BorderFactory.createEmptyBorder(0, 3, 0, 3));
         } else {
-            p_window.setTitle(GUI.APP_NAME + " - Reference Editor - '" + name + "'");
+            p_window.setTitle(GUI.APP_NAME + " - '" + name + "'");
             p_scrollPane.setBorder(BorderFactory.createTitledBorder(style + " - " + name));
         }
     }
@@ -314,27 +314,21 @@ public class ReferenceWindow implements Iterable<Map.Entry<String, String>> {
         p_menu.add(fileMenu);
 
         JPanel topPane = new JPanel();
-        topPane.setLayout(new BoxLayout(topPane, BoxLayout.Y_AXIS));
-
-        JPanel topSubPane = new JPanel();
         p_entryStyleInput = new JComboBox();
         p_entryNameInput = new JTextField();
         p_setEntryButton = new JButton();
 
-        topSubPane.setLayout(new BoxLayout(topSubPane, BoxLayout.X_AXIS));
-        topSubPane.setBorder(BorderFactory.createEmptyBorder(3, 3, 3, 3));
-        topSubPane.add(new JLabel("Reference type:"));
-        topSubPane.add(Box.createRigidArea(new Dimension(5, 0)));
-        topSubPane.add(p_entryStyleInput);
-        topSubPane.add(Box.createRigidArea(new Dimension(10, 0)));
-        topSubPane.add(new JLabel("Reference name:"));
-        topSubPane.add(Box.createRigidArea(new Dimension(5, 0)));
-        topSubPane.add(p_entryNameInput);
-        topSubPane.add(Box.createRigidArea(new Dimension(5, 0)));
-        topSubPane.add(p_setEntryButton);
-
-        topPane.add(entryPane);
-        topPane.add(topSubPane);
+        topPane.setLayout(new BoxLayout(topPane, BoxLayout.X_AXIS));
+        topPane.setBorder(BorderFactory.createEmptyBorder(3, 3, 3, 3));
+        topPane.add(new JLabel("Reference type:"));
+        topPane.add(Box.createRigidArea(new Dimension(5, 0)));
+        topPane.add(p_entryStyleInput);
+        topPane.add(Box.createRigidArea(new Dimension(10, 0)));
+        topPane.add(new JLabel("Reference name:"));
+        topPane.add(Box.createRigidArea(new Dimension(5, 0)));
+        topPane.add(p_entryNameInput);
+        topPane.add(Box.createRigidArea(new Dimension(5, 0)));
+        topPane.add(p_setEntryButton);
 
         JPanel bottomSubPane = new JPanel();
         p_fieldNameInput = new JTextField();
@@ -363,8 +357,17 @@ public class ReferenceWindow implements Iterable<Map.Entry<String, String>> {
         p_scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
         p_scrollPane.setBorder(BorderFactory.createEmptyBorder(0, 3, 0, 3));
 
-        p_window.getContentPane().add(topPane, BorderLayout.NORTH);
-        p_window.getContentPane().add(p_scrollPane, BorderLayout.CENTER);
-        p_window.getContentPane().add(bottomPane, BorderLayout.SOUTH);
+        JPanel mainPane = new JPanel();
+        mainPane.setLayout(new BorderLayout());
+
+        entryPane.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+
+        mainPane.add(topPane, BorderLayout.NORTH);
+        mainPane.add(p_scrollPane, BorderLayout.CENTER);
+        mainPane.add(bottomPane, BorderLayout.SOUTH);
+
+        p_window.getContentPane().add(entryPane, BorderLayout.WEST);
+        p_window.getContentPane().add(mainPane, BorderLayout.CENTER);
     }
 }
+

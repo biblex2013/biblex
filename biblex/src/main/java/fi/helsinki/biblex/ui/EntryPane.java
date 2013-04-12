@@ -18,9 +18,6 @@ public class EntryPane extends JPanel {
 
 
     public EntryPane() {
-        this.setSize(550, 200);
-        this.setMinimumSize(new Dimension(475, 350));
-
         p_entryList = new DefaultListModel();
 
         populate();
@@ -36,7 +33,7 @@ public class EntryPane extends JPanel {
         p_entryList.addElement(name);
         p_scrollPane.revalidate();
     }
-    
+
     public void clearEntryList() {
         p_entryList.clear();
         p_scrollPane.revalidate();
@@ -51,5 +48,7 @@ public class EntryPane extends JPanel {
         p_scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
         p_scrollPane.setBorder(BorderFactory.createEmptyBorder(0, 3, 0, 3));
 
+        this.add(p_scrollPane, BorderLayout.CENTER);
     }
 }
+
