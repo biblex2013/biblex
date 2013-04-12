@@ -31,14 +31,14 @@ public class MainWindowTest extends TestCase {
     
     
         
-    @Before
-    public void setUp() {
-        app = App.getInstance();
-        gui = app.getP_gui();
-        mainWindow = gui.getWindow();
-        
-        main = new FrameFixture(mainWindow);
-    }
+//    @Before
+//    public void setUp() {
+//        app = App.getInstance();
+//        gui = app.getP_gui();
+//        mainWindow = gui.getWindow();
+//        
+//        main = new FrameFixture(mainWindow);
+//    }
     
     @After
     public void tearDown() {
