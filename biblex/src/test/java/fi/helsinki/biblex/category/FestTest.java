@@ -5,4 +5,4 @@ package fi.helsinki.biblex.category;
  *
  * @author jzse
  */
-public interface SlowTest {}
+public interface FestTest {}
