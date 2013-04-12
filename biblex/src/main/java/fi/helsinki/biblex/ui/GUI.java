@@ -5,7 +5,6 @@ import fi.helsinki.biblex.domain.BibTexEntry;
 import fi.helsinki.biblex.domain.BibTexStyle;
 import fi.helsinki.biblex.validation.AbstractValidator;
 import fi.helsinki.biblex.validation.ValidationException;
-
 import java.awt.event.ActionEvent;
 import java.io.IOException;
 import java.util.*;
@@ -36,9 +35,11 @@ public class GUI {
         createActions();
     }
 
+
     public JFrame getWindow() {
         return p_refWindow.getWindow();
     }
+
 
     /**
      * Add all known entry styles to the style selection combo-box
@@ -188,8 +189,10 @@ public class GUI {
                     @Override
                     /* Maybesti needs some fileselector thingie to select the outputfile */
                     public void actionPerformed(ActionEvent e) {
+                        FileChooser fc = new FileChooser();
                         try {
-                            App.getExporter().write("exported.bib");
+                            String filename = fc.getFileName();
+                            App.getExporter().write(filename);
                         } catch (IOException ex) {
                             p_refWindow.displayError(ex.getMessage(), "Export failed");
                         }

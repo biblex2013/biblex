@@ -40,12 +40,24 @@ public class App {
 
         p_gui = new GUI();
     }
+    
+    /** Getter for FEST TESTS. */
+    public GUI getP_gui() {
+        return p_gui;
+    }
 
     private void run() {
         p_gui.init();
     }
 
     public static void main(String[] args) {
+        createInstance();
+    }
+    
+    public static void createInstance() {
+        if (p_instance != null)
+            throw new RuntimeException("App instance already exists");
+            
         p_instance = new App();
         p_instance.run();
     }
