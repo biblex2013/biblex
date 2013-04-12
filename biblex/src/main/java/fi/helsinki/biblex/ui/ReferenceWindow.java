@@ -24,7 +24,7 @@ public class ReferenceWindow implements Iterable<Map.Entry<String, String>> {
         private int p_pos;
         private ReferenceWindow p_win;
 
-        private EntryIterator(ReferenceWindow win) {
+        public EntryIterator(ReferenceWindow win) {
             p_pos = 0;
             p_win = win;
         }

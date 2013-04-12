@@ -40,6 +40,7 @@ public class GUI {
      * Add all known entry styles to the style selection combo-box
      */
     private void populateEntryList() {
+        p_mainWindow.clearEntryList();
         for (BibTexEntry entry : App.getStorage()) {
             p_mainWindow.addEntry(entry.getName());
         }
@@ -133,6 +134,7 @@ public class GUI {
                 new AbstractAction("Save Reference", UIManager.getIcon("FileView.hardDriveIcon")) {
                     public void actionPerformed(ActionEvent e) {
                         submitEntry();
+                        populateEntryList();
                     }
                 }
         );
