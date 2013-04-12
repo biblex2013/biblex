@@ -1,10 +1,12 @@
 package fi.helsinki.biblex.ui;
 
+import java.util.MissingResourceException;
 import javax.swing.*;
 
-public class FileChooser extends JFileChooser {
-    public FileChooser() {
+public class ExportFileChooser extends GenericFileChooser {
+    public ExportFileChooser() {
         this.setFileSelectionMode(JFileChooser.FILES_ONLY);
+				this.setApproveButtonMnemonic('e');
     }
 
     public String getFileName() {

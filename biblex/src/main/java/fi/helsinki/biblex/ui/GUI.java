@@ -7,6 +7,7 @@ import fi.helsinki.biblex.validation.AbstractValidator;
 import fi.helsinki.biblex.validation.ValidationException;
 import java.awt.event.ActionEvent;
 import java.io.IOException;
+
 import java.util.*;
 
 import javax.swing.*;
@@ -189,10 +190,11 @@ public class GUI {
                     @Override
                     /* Maybesti needs some fileselector thingie to select the outputfile */
                     public void actionPerformed(ActionEvent e) {
-                        FileChooser fc = new FileChooser();
+                        GenericFileChooser fc = new ExportFileChooser();
                         try {
                             String filename = fc.getFileName();
-                            App.getExporter().write(filename);
+                            if (filename != null)
+                              App.getExporter().write(filename);
                         } catch (IOException ex) {
                             p_refWindow.displayError(ex.getMessage(), "Export failed");
                         }
