@@ -1,7 +1,7 @@
 package fi.helsinki.biblex.ui;
 
 import fi.helsinki.biblex.App;
-import fi.helsinki.biblex.category.SlowTest;
+import fi.helsinki.biblex.category.FestTest;
 import fi.helsinki.biblex.exporter.Exporter;
 import fi.helsinki.biblex.storage.Storage;
 import java.awt.GraphicsEnvironment;
@@ -33,7 +33,7 @@ import org.junit.runners.MethodSorters;
  *
  * @author jtmikkon
  */
-@Category(SlowTest.class)
+@Category(FestTest.class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class GuiTest {
     
