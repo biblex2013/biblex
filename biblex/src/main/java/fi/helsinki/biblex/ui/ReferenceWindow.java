@@ -106,6 +106,7 @@ public class ReferenceWindow implements Iterable<Map.Entry<String, String>> {
     public void registerAction(UIAction uiAction, Action action) {
         switch (uiAction) {
             case SUBMIT:
+                p_submitButton.setName("p_submitButton");
                 p_submitButton.setAction(action);
                 return;
 

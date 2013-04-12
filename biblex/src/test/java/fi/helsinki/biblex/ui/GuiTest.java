@@ -3,6 +3,7 @@ package fi.helsinki.biblex.ui;
 import fi.helsinki.biblex.App;
 import fi.helsinki.biblex.exporter.Exporter;
 import fi.helsinki.biblex.storage.Storage;
+import java.awt.GraphicsEnvironment;
 import javax.swing.JFrame;
 import junit.framework.TestCase;
 import org.junit.After;
@@ -10,6 +11,7 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import static org.junit.Assume.*;
 import static org.junit.Assert.*;
 import org.fest.util.*;
 import org.fest.assertions.*;
@@ -44,6 +46,7 @@ public class GuiTest {
     
     @BeforeClass
     public static void setUpClass() {
+        assumeTrue(!GraphicsEnvironment.isHeadless());
     }
     
     @AfterClass
@@ -67,7 +70,8 @@ public class GuiTest {
         testFrame.comboBox().selectItem("inproceedings");
         testFrame.comboBox().requireSelection("inproceedings");
         
-        testFrame.textBox().enterText("lols");
+        //testFrame.textBox().enterText("lols");
+        testFrame.button("p_submitButton").click();
         
         
     }
