@@ -122,6 +122,7 @@ public class ReferenceWindow implements Iterable<Map.Entry<String, String>> {
                 return;
 
             case SET_ENTRY:
+                p_setEntryButton.setName("p_setEntryButton");
                 p_setEntryButton.setAction(action);
                 return;
 
@@ -317,6 +318,7 @@ public class ReferenceWindow implements Iterable<Map.Entry<String, String>> {
         JPanel topPane = new JPanel();
         p_entryStyleInput = new JComboBox();
         p_entryNameInput = new JTextField();
+        p_entryNameInput.setName("p_entryNameInput");
         p_setEntryButton = new JButton();
 
         topPane.setLayout(new BoxLayout(topPane, BoxLayout.X_AXIS));
