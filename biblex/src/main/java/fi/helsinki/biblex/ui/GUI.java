@@ -19,19 +19,19 @@ public class GUI {
     static final String APP_NAME = "Biblex";
 
     private EntryPane p_entryPane;
-    private ReferenceWindow p_refWindow;
+    private Window p_refWindow;
     private BibTexEntry p_entry;
 
     public GUI() {
         p_entryPane = new EntryPane();
-        p_refWindow = new ReferenceWindow(p_entryPane);
+        p_refWindow = new Window(p_entryPane);
     }
 
     public void init() {
         // Populate EntryPane
         populateEntryList();
 
-        // Populate ReferenceWindow
+        // Populate Window
         populateEntryStyles();
         createActions();
     }
@@ -134,9 +134,9 @@ public class GUI {
      * Set up the actions to be used in the UI
      */
     private void createActions() {
-        // ReferenceWindow
+        // Window
         p_refWindow.registerAction(
-                ReferenceWindow.UIAction.SUBMIT,
+                Window.UIAction.SUBMIT,
                 new AbstractAction("Save Reference", UIManager.getIcon("FileView.hardDriveIcon")) {
                     public void actionPerformed(ActionEvent e) {
                         submitEntry();
@@ -146,7 +146,7 @@ public class GUI {
         );
 
         p_refWindow.registerAction(
-                ReferenceWindow.UIAction.ADD_FIELD,
+                Window.UIAction.ADD_FIELD,
                 new AbstractAction("Add Field") {
                     public void actionPerformed(ActionEvent e) {
                         String name = p_refWindow.getFieldNameEntry();
@@ -163,7 +163,7 @@ public class GUI {
         );
 
         p_refWindow.registerAction(
-                ReferenceWindow.UIAction.DELETE_FIELD,
+                Window.UIAction.DELETE_FIELD,
                 new AbstractAction("", UIManager.getIcon("InternalFrame.paletteCloseIcon")) {
                     public void actionPerformed(ActionEvent e) {
                         p_refWindow.deleteField(e.getActionCommand());
@@ -173,7 +173,7 @@ public class GUI {
         );
 
         p_refWindow.registerAction(
-                ReferenceWindow.UIAction.SET_ENTRY,
+                Window.UIAction.SET_ENTRY,
                 new AbstractAction("Create") {
 
                     public void actionPerformed(ActionEvent e) {
@@ -185,7 +185,7 @@ public class GUI {
 
         // EntryPane
         p_refWindow.registerAction(
-                ReferenceWindow.UIAction.MENU_EXPORT,
+                Window.UIAction.MENU_EXPORT,
                 new AbstractAction("Export") {
                     @Override
                     /* Maybesti needs some fileselector thingie to select the outputfile */
@@ -203,7 +203,7 @@ public class GUI {
         );
 
         p_refWindow.registerAction(
-                ReferenceWindow.UIAction.MENU_QUIT,
+                Window.UIAction.MENU_QUIT,
                 new AbstractAction("Quit") {
                     @Override
                     public void actionPerformed(ActionEvent e) {
@@ -213,7 +213,7 @@ public class GUI {
         );
 
         p_refWindow.registerAction(
-                ReferenceWindow.UIAction.MENU_NEW_ENTRY,
+                Window.UIAction.MENU_NEW_ENTRY,
                 new AbstractAction("New Reference") {
                     @Override
                     public void actionPerformed(ActionEvent e) {

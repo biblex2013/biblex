@@ -11,7 +11,7 @@ import java.util.List;
  * This class handles the visual appearance of the reference editor window
  * All handling of user input and actions is done elsewhere.
  */
-public class ReferenceWindow implements Iterable<Map.Entry<String, String>> {
+public class Window implements Iterable<Map.Entry<String, String>> {
     public static enum UIAction {
         SUBMIT,
         ADD_FIELD,
@@ -25,9 +25,9 @@ public class ReferenceWindow implements Iterable<Map.Entry<String, String>> {
 
     public static class EntryIterator implements Iterator<Map.Entry<String, String>> {
         private int p_pos;
-        private ReferenceWindow p_win;
+        private Window p_win;
 
-        public EntryIterator(ReferenceWindow win) {
+        public EntryIterator(Window win) {
             p_pos = 0;
             p_win = win;
         }
@@ -82,7 +82,7 @@ public class ReferenceWindow implements Iterable<Map.Entry<String, String>> {
     private List<Map.Entry<String, JPanel>> p_fieldMap;
 
 
-    public ReferenceWindow(JPanel entryPane) {
+    public Window(JPanel entryPane) {
         p_window = new JFrame();
 
         p_fieldMap = new ArrayList<Map.Entry<String, JPanel>>();

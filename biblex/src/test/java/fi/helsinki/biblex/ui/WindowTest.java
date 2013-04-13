@@ -12,15 +12,15 @@ import java.awt.*;
 import java.util.Iterator;
 import java.util.Map;
 
-public class ReferenceWindowTest {
-    private ReferenceWindow win;
+public class WindowTest {
+    private Window win;
 
     @Before
     public void setUp() {
         // skipataan GUI testaus, jos ympäristö ei ole graafinen (esim. Jenkins)
         assumeTrue(!GraphicsEnvironment.isHeadless());
 
-        win = new ReferenceWindow(new EntryPane());
+        win = new Window(new EntryPane());
         win.setEntry("Test", "Test");
     }
 
