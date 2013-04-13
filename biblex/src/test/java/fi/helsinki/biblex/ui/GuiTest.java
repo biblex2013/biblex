@@ -4,27 +4,14 @@ import fi.helsinki.biblex.App;
 import fi.helsinki.biblex.category.FestTest;
 import fi.helsinki.biblex.exporter.Exporter;
 import fi.helsinki.biblex.storage.Storage;
-import java.awt.GraphicsEnvironment;
-import java.util.concurrent.TimeUnit;
+
 import javax.swing.JFrame;
-import junit.framework.TestCase;
+
 import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
-import static org.junit.Assume.*;
-import static org.junit.Assert.*;
-import org.fest.util.*;
-import org.fest.assertions.*;
-import org.fest.swing.annotation.GUITest;
-import org.fest.swing.*;
-import org.fest.swing.core.matcher.DialogMatcher;
-import org.fest.swing.fixture.ContainerFixture;
 import org.fest.swing.fixture.FrameFixture;
-import org.fest.swing.fixture.JOptionPaneFixture;
 import org.fest.swing.timing.Pause;
-import org.fest.swing.timing.Timeout;
 import org.junit.FixMethodOrder;
 import org.junit.experimental.categories.Category;
 import org.junit.runners.MethodSorters;
@@ -66,9 +53,9 @@ public class GuiTest {
     
     @Before
     public void setUp() {
-        app.createInstance();
+        App.createInstance();
         app = App.getInstance();
-        gui = app.getP_gui();
+        gui = app.getGUI();
         refWindow = gui.getWindow();
         testFrame = new FrameFixture(refWindow);
         testFrame.show();
@@ -78,7 +65,7 @@ public class GuiTest {
     @After
     public void tearDown() {
         testFrame.cleanUp();
-        app.deleteInstance();
+        App.deleteInstance();
         app = null;
         gui = null;
         refWindow = null;

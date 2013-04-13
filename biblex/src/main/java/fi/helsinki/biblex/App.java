@@ -7,8 +7,6 @@ import fi.helsinki.biblex.storage.Storage;
 import fi.helsinki.biblex.ui.GUI;
 import fi.helsinki.biblex.validation.*;
 import fi.helsinki.biblex.validation.support.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * Singleton-style main class for the application
@@ -40,35 +38,35 @@ public class App {
 
         p_gui = new GUI();
     }
-    
-    /* Getter for FEST TESTS. */
-    public GUI getP_gui() {
-        return p_gui;
+
+    public static void main(String[] args) {
+        createInstance();
     }
-    
-    /* Delete instance for fest tests. */
-    public void deleteInstance() {
-        p_instance = null;
-        p_gui = null;
-        p_validation = null;
-        p_storage = null;
-        p_exporter = null;
+
+    /* Getter for FEST TESTS. */
+    public GUI getGUI() {
+        return p_gui;
     }
 
     private void run() {
         p_gui.init();
     }
 
-    public static void main(String[] args) {
-        createInstance();
-    }
-    
     public static void createInstance() {
         if (p_instance != null)
             throw new RuntimeException("App instance already exists");
-            
+
         p_instance = new App();
         p_instance.run();
+    }
+
+    /* Delete instance for fest tests. */
+    public static void deleteInstance() {
+        if (p_instance == null)
+            throw new RuntimeException("No App instance available");
+
+        p_instance.p_gui.getWindow().dispose();
+        p_instance = null;
     }
 
     public static Storage getStorage() {
