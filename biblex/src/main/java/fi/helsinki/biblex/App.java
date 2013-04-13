@@ -47,7 +47,7 @@ public class App {
     }
     
     /* Delete instance for fest tests. */
-    public void deleteInstrance() {
+    public void deleteInstance() {
         p_instance = null;
         p_gui = null;
         p_validation = null;

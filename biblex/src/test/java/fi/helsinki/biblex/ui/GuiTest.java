@@ -78,7 +78,7 @@ public class GuiTest {
     @After
     public void tearDown() {
         testFrame.cleanUp();
-        app.deleteInstrance();
+        app.deleteInstance();
         app = null;
         gui = null;
         refWindow = null;
