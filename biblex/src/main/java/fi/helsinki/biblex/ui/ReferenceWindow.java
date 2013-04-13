@@ -16,7 +16,10 @@ public class ReferenceWindow implements Iterable<Map.Entry<String, String>> {
         SUBMIT,
         ADD_FIELD,
         DELETE_FIELD,
-        SET_ENTRY
+        SET_ENTRY,
+        MENU_QUIT,
+        MENU_EXPORT,
+        MENU_NEW_ENTRY
     }
 
 
@@ -24,7 +27,7 @@ public class ReferenceWindow implements Iterable<Map.Entry<String, String>> {
         private int p_pos;
         private ReferenceWindow p_win;
 
-        private EntryIterator(ReferenceWindow win) {
+        public EntryIterator(ReferenceWindow win) {
             p_pos = 0;
             p_win = win;
         }
@@ -62,9 +65,15 @@ public class ReferenceWindow implements Iterable<Map.Entry<String, String>> {
     private JTextField p_entryNameInput;
     private JTextField p_fieldNameInput;
 
+    private JMenuBar p_menu;
+
     private JButton p_submitButton;
     private JButton p_addFieldButton;
     private JButton p_setEntryButton;
+
+    private JMenuItem p_menuNewEntry;
+    private JMenuItem p_menuExport;
+    private JMenuItem p_menuQuit;
 
     // Need to keep track of this, as each field has it's own button
     private Action p_deleteAction;
@@ -73,20 +82,18 @@ public class ReferenceWindow implements Iterable<Map.Entry<String, String>> {
     private List<Map.Entry<String, JPanel>> p_fieldMap;
 
 
-    public ReferenceWindow() {
+    public ReferenceWindow(JPanel entryPane) {
         p_window = new JFrame();
 
         p_fieldMap = new ArrayList<Map.Entry<String, JPanel>>();
 
-        p_window.setSize(550, 350);
+        p_window.setSize(550, 550);
         p_window.setMinimumSize(new Dimension(475, 350));
-        p_window.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
+        p_window.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
-        populate();
-    }
+        populate(entryPane);
 
-    public void setVisible(boolean visible) {
-        p_window.setVisible(visible);
+        p_window.setVisible(true);
     }
 
 
@@ -99,6 +106,7 @@ public class ReferenceWindow implements Iterable<Map.Entry<String, String>> {
     public void registerAction(UIAction uiAction, Action action) {
         switch (uiAction) {
             case SUBMIT:
+                p_submitButton.setName("p_submitButton");
                 p_submitButton.setAction(action);
                 return;
 
@@ -114,7 +122,20 @@ public class ReferenceWindow implements Iterable<Map.Entry<String, String>> {
                 return;
 
             case SET_ENTRY:
+                p_setEntryButton.setName("p_setEntryButton");
                 p_setEntryButton.setAction(action);
+                return;
+
+            case MENU_QUIT:
+                p_menuQuit.setAction(action);
+                return;
+                
+            case MENU_EXPORT:
+                p_menuExport.setAction(action);
+                return;
+
+            case MENU_NEW_ENTRY:
+                p_menuNewEntry.setAction(action);
                 return;
                
             default:
@@ -134,10 +155,10 @@ public class ReferenceWindow implements Iterable<Map.Entry<String, String>> {
         p_fieldMap.clear();
 
         if (name.isEmpty()) {
-            p_window.setTitle(GUI.APP_NAME + " - Reference Editor");
+            p_window.setTitle(GUI.APP_NAME);
             p_scrollPane.setBorder(BorderFactory.createEmptyBorder(0, 3, 0, 3));
         } else {
-            p_window.setTitle(GUI.APP_NAME + " - Reference Editor - '" + name + "'");
+            p_window.setTitle(GUI.APP_NAME + " - '" + name + "'");
             p_scrollPane.setBorder(BorderFactory.createTitledBorder(style + " - " + name));
         }
     }
@@ -269,13 +290,35 @@ public class ReferenceWindow implements Iterable<Map.Entry<String, String>> {
     }
 
 
+    public JFrame getWindow() {
+        return p_window;
+    }
+
+
     /**
      * Add UI elements to the window, and setup action handling
      */
-    private void populate() {
+    private void populate(JPanel entryPane) {
+        p_menu = new JMenuBar();
+        p_window.setJMenuBar(p_menu);
+
+        JMenu fileMenu = new JMenu("File");
+        p_menuNewEntry = new JMenuItem();
+        p_menuExport = new JMenuItem();
+        p_menuQuit = new JMenuItem();
+
+        fileMenu.add(p_menuNewEntry);
+        fileMenu.add(new JSeparator());
+        fileMenu.add(p_menuExport);
+        fileMenu.add(new JSeparator());
+        fileMenu.add(p_menuQuit);
+
+        p_menu.add(fileMenu);
+
         JPanel topPane = new JPanel();
         p_entryStyleInput = new JComboBox();
         p_entryNameInput = new JTextField();
+        p_entryNameInput.setName("p_entryNameInput");
         p_setEntryButton = new JButton();
 
         topPane.setLayout(new BoxLayout(topPane, BoxLayout.X_AXIS));
@@ -317,8 +360,17 @@ public class ReferenceWindow implements Iterable<Map.Entry<String, String>> {
         p_scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
         p_scrollPane.setBorder(BorderFactory.createEmptyBorder(0, 3, 0, 3));
 
-        p_window.getContentPane().add(topPane, BorderLayout.NORTH);
-        p_window.getContentPane().add(p_scrollPane, BorderLayout.CENTER);
-        p_window.getContentPane().add(bottomPane, BorderLayout.SOUTH);
+        JPanel mainPane = new JPanel();
+        mainPane.setLayout(new BorderLayout());
+
+        entryPane.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+
+        mainPane.add(topPane, BorderLayout.NORTH);
+        mainPane.add(p_scrollPane, BorderLayout.CENTER);
+        mainPane.add(bottomPane, BorderLayout.SOUTH);
+
+        p_window.getContentPane().add(entryPane, BorderLayout.WEST);
+        p_window.getContentPane().add(mainPane, BorderLayout.CENTER);
     }
 }
+

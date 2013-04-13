@@ -40,12 +40,33 @@ public class App {
 
         p_gui = new GUI();
     }
+    
+    /* Getter for FEST TESTS. */
+    public GUI getP_gui() {
+        return p_gui;
+    }
+    
+    /* Delete instance for fest tests. */
+    public void deleteInstance() {
+        p_instance = null;
+        p_gui = null;
+        p_validation = null;
+        p_storage = null;
+        p_exporter = null;
+    }
 
     private void run() {
         p_gui.init();
     }
 
     public static void main(String[] args) {
+        createInstance();
+    }
+    
+    public static void createInstance() {
+        if (p_instance != null)
+            throw new RuntimeException("App instance already exists");
+            
         p_instance = new App();
         p_instance.run();
     }
@@ -62,7 +83,7 @@ public class App {
         return getInstance().p_validation;
     }
 
-    private static App getInstance() {
+    public static App getInstance() {
         if (p_instance == null) {
             throw new RuntimeException("No App instance available");
         }

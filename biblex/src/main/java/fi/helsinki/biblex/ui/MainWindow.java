@@ -78,6 +78,11 @@ public class MainWindow {
         p_entryList.addElement(name);
         p_scrollPane.revalidate();
     }
+    
+    public void clearEntryList() {
+        p_entryList.clear();
+        p_scrollPane.revalidate();
+    }
 
 
     /**
