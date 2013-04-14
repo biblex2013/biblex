@@ -131,7 +131,6 @@ public class SQLiteStorage extends Storage {
             PreparedStatement st = conn.prepareStatement("DELETE FROM Entries WHERE id = ?;");
             st.setLong(1, eid);
             st.executeUpdate();
-            st.close();
         } catch (Exception e) {
             System.out.println("STORAGE DELETE ERROR: " + e.toString());
             throw e;
