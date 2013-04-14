@@ -131,6 +131,7 @@ public class Window implements Iterable<Map.Entry<String, String>> {
                 return;
                 
             case MENU_EXPORT:
+                p_menuExport.setName("p_menuExport");
                 p_menuExport.setAction(action);
                 return;
 

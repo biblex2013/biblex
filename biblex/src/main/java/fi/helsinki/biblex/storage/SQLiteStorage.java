@@ -81,7 +81,7 @@ public class SQLiteStorage extends Storage {
         long eid = st.getGeneratedKeys().getLong(1);
 
         st = conn.prepareStatement(
-            "INSERT INTO Fields (entry, name, value) VALUES (?, ?, ?)");
+            "INSERT INTO Fields (entry, name, value) VALUES (?, ?, ?);");
         st.setLong(1, eid);
 
         for (Map.Entry<String, String> e : entry) {
@@ -100,7 +100,7 @@ public class SQLiteStorage extends Storage {
     public BibTexEntry get(long eid) {
         try {
             PreparedStatement st = conn.prepareStatement(
-                "SELECT id,name,style FROM Entries WHERE id = ?");
+                "SELECT id,name,style FROM Entries WHERE id = ?;");
             st.setLong(1, eid);
             return entryFromResultSet(st.executeQuery());
         } catch (Exception e) {
@@ -116,7 +116,7 @@ public class SQLiteStorage extends Storage {
     public BibTexEntry get(String name) {
         try {
             PreparedStatement st = conn.prepareStatement(
-                "SELECT id,name,style FROM Entries WHERE name = ?");
+                "SELECT id,name,style FROM Entries WHERE name = ?;");
             st.setString(1, name);
             return entryFromResultSet(st.executeQuery());
         } catch (Exception e) {
@@ -127,6 +127,16 @@ public class SQLiteStorage extends Storage {
     }
 
     public boolean delete(long eid) throws Exception {
+        try {
+            PreparedStatement st = conn.prepareStatement("DELETE FROM Entries WHERE id = ?;");
+            st.setLong(1, eid);
+            st.executeUpdate();
+            st.close();
+        } catch (Exception e) {
+            System.out.println("STORAGE DELETE ERROR: " + e.toString());
+            throw e;
+        }
+        
         return false;
     }
 
@@ -190,7 +200,7 @@ public class SQLiteStorage extends Storage {
 
     private void readFieldsFromDB(long eid, BibTexEntry entry) throws SQLException {
         PreparedStatement st = conn.prepareStatement(
-            "SELECT name,value FROM Fields WHERE entry = ?");
+            "SELECT name,value FROM Fields WHERE entry = ?;");
         st.setLong(1, eid);
         ResultSet rs = st.executeQuery();
 

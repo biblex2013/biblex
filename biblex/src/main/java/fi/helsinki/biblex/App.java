@@ -53,11 +53,12 @@ public class App {
     }
 
     public static void createInstance() {
-        if (p_instance != null)
-            throw new RuntimeException("App instance already exists");
+        if (p_instance == null) {
+            
 
-        p_instance = new App();
-        p_instance.run();
+            p_instance = new App();
+            p_instance.run();
+        }
     }
 
     /* Delete instance for fest tests. */

@@ -191,6 +191,7 @@ public class GUI {
                     /* Maybesti needs some fileselector thingie to select the outputfile */
                     public void actionPerformed(ActionEvent e) {
                         GenericFileChooser fc = new ExportFileChooser();
+                        fc.setName("fc");
                         try {
                             String filename = fc.getFileName();
                             if (filename != null)

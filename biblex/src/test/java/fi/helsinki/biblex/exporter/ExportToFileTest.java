@@ -5,13 +5,12 @@ import fi.helsinki.biblex.domain.BibTexStyle;
 import fi.helsinki.biblex.storage.SQLiteStorage;
 import fi.helsinki.biblex.storage.Storage;
 import java.io.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.junit.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-import org.junit.*;
 
 
 /**
@@ -32,24 +31,34 @@ public class ExportToFileTest {
     }
     
     @AfterClass
-    public static void tearDownClass() throws FileNotFoundException, IOException {
-        File file1 = new File("test1.txt");
-        File file2 = new File("test2.txt");
-        BufferedReader reader1 = new BufferedReader(new FileReader(file1));
-        BufferedReader reader2 = new BufferedReader(new FileReader(file2));
-        String read1 = "", read2 = "";
-        while(read1 != null && read2 != null) {
-            read1 = reader1.readLine();
-            read2 = reader2.readLine();
-            assertEquals(read1,read2);
+    public static void tearDownClass() {
+        BufferedReader reader1 = null;
+        BufferedReader reader2 = null;
+        try {
+            File file1 = new File("test1.txt");
+            File file2 = new File("test2.txt");
+            File file3 = new File("unexistent.txt");
+            assertTrue(file1.exists());
+            assertTrue(file2.exists());
+            assertFalse(file3.exists());
+            reader1 = new BufferedReader(new FileReader(file1));
+            reader2 = new BufferedReader(new FileReader(file2));
+            String read1 = "";
+            String read2 = "";
+            while(read1 != null && read2 != null) {
+                read1 = reader1.readLine();
+                read2 = reader2.readLine();
+                assertEquals(read1,read2);
+            }
+            assertNull(read1);
+            assertNull(read2);
+            
+        } catch (FileNotFoundException ex) {
+            fail("File not found in ExportToFileTest.java: " + ex.toString());
+        } catch (IOException ex) {
+            fail("ExportToFileTest.java: " + ex.toString());
         }
-        
-        assertNull(read1);
-        assertNull(read2);
-        file1.delete();
-        file2.delete();
     }
-    
     @Before
     public void setUp() {
         try {
@@ -108,7 +117,7 @@ public class ExportToFileTest {
         assertTrue(thrown);
         
         File file = new File("test1.txt");
-        
+        file.deleteOnExit();
         assertTrue(file.exists());
         assertTrue(file.length() > 10);
     }
@@ -119,6 +128,7 @@ public class ExportToFileTest {
     @Test
     public void testWrite_File() {
         File file = new File("test2.txt");
+        file.deleteOnExit();
         try {
             exporter.write(file);
         } catch (IOException ex) {
