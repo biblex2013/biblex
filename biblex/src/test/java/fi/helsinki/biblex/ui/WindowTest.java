@@ -11,14 +11,17 @@ import org.junit.Test;
 import java.awt.*;
 import java.util.Iterator;
 import java.util.Map;
+import net.java.openjdk.cacio.ctc.junit.CacioFESTRunner;
+import org.junit.runner.RunWith;
 
+@RunWith(CacioFESTRunner.class)
 public class WindowTest {
     private Window win;
 
     @Before
     public void setUp() {
         // skipataan GUI testaus, jos ympäristö ei ole graafinen (esim. Jenkins)
-        assumeTrue(!GraphicsEnvironment.isHeadless());
+        //assumeTrue(!GraphicsEnvironment.isHeadless());
 
         win = new Window(new EntryPane());
         win.setEntry("Test", "Test");
