@@ -2,6 +2,8 @@ package fi.helsinki.biblex.ui;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 /**
  * This class handles the visual appearance of the main UI window
@@ -15,6 +17,7 @@ public class EntryPane extends JPanel {
 
     private DefaultListModel p_entryList;
     private JScrollPane p_scrollPane;
+    public JList p_entryJList;
 
 
     public EntryPane() {
@@ -44,11 +47,16 @@ public class EntryPane extends JPanel {
      * Add UI elements to the window, and setup action handling
      */
     private void populate() {
-        p_scrollPane = new JScrollPane(new JList(p_entryList));
+        p_entryJList = new JList(p_entryList);
+        p_scrollPane = new JScrollPane(p_entryJList);
         p_scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-        p_scrollPane.setBorder(BorderFactory.createEmptyBorder(0, 3, 0, 3));
+        p_scrollPane.setBorder(BorderFactory.createEmptyBorder(0, 3, 0, 3));        
 
         this.add(p_scrollPane, BorderLayout.CENTER);
+    }
+    
+    public void addMListener(MouseListener ml) {
+        p_entryJList.addMouseListener(ml);
     }
 }
 

@@ -6,6 +6,8 @@ import fi.helsinki.biblex.domain.BibTexStyle;
 import fi.helsinki.biblex.validation.AbstractValidator;
 import fi.helsinki.biblex.validation.ValidationException;
 import java.awt.event.ActionEvent;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.IOException;
 
 import java.util.*;
@@ -222,5 +224,29 @@ public class GUI {
                     }
                 }
         );
+        p_entryPane.addMListener(new MouseListener() {
+
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                String chosenOne = (String) p_entryPane.p_entryJList.getSelectedValue();
+                openEntry(App.getStorage().get(chosenOne));
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+            }
+        });
     }
 }
