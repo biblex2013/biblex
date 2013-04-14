@@ -188,6 +188,7 @@ public class Window implements Iterable<Map.Entry<String, String>> {
         JLabel nameLabel = new JLabel(name);
         JTextField nameField = new JTextField(content);
 
+        nameField.setName(name);
         nameLabel.setMinimumSize(new Dimension(150, 20));
         nameLabel.setPreferredSize(new Dimension(150, 20));
         nameLabel.setMaximumSize(new Dimension(225, 20));
