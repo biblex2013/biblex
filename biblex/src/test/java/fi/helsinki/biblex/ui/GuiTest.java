@@ -29,33 +29,32 @@ import org.junit.runners.MethodSorters;
 @Category(FestTest.class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class GuiTest {
-    
+
     private GUI gui;
     private JFrame refWindow;
     private App app;
     private Storage storage;
     private FrameFixture testFrame;
-    
+
     /**
      * Some GUI testings.
+     *
      * @throws InstantiationException
      * @throws IllegalAccessException
      */
-    
- //   public GuiTest() {
- //   }
-    
+    //   public GuiTest() {
+    //   }
     @BeforeClass
     public static void setUpClass() {
     }
-    
+
     @AfterClass
     public static void tearDownClass() {
         File file = new File("database.dat");
         file.deleteOnExit();
         assertTrue(file.exists());
     }
-    
+
     @Before
     public void setUp() {
         App.createInstance();
@@ -66,9 +65,9 @@ public class GuiTest {
         storage = app.getStorage();
         testFrame.show();
 
-        
+
     }
-    
+
     @After
     public void tearDown() {
         testFrame.cleanUp();
@@ -78,7 +77,7 @@ public class GuiTest {
         refWindow = null;
         testFrame = null;
     }
-  
+
     @Test
     public void BBrequireErrorMessageWhenTextBoxEmptyTest() {
         testFrame.comboBox().selectItem("inproceedings");
@@ -86,9 +85,9 @@ public class GuiTest {
         testFrame.button("p_setEntryButton").click();
         testFrame.optionPane().requireErrorMessage();
         testFrame.optionPane().button().click();
-        
+
     }
-    
+
     @Test
     public void CCrequireErrorMessageWhenClickingCreateWithEmptyFields() {
         testFrame.comboBox().selectItem("article");
@@ -96,11 +95,11 @@ public class GuiTest {
         testFrame.textBox("p_entryNameInput").enterText("omgtesti");
         testFrame.button("p_setEntryButton").click();
         testFrame.button("p_submitButton").click();
-        
+
         testFrame.optionPane().requireErrorMessage();
-        
+
     }
-    
+
     //Jostain syystä:database is locked.
     //@Test
     public void DDallIsWellWhenFieldsAreFull() {
@@ -112,23 +111,25 @@ public class GuiTest {
         testFrame.textBox("author").enterText("tester");
         testFrame.textBox("title").enterText("tester");
         Pause.pause(1000);
-        
+
         testFrame.button("p_submitButton").click();
-        
+
         //Storage stor = app.getStorage();
-        
-        //BibTexEntry entry = storage.get("tester");
-        
-        //assertNotNull(entry);
-        
-        Pause.pause(6000);
-        try {
-            //storage.delete(entry.getId());
-        } catch (Exception ex) {
-            fail("DDallIsWell.. NOT: " + ex.toString());
+
+        BibTexEntry entry = storage.get("tester");
+
+        assertNotNull(entry);
+
+        //Pause.pause(6000);
+        if (entry != null) {
+            try {
+                storage.delete(entry.getId());
+            } catch (Exception ex) {
+                fail("DDallIsWell.. NOT: " + ex.toString());
+            }
         }
     }
-    
+
     @Test
     public void AAexportingReallyExportsTest() {
 
@@ -138,23 +139,22 @@ public class GuiTest {
         testFrame.fileChooser().setCurrentDirectory(new File(System.getProperty("user.dir")));
         testFrame.fileChooser().fileNameTextBox().enterText("exportFestTest.bib");
         testFrame.fileChooser().approveButton().click();
-        
+
         String fileString = System.getProperty("user.dir") + System.getProperty("file.separator") + "exportFestTest.bib";
         File testExportFile = new File(fileString);
-        
+
         System.out.println("FILE: " + testExportFile.getAbsolutePath());
         assertTrue(testExportFile.exists());
-        
+
         testExportFile.delete();
-        
+
         removeStuffFromDatabase();
     }
-   
-    
+
     private void addStuffToDatabase() {
         //Storage stor = app.getStorage();
-        
-        if(storage.get("article1") == null) {
+
+        if (storage.get("article1") == null) {
             testFrame.focus();
             testFrame.comboBox().selectItem("article");
             testFrame.textBox("p_entryNameInput").enterText("article1");
@@ -163,11 +163,11 @@ public class GuiTest {
             testFrame.textBox("journal").enterText("journal");
             testFrame.textBox("author").enterText("author");
             testFrame.textBox("title").enterText("title");
-        
+
             testFrame.button("p_submitButton").click();
         }
 
-        if(storage.get("article2") == null) {
+        if (storage.get("article2") == null) {
             testFrame.focus();
             testFrame.comboBox().selectItem("article");
             testFrame.textBox("p_entryNameInput").enterText("article2");
@@ -176,26 +176,24 @@ public class GuiTest {
             testFrame.textBox("journal").enterText("journal22");
             testFrame.textBox("author").enterText("author22");
             testFrame.textBox("title").enterText("title22");
-        
+
             testFrame.button("p_submitButton").click();
         }
     }
-    
+
     private void removeStuffFromDatabase() {
         //Storage stor = app.getStorage();
         BibTexEntry article1 = storage.get("article1");
         BibTexEntry article2 = storage.get("article2");
-        
+
         assertNotNull(article1);
         assertNotNull(article2);
         try {
             storage.delete(article1.getId());
             storage.delete(article2.getId());
         } catch (Exception ex) {
-            
+
             fail("failed to delete entry in remoteStuffFromDatabase()" + ex.getMessage());
         }
     }
-    
 }
-

@@ -102,9 +102,11 @@ public class SQLiteStorage extends Storage {
             PreparedStatement st = conn.prepareStatement(
                 "SELECT id,name,style FROM Entries WHERE id = ?;");
             st.setLong(1, eid);
-            return entryFromResultSet(st.executeQuery());
+            ResultSet rs = st.executeQuery();
+            conn.commit();
+            return entryFromResultSet(rs);
         } catch (Exception e) {
-            System.err.println(e);
+            System.err.println("Error in SQLiteStorage.get(long): " + e.toString());
         }
 
         return null;
@@ -118,9 +120,13 @@ public class SQLiteStorage extends Storage {
             PreparedStatement st = conn.prepareStatement(
                 "SELECT id,name,style FROM Entries WHERE name = ?;");
             st.setString(1, name);
-            return entryFromResultSet(st.executeQuery());
+            ResultSet rs = st.executeQuery();
+            if(rs.next()) {
+                return entryFromResultSet(rs);
+            }
+            return null;
         } catch (Exception e) {
-            System.err.println(e);
+            System.err.println("Error in SQLiteStorage.get(string): " + e.toString());
         }
 
         return null;
@@ -131,8 +137,9 @@ public class SQLiteStorage extends Storage {
             PreparedStatement st = conn.prepareStatement("DELETE FROM Entries WHERE id = ?;");
             st.setLong(1, eid);
             st.executeUpdate();
+            conn.commit();
         } catch (Exception e) {
-            System.out.println("STORAGE DELETE ERROR: " + e.toString());
+            System.out.println("Error in SQLiteStorage.delete(long): " + e.toString());
             throw e;
         }
         
