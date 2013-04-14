@@ -74,6 +74,10 @@ public class App {
         return getInstance().p_storage;
     }
     
+    public void setStorage(Storage p_storage) {
+        this.p_storage = p_storage;
+    }
+    
     public static Exporter getExporter() {
         return getInstance().p_exporter;
     }

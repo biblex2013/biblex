@@ -4,6 +4,7 @@ import fi.helsinki.biblex.App;
 import fi.helsinki.biblex.category.FestTest;
 import fi.helsinki.biblex.domain.BibTexEntry;
 import fi.helsinki.biblex.exporter.Exporter;
+import fi.helsinki.biblex.storage.SQLiteStorage;
 import fi.helsinki.biblex.storage.Storage;
 import java.io.File;
 import javax.swing.JFrame;
@@ -56,9 +57,11 @@ public class GuiTest {
     }
 
     @Before
-    public void setUp() {
+    public void setUp() throws Exception {
         App.createInstance();
         app = App.getInstance();
+        app.setStorage(new SQLiteStorage(":memory:"));
+        
         gui = app.getGUI();
         refWindow = gui.getWindow();
         testFrame = new FrameFixture(refWindow);
@@ -100,8 +103,7 @@ public class GuiTest {
 
     }
 
-    //Jostain syystä:database is locked.
-    //@Test
+    @Test
     public void DDallIsWellWhenFieldsAreFull() {
         testFrame.comboBox().selectItem("article");
         testFrame.textBox("p_entryNameInput").enterText("tester");
@@ -196,4 +198,7 @@ public class GuiTest {
             fail("failed to delete entry in remoteStuffFromDatabase()" + ex.getMessage());
         }
     }
+
+    
+    
 }
