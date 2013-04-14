@@ -41,6 +41,12 @@
             <type>jar</type>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>net.java.openjdk.cacio</groupId>
+            <artifactId>cacio-tta</artifactId>
+            <version>1.3</version>
+            <scope>test</scope>
+        </dependency>
 
     </dependencies>
 
@@ -105,8 +111,8 @@
                     </dependency>
                 </dependencies>
                 <configuration>
-                    <!--Comment out to run FestTest tests.-->
-                    <excludedGroups>fi.helsinki.biblex.category.FestTest</excludedGroups>
+                    <!--Comment out to run FestTest tests.
+                    <excludedGroups>fi.helsinki.biblex.category.FestTest</excludedGroups> -->
                 </configuration>
             </plugin>
             

@@ -5,10 +5,10 @@ import fi.helsinki.biblex.category.FestTest;
 import fi.helsinki.biblex.domain.BibTexEntry;
 import fi.helsinki.biblex.exporter.Exporter;
 import fi.helsinki.biblex.storage.Storage;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import net.java.openjdk.cacio.*;
 
 import javax.swing.JFrame;
+import net.java.openjdk.cacio.ctc.junit.CacioFESTRunner;
 
 import org.junit.After;
 import org.junit.Before;
@@ -18,12 +18,14 @@ import org.fest.swing.fixture.FrameFixture;
 import org.fest.swing.timing.Pause;
 import org.junit.FixMethodOrder;
 import org.junit.experimental.categories.Category;
+import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
 
 /**
  *
  * @author jtmikkon
  */
+@RunWith(CacioFESTRunner.class)
 @Category(FestTest.class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class GuiTest {
