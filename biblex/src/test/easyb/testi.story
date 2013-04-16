@@ -3,11 +3,9 @@ import fi.helsinki.biblex.storage.*;
 import fi.helsinki.biblex.domain.*;
 
 scenario "exporttaus luo filen", {
-    
+
     given "tuore storage exportterille", {
-        file = new File("database.dat")
-        file.delete()
-        storage = new SQLiteStorage("database.dat")
+        storage = new SQLiteStorage(":memory:")
         exporter = new ExportToFile(storage)
     }
 
@@ -22,12 +20,15 @@ scenario "exporttaus luo filen", {
 
     and "poista pasket lopuksi", {
         file.delete()
+        storage.close()
     }
 }
 
 scenario "Pystyy tallentaa artikkelin", {
 
-    given "db on päällä ja tyhjä"
+    given "db on päällä ja tyhjä", {
+        storage = new SQLiteStorage(":memory:")
+    }
 
     when "lisätään article-entry", {
         e = new BibTexEntry("name1", "article")
@@ -38,12 +39,11 @@ scenario "Pystyy tallentaa artikkelin", {
         storage.add(e)
     }
 
-    then "storagesta löytyy", {
-        storage.get("name1").get("author").contains("Thor").shouldBe true
-    }
+    then "lisätty article-entry löytyy", {
+        e = storage.get("name1")
+        e.shouldNotBe null
+        e.get("author").contains("Thor").shouldBe true
 
-    and "poista db:n filu", {
-        file = new File("database.dat")
-        file.delete()
+        storage.close()
     }
 }
