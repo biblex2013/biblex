@@ -47,21 +47,42 @@ scenario 'Pystyy tallentamaan article-viitteen', {
         Pause.pause(1000)
 
         testFrame.textBox("title").enterText("title")
-        testFrame.button("p_submitButton").click()
 
         Pause.pause(1000)
 
-        // luo kaksi vapaaehtoista kenttää: volume, number (tulossa)
+        // luo 'badone'-kenttä ja yritä submitata
+        testFrame.textBox("p_fieldNameInput").enterText("badone")
+        testFrame.button("p_addFieldButton").click()
+
+        Pause.pause(600)
+
+        testFrame.button("p_submitButton").click()
+
+        Pause.pause(600)
+
+        testFrame.optionPane().requireErrorMessage()
+        testFrame.optionPane().button().click()
+
+        // poista 'badone'-kenttä, lisää 'volume' ja submittaa
+        testFrame.button("btnDeleteField:badone").click()
+        testFrame.textBox("p_fieldNameInput").enterText("volume")
+        testFrame.button("p_addFieldButton").click()
+
+        Pause.pause(600)
+
+        testFrame.button("p_submitButton").click()
 
     }
 
     then 'article-viite löytyy kannasta', {
         entry = storage.get(ARTICLE_NAME)
-        entry.getName().equals(ARTICLE_NAME).shouldBe true
-        entry.get("year").equals("year").shouldBe true
-        entry.get("journal").equals("journal").shouldBe true
-        entry.get("author").equals("Thor").shouldBe true
-        entry.get("title").equals("title").shouldBe true
+        entry.getName()     .equals(ARTICLE_NAME)   .shouldBe true
+        entry.get("year")   .equals("year")         .shouldBe true
+        entry.get("journal").equals("journal")      .shouldBe true
+        entry.get("author") .equals("Thor")         .shouldBe true
+        entry.get("title")  .equals("title")        .shouldBe true
+        // volume is optional, so don't insist on non-emptyness of value
+        entry.get("volume") .equals("")             .shouldBe true
     }
 }
 
@@ -105,6 +126,49 @@ scenario 'Pystyy tallentamaan book-viitteen', {
         entry.get("title")      .equals(TX_TITLE)       .shouldBe true
         entry.get("editor")     .equals(TX_EDITOR)      .shouldBe true
         entry.get("publisher")  .equals(TX_PUBLISHER)   .shouldBe true
+        entry.get("year")       .equals(TX_YEAR)        .shouldBe true
+    }
+}
+
+scenario 'Pystyy tallentamaan inproceedings-viitteen', {
+
+    when 'inproceedings-viite luotu ja talletettu', {
+        INPROC_NAME = "Inproc" + System.currentTimeMillis()
+
+        testFrame.comboBox().selectItem("inproceedings")
+        testFrame.comboBox().requireSelection("inproceedings")
+        testFrame.textBox("p_entryNameInput").enterText(INPROC_NAME)
+        testFrame.button("p_setEntryButton").click()
+
+        Pause.pause(1000)
+
+        TX_AUTHOR       =    "Thorrr"
+        TX_TITLE        =    "About Inproceedings"
+        TX_BOOKTITLE    =    "Big funky book"
+        TX_YEAR         =    "2013"
+
+        // erikoismerkit eivät säilyy, esim '*' päättyy '(':ksi
+
+        testFrame.textBox("author")     .enterText(TX_AUTHOR)
+        testFrame.textBox("title")      .enterText(TX_TITLE)
+        testFrame.textBox("booktitle")  .enterText(TX_BOOKTITLE)
+        testFrame.textBox("year")       .enterText(TX_YEAR)
+
+        Pause.pause(1000)
+
+        testFrame.button("p_submitButton").click()
+
+        Pause.pause(1000)
+    }
+
+    then 'inproceedings-viite löytyy kannasta', {
+        entry = storage.get(INPROC_NAME)
+        entry.shouldNotBe null
+        entry.getName().equals(INPROC_NAME).shouldBe true
+
+        entry.get("author")     .equals(TX_AUTHOR)      .shouldBe true
+        entry.get("title")      .equals(TX_TITLE)       .shouldBe true
+        entry.get("booktitle")  .equals(TX_BOOKTITLE)   .shouldBe true
         entry.get("year")       .equals(TX_YEAR)        .shouldBe true
     }
 }

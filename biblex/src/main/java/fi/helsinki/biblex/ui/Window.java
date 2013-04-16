@@ -129,7 +129,7 @@ public class Window implements Iterable<Map.Entry<String, String>> {
             case MENU_QUIT:
                 p_menuQuit.setAction(action);
                 return;
-                
+
             case MENU_EXPORT:
                 p_menuExport.setName("p_menuExport");
                 p_menuExport.setAction(action);
@@ -138,7 +138,7 @@ public class Window implements Iterable<Map.Entry<String, String>> {
             case MENU_NEW_ENTRY:
                 p_menuNewEntry.setAction(action);
                 return;
-               
+
             default:
                 // action not supported
                 assert(false);
@@ -204,6 +204,7 @@ public class Window implements Iterable<Map.Entry<String, String>> {
 
         JButton deleteButton = new JButton();
         deleteButton.setAction(p_deleteAction); // null check not needed
+        deleteButton.setName("btnDeleteField:" + name); // need this for testing.
         deleteButton.setActionCommand(name);
         pane.add(deleteButton);
 
@@ -337,7 +338,9 @@ public class Window implements Iterable<Map.Entry<String, String>> {
 
         JPanel bottomSubPane = new JPanel();
         p_fieldNameInput = new JTextField();
+        p_fieldNameInput.setName("p_fieldNameInput");
         p_addFieldButton = new JButton();
+        p_addFieldButton.setName("p_addFieldButton");
 
         bottomSubPane.setLayout(new BoxLayout(bottomSubPane, BoxLayout.X_AXIS));
         bottomSubPane.add(Box.createHorizontalGlue());
