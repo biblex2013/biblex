@@ -24,9 +24,14 @@ public class GUI {
     private Window p_refWindow;
     private BibTexEntry p_entry;
 
+    private ExportFileChooser p_exportFileChooser;
+
     public GUI() {
         p_entryPane = new EntryPane();
         p_refWindow = new Window(p_entryPane);
+
+        p_exportFileChooser = new ExportFileChooser();
+        p_exportFileChooser.setName("exportFileChooser");
     }
 
     public void init() {
@@ -191,12 +196,9 @@ public class GUI {
                 Window.UIAction.MENU_EXPORT,
                 new AbstractAction("Export") {
                     @Override
-                    /* Maybesti needs some fileselector thingie to select the outputfile */
                     public void actionPerformed(ActionEvent e) {
-                        GenericFileChooser fc = new ExportFileChooser();
-                        fc.setName("fc");
                         try {
-                            String filename = fc.getFileName();
+                            String filename = p_exportFileChooser.getFileName();
                             if (filename != null)
                               App.getExporter().write(filename);
                         } catch (IOException ex) {
