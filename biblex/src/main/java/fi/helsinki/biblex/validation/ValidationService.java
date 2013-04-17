@@ -51,8 +51,8 @@ public class ValidationService {
                           mapping.getValue());
         }
 
+        // Check required fields
         Set<String> req = m.get(entry.getStyle()).getSetOfRequiredFields();
-
         for (String field : req) {
             if (!entry.containsField(field)) {
                 throw new ValidationException(
@@ -61,6 +61,30 @@ public class ValidationService {
                 throw new ValidationException(
                         "Field '" + field +
                         "' is required but maps to an empty string.");
+            }
+        }
+
+        // Check mutually exclusive fields
+        Set<AbstractValidator.ExclusiveField> excl = m.get(entry.getStyle()).getSetOfExclusiveFields();
+        for (AbstractValidator.ExclusiveField fieldData : excl) {
+            boolean exists = false;
+
+            for (String field : fieldData.getSetOfFields()) {
+                if (entry.containsField(field)) {
+                    if (!exists) {
+                        exists = true;
+                    } else {
+                        throw new ValidationException(
+                                "Entry must only have one of the following fields: " +
+                                fieldData.getSetOfFields() + ".");
+                    }
+                }
+            }
+
+            if (!exists && fieldData.isRequired()) {
+                throw new ValidationException(
+                        "One of the fields " + fieldData.getSetOfFields() +
+                        " is required, but none exist.");
             }
         }
     }

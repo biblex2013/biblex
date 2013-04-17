@@ -28,8 +28,11 @@ public class InproceedingsValidator extends AbstractValidator {
         "note",
     };
 
+    private static final ExclusiveField[] EXCLUSIVE_FIELDS = {
+    };
+
     public InproceedingsValidator() {
-        super(STYLE, REQUIRED_FIELDS, OPTIONAL_FIELDS);
+        super(STYLE, REQUIRED_FIELDS, OPTIONAL_FIELDS, EXCLUSIVE_FIELDS);
     }
 
     public String validateAndGetErrorMessage(String fieldName, String value) {

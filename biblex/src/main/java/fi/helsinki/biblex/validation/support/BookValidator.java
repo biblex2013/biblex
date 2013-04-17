@@ -9,8 +9,6 @@ import fi.helsinki.biblex.validation.AbstractValidator;
 public class BookValidator extends AbstractValidator {
     private static final BibTexStyle STYLE = BibTexStyle.BOOK;
     private static final String[] REQUIRED_FIELDS = {
-        "author",
-        "editor",
         "title",
         "publisher",
         "year",
@@ -23,11 +21,18 @@ public class BookValidator extends AbstractValidator {
         "address",
         "edition",
         "month",
-        "note"
+        "note",
+        // TODO: exclusive fields shouldn't need to be listed twice...
+        "author",
+        "editor"
+    };
+
+    private static final ExclusiveField[] EXCLUSIVE_FIELDS = {
+        new ExclusiveField(true, "author", "editor")
     };
 
     public BookValidator() {
-        super(STYLE, REQUIRED_FIELDS, OPTIONAL_FIELDS);
+        super(STYLE, REQUIRED_FIELDS, OPTIONAL_FIELDS, EXCLUSIVE_FIELDS);
     }
 
     public String validateAndGetErrorMessage(String fieldName, String value) {

@@ -3,6 +3,7 @@ package fi.helsinki.biblex.validation;
 import fi.helsinki.biblex.domain.BibTexStyle;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * This interface defines the API for the actual validating objects.
@@ -12,15 +13,43 @@ public abstract class AbstractValidator {
     // Protected as to be visible in implementation classes.
     protected final Set<String> requiredFieldsSet;
     protected final Set<String> optionalFieldsSet;
+    protected final Set<ExclusiveField> exclusiveFieldsSet;
+
+    /**
+     * Container class for information on mutually exclusive fields
+     */
+    public static class ExclusiveField {
+        private final Set<String> fields;
+        private final boolean required;
+
+        public ExclusiveField(boolean required, String... fields) {
+            this.required = required;
+
+            this.fields = new TreeSet<String>();
+            java.util.Collections.addAll(this.fields, fields);
+        }
+
+        public Set<String> getSetOfFields() {
+            return java.util.Collections.unmodifiableSet(this.fields);
+        }
+
+        public boolean isRequired() {
+            return required;
+        }
+    }
+
 
     public AbstractValidator(BibTexStyle targetStyle,
                              String[] requiredFields,
-                             String[] optionalFields) {
+                             String[] optionalFields,
+                             ExclusiveField[] exclusiveFields) {
         this.targetStyle = targetStyle;
         requiredFieldsSet = new HashSet<String>();
         optionalFieldsSet = new HashSet<String>();
+        exclusiveFieldsSet = new HashSet<ExclusiveField>();
         java.util.Collections.addAll(requiredFieldsSet, requiredFields);
         java.util.Collections.addAll(optionalFieldsSet, optionalFields);
+        java.util.Collections.addAll(exclusiveFieldsSet, exclusiveFields);
     }
 
     /**
@@ -45,6 +74,10 @@ public abstract class AbstractValidator {
 
     public Set<String> getSetOfOptionalFields() {
         return java.util.Collections.unmodifiableSet(optionalFieldsSet);
+    }
+
+    public Set<ExclusiveField> getSetOfExclusiveFields() {
+        return java.util.Collections.unmodifiableSet(exclusiveFieldsSet);
     }
 
     public static void checkArguments(String fieldName, String value) {
