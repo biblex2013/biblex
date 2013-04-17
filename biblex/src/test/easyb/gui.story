@@ -189,3 +189,70 @@ scenario 'New Reference -toiminto menusta tyhjentää näkymän', {
         }
     }
 }
+
+scenario 'Puuttuva pakollinen kenttä aiheuttaa virhevaroituksen', {
+when 'inproceedings-viite luotu ja talletettu', {
+        ARTICLE_NAME = "Artikkeli" + System.currentTimeMillis()
+
+        testFrame.comboBox().selectItem("article")
+        testFrame.comboBox().requireSelection("article")
+        testFrame.textBox("p_entryNameInput").enterText(ARTICLE_NAME)
+        testFrame.button("p_setEntryButton").click()
+
+        Pause.pause(600)
+
+        TX_AUTHOR       =    "Thor 2"
+        TX_TITLE        =    "Title"
+        TX_JOURNAL      =    "Bonjour"
+        TX_YEAR         =    "2013"
+
+        testFrame.textBox("author")     .enterText(TX_AUTHOR)
+        testFrame.textBox("title")      .enterText(TX_TITLE)
+        testFrame.textBox("year")       .enterText(TX_YEAR)
+
+        Pause.pause(300)
+
+        // nyt poista 'journal'-kenttä
+        testFrame.button("btnDeleteField:journal").click()
+        testFrame.button("p_submitButton").click()
+
+        Pause.pause(300)
+
+        // error-ikkuna päällä
+        testFrame.optionPane().requireErrorMessage()
+        testFrame.optionPane().button().click()
+
+        Pause.pause(300)
+
+        // luo uudestaan 'journal'-kenttä
+        testFrame.textBox("p_fieldNameInput").enterText("journal")
+        testFrame.button("p_addFieldButton").click()
+
+        Pause.pause(300)
+
+        // submita, error koska journal:lla ei arvoa
+        testFrame.button("p_submitButton").click()
+        testFrame.optionPane().requireErrorMessage()
+        testFrame.optionPane().button().click()
+
+        // journal:iin tekstiä
+        testFrame.textBox("journal")    .enterText(TX_JOURNAL)
+
+        Pause.pause(300)
+
+        // ja submita
+        testFrame.button("p_submitButton").click()
+        Pause.pause(600)
+    }
+
+    then 'inproceedings-viite löytyy kannasta', {
+        entry = storage.get(ARTICLE_NAME)
+        entry.shouldNotBe null
+        entry.getName().equals(ARTICLE_NAME).shouldBe true
+
+        entry.get("author")     .equals(TX_AUTHOR)      .shouldBe true
+        entry.get("title")      .equals(TX_TITLE)       .shouldBe true
+        entry.get("journal")    .equals(TX_JOURNAL)     .shouldBe true
+        entry.get("year")       .equals(TX_YEAR)        .shouldBe true
+    }
+}
