@@ -6,6 +6,8 @@ import fi.helsinki.biblex.domain.BibTexStyle;
 import fi.helsinki.biblex.validation.AbstractValidator;
 import fi.helsinki.biblex.validation.ValidationException;
 import java.awt.event.ActionEvent;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.IOException;
 
 import java.util.*;
@@ -122,12 +124,17 @@ public class GUI {
         }
 
         try {
-            App.getStorage().add(p_entry);
+            if(App.getStorage().get(p_entry.getName()) != null) {
+                App.getStorage().update(p_entry.getId(), p_entry);
+            }
+            else {
+                App.getStorage().add(p_entry);
+            }
         } catch (Exception ex) {
             p_refWindow.displayError(ex.getMessage(), "Saving failed");
             return;
         }
-        System.out.println(p_entry.toString());
+        //System.out.println(p_entry.toString());
     }
 
     /**
@@ -183,7 +190,6 @@ public class GUI {
                 }
         );
 
-        // EntryPane
         p_refWindow.registerAction(
                 Window.UIAction.MENU_EXPORT,
                 new AbstractAction("Export") {
@@ -222,5 +228,45 @@ public class GUI {
                     }
                 }
         );
+        p_entryPane.addMListener(new MouseListener() {
+
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if(e.getClickCount() > 1) {
+                    e.consume();
+                    String chosenOne = (String) p_entryPane.p_entryJList.getSelectedValue();
+                    openEntry(App.getStorage().get(chosenOne));
+                }
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+            }
+        });
+        p_entryPane.registerAction(EntryPane.UIAction.POPUP_DELETE, new AbstractAction("Delete") {
+
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    BibTexEntry selected = App.getStorage().get((String) p_entryPane.p_entryJList.getSelectedValue());
+                    App.getStorage().delete(selected.getId());
+                } catch (Exception ex) {
+                    p_refWindow.displayError(ex.toString(), "Failed to delete");
+                }
+                populateEntryList();
+            }
+
+        });
     }
 }

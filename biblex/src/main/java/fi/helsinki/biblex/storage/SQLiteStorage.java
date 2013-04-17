@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.io.*;
 import java.sql.*;
+import java.util.ArrayDeque;
 
 /**
  * This class implements persistent storage using SQLite
@@ -74,11 +75,13 @@ public class SQLiteStorage extends Storage {
 
         PreparedStatement st = conn.prepareStatement(
             "INSERT INTO Entries (name, style) VALUES (?, ?)");
+        
         st.setString(1, entry.getName());
         st.setString(2, entry.getStyle().toString());
 
         st.execute();
         long eid = st.getGeneratedKeys().getLong(1);
+        entry.setId(eid);
 
         st = conn.prepareStatement(
             "INSERT INTO Fields (entry, name, value) VALUES (?, ?, ?);");
@@ -138,15 +141,41 @@ public class SQLiteStorage extends Storage {
             st.setLong(1, eid);
             st.executeUpdate();
             conn.commit();
+            st = conn.prepareStatement("DELETE FROM Fields WHERE entry = ?");
+            st.setLong(1, eid);
+            st.executeUpdate();
+            conn.commit();
+            return true;
         } catch (Exception e) {
             System.out.println("Error in SQLiteStorage.delete(long): " + e.toString());
             throw e;
         }
-        
-        return false;
     }
+    
 
     public boolean update(long eid, BibTexEntry entry) throws Exception {
+        //JOS ENTRYSTÄ ON POISTETTU KENTTÄ, EI POISTA DB:STÄ!
+        //EI MUUTA ENTRYN STYLEÄ!
+        PreparedStatement st = conn.prepareStatement("UPDATE Fields SET value = ? WHERE entry = ? AND name = ?;");
+        for (Map.Entry<String, String> e : entry) {
+            st.setString(1, e.getValue());
+            st.setLong(2, eid);
+            st.setString(3, e.getKey());
+            st.execute();
+            if(st.getUpdateCount() > 1) {
+                throw new Exception("SOMETHING WENT WRONG: DATABASE MIGHT BE CORRUPTED!");
+            }
+            else if(st.getUpdateCount() == 0) {
+                PreparedStatement addStatement = conn.prepareStatement("INSERT INTO Fields (entry, name, value) VALUES (?, ?, ?);");
+                addStatement.setLong(1, eid);
+                addStatement.setString(2, e.getKey());
+                addStatement.setString(3, e.getValue());
+                addStatement.executeUpdate();
+                
+            }
+        }
+        conn.commit();
+        
         return false;
     }
 
@@ -178,6 +207,7 @@ public class SQLiteStorage extends Storage {
         String style = rs.getString("style");
 
         BibTexEntry entry = new BibTexEntry(name, style);
+        entry.setId(id);
         readFieldsFromDB(id, entry);
 
         return entry;

@@ -187,7 +187,8 @@ public class GuiTest {
         //Storage stor = app.getStorage();
         BibTexEntry article1 = storage.get("article1");
         BibTexEntry article2 = storage.get("article2");
-
+        System.out.println(article1.getId());
+        System.out.println(article2.getId());
         assertNotNull(article1);
         assertNotNull(article2);
         try {
