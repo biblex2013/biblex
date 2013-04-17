@@ -115,6 +115,20 @@
                 <configuration>
                     <!--Comment out to run FestTest tests.
                     <excludedGroups>fi.helsinki.biblex.category.FestTest</excludedGroups> -->
+                     
+                </configuration>
+            </plugin>
+            
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>cobertura-maven-plugin</artifactId>
+                <version>2.5.2</version>
+                <configuration>
+                    <instrumentation>
+                        <excludes>
+                            <exclude>fi/helsinki/biblex/Importer/*.class</exclude>
+                        </excludes>
+                    </instrumentation>
                 </configuration>
             </plugin>
             
