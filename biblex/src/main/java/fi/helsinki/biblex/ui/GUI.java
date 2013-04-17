@@ -117,7 +117,6 @@ public class GUI {
             }
 
             App.getValidationService().checkEntry(p_entry);
-
         } catch (ValidationException e) {
             p_refWindow.displayError(e.getMessage(), "Validation failed");
             return;
@@ -132,9 +131,7 @@ public class GUI {
             }
         } catch (Exception ex) {
             p_refWindow.displayError(ex.getMessage(), "Saving failed");
-            return;
         }
-        //System.out.println(p_entry.toString());
     }
 
     /**
@@ -228,45 +225,33 @@ public class GUI {
                     }
                 }
         );
-        p_entryPane.addMListener(new MouseListener() {
 
+        // EntryPane
+        p_entryPane.addMListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if(e.getClickCount() > 1) {
                     e.consume();
-                    String chosenOne = (String) p_entryPane.p_entryJList.getSelectedValue();
-                    openEntry(App.getStorage().get(chosenOne));
+                    openEntry(App.getStorage().get(p_entryPane.getSelectedEntry()));
                 }
             }
 
-            @Override
-            public void mousePressed(MouseEvent e) {
-            }
-
-            @Override
-            public void mouseReleased(MouseEvent e) {
-            }
-
-            @Override
-            public void mouseEntered(MouseEvent e) {
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) {
-            }
+            public void mousePressed(MouseEvent e) {}
+            public void mouseReleased(MouseEvent e) {}
+            public void mouseEntered(MouseEvent e) {}
+            public void mouseExited(MouseEvent e) {}
         });
-        p_entryPane.registerAction(EntryPane.UIAction.POPUP_DELETE, new AbstractAction("Delete") {
 
+        p_entryPane.registerDeleteAction(new AbstractAction("Delete") {
             public void actionPerformed(ActionEvent e) {
                 try {
-                    BibTexEntry selected = App.getStorage().get((String) p_entryPane.p_entryJList.getSelectedValue());
+                    BibTexEntry selected = App.getStorage().get(p_entryPane.getSelectedEntry());
                     App.getStorage().delete(selected.getId());
                 } catch (Exception ex) {
                     p_refWindow.displayError(ex.toString(), "Failed to delete");
                 }
                 populateEntryList();
             }
-
         });
     }
 }
