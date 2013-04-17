@@ -30,32 +30,25 @@ scenario 'Pystyy tallentamaan article-viitteen', {
         testFrame.textBox("p_entryNameInput").enterText(ARTICLE_NAME)
         testFrame.button("p_setEntryButton").click()
 
-        Pause.pause(1000)
-
         testFrame.textBox("year").enterText("year")
         testFrame.textBox("journal").enterText("journal")
         testFrame.textBox("author").enterText("Thor")
 
         testFrame.button("p_submitButton").click()
 
-        Pause.pause(1000)
+        Pause.pause(600)
 
         // "title" kenttä ei saa olla tyhjä
         testFrame.optionPane().requireErrorMessage()
         testFrame.optionPane().button().click()
 
-        Pause.pause(1000)
+        Pause.pause(600)
 
         testFrame.textBox("title").enterText("title")
-
-        Pause.pause(1000)
 
         // luo 'badone'-kenttä ja yritä submitata
         testFrame.textBox("p_fieldNameInput").enterText("badone")
         testFrame.button("p_addFieldButton").click()
-
-        Pause.pause(600)
-
         testFrame.button("p_submitButton").click()
 
         Pause.pause(600)
@@ -81,6 +74,7 @@ scenario 'Pystyy tallentamaan article-viitteen', {
         entry.get("journal").equals("journal")      .shouldBe true
         entry.get("author") .equals("Thor")         .shouldBe true
         entry.get("title")  .equals("title")        .shouldBe true
+
         // volume is optional, so don't insist on non-emptyness of value
         entry.get("volume") .equals("")             .shouldBe true
     }
@@ -96,7 +90,7 @@ scenario 'Pystyy tallentamaan book-viitteen', {
         testFrame.textBox("p_entryNameInput").enterText(BOOK_NAME)
         testFrame.button("p_setEntryButton").click()
 
-        Pause.pause(1000)
+        Pause.pause(600)
 
         TX_AUTHOR =    "Thorr"
         TX_TITLE  =    "Calculus I"
@@ -110,11 +104,9 @@ scenario 'Pystyy tallentamaan book-viitteen', {
         testFrame.textBox("publisher")  .enterText(TX_PUBLISHER)
         testFrame.textBox("year")       .enterText(TX_YEAR)
 
-        Pause.pause(1000)
-
         testFrame.button("p_submitButton").click()
 
-        Pause.pause(1000)
+        Pause.pause(600)
     }
 
     then 'book-viite löytyy kannasta', {
@@ -140,7 +132,7 @@ scenario 'Pystyy tallentamaan inproceedings-viitteen', {
         testFrame.textBox("p_entryNameInput").enterText(INPROC_NAME)
         testFrame.button("p_setEntryButton").click()
 
-        Pause.pause(1000)
+        Pause.pause(600)
 
         TX_AUTHOR       =    "Thorrr"
         TX_TITLE        =    "About Inproceedings"
@@ -154,11 +146,9 @@ scenario 'Pystyy tallentamaan inproceedings-viitteen', {
         testFrame.textBox("booktitle")  .enterText(TX_BOOKTITLE)
         testFrame.textBox("year")       .enterText(TX_YEAR)
 
-        Pause.pause(1000)
-
         testFrame.button("p_submitButton").click()
 
-        Pause.pause(1000)
+        Pause.pause(600)
     }
 
     then 'inproceedings-viite löytyy kannasta', {
@@ -170,5 +160,32 @@ scenario 'Pystyy tallentamaan inproceedings-viitteen', {
         entry.get("title")      .equals(TX_TITLE)       .shouldBe true
         entry.get("booktitle")  .equals(TX_BOOKTITLE)   .shouldBe true
         entry.get("year")       .equals(TX_YEAR)        .shouldBe true
+    }
+}
+
+scenario 'New Reference -toiminto menusta tyhjentää näkymän', {
+    when 'Luotu viite', {
+        BOOK_NAME = "Book2_" + System.currentTimeMillis()
+
+        testFrame.comboBox().selectItem("book")
+        testFrame.comboBox().requireSelection("book")
+        testFrame.textBox("p_entryNameInput").enterText(BOOK_NAME)
+        testFrame.button("p_setEntryButton").click()
+    }
+
+    then 'New Reference -toiminto tyhjentää näkymän', {
+
+        Pause.pause(3000)
+
+        menuItem = testFrame.menuItem("p_menuNewEntry")
+        menuItem.requireEnabled()
+        menuItem.click()
+
+        Pause.pause(3000)
+
+        ensureThrows(Exception) {
+            // nappulan ei pitäisi olla siellä
+            testFrame.button("btnDeleteField:author")
+        }
     }
 }

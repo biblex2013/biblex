@@ -136,6 +136,7 @@ public class Window implements Iterable<Map.Entry<String, String>> {
                 return;
 
             case MENU_NEW_ENTRY:
+                p_menuNewEntry.setName("p_menuNewEntry");
                 p_menuNewEntry.setAction(action);
                 return;
 
@@ -359,6 +360,7 @@ public class Window implements Iterable<Map.Entry<String, String>> {
         bottomPane.add(p_submitButton);
 
         p_pane = new JPanel();
+        p_pane.setName("p_pane");
         p_pane.setLayout(new BoxLayout(p_pane, BoxLayout.Y_AXIS));
 
         p_scrollPane = new JScrollPane(p_pane);
