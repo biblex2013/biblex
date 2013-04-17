@@ -25,14 +25,14 @@ public class BookValidatorTest {
 
     @Test
     public void testRequiredFields() {
-        assertEquals(5, v.getSetOfRequiredFields().size());
-        assertTrue(v.getSetOfRequiredFields().contains("author"));
+        assertEquals(3, v.getSetOfRequiredFields().size());
+        assertTrue(v.getSetOfRequiredFields().contains("title"));
         assertFalse(v.getSetOfRequiredFields().contains("fdsafds"));
     }
 
     @Test
     public void testOptionalFields() {
-        assertEquals(7, v.getSetOfOptionalFields().size());
+        assertEquals(9, v.getSetOfOptionalFields().size());
         assertTrue(v.getSetOfOptionalFields().contains("edition"));
         assertFalse(v.getSetOfOptionalFields().contains("fdsafds"));
     }
@@ -72,6 +72,5 @@ public class BookValidatorTest {
         assertNull(v.validateAndGetErrorMessage("author", "Thor"));
         assertNull(v.validateAndGetErrorMessage("edition", "2nd"));
         assertNotNull(v.validateAndGetErrorMessage("epic", "fail"));
-        assertNotNull(v.validateAndGetErrorMessage("author", ""));
     }
 }

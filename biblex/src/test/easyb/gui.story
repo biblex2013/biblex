@@ -36,13 +36,13 @@ scenario 'Pystyy tallentamaan article-viitteen', {
 
         testFrame.button("p_submitButton").click()
 
-        Pause.pause(600)
+        Pause.pause(100)
 
         // "title" kenttä ei saa olla tyhjä
         testFrame.optionPane().requireErrorMessage()
         testFrame.optionPane().button().click()
 
-        Pause.pause(600)
+        Pause.pause(100)
 
         testFrame.textBox("title").enterText("title")
 
@@ -51,7 +51,7 @@ scenario 'Pystyy tallentamaan article-viitteen', {
         testFrame.button("p_addFieldButton").click()
         testFrame.button("p_submitButton").click()
 
-        Pause.pause(600)
+        Pause.pause(100)
 
         testFrame.optionPane().requireErrorMessage()
         testFrame.optionPane().button().click()
@@ -61,7 +61,7 @@ scenario 'Pystyy tallentamaan article-viitteen', {
         testFrame.textBox("p_fieldNameInput").enterText("volume")
         testFrame.button("p_addFieldButton").click()
 
-        Pause.pause(600)
+        Pause.pause(100)
 
         testFrame.button("p_submitButton").click()
     }
@@ -90,23 +90,25 @@ scenario 'Pystyy tallentamaan book-viitteen', {
         testFrame.textBox("p_entryNameInput").enterText(BOOK_NAME)
         testFrame.button("p_setEntryButton").click()
 
-        Pause.pause(600)
+        Pause.pause(100)
 
         TX_AUTHOR =    "Thorr"
         TX_TITLE  =    "Calculus I"
-        TX_EDITOR =    "Odin"
         TX_PUBLISHER = "Usher"
         TX_YEAR =      "354"
 
+        // book requires author or editor, but not both, so add author
+        testFrame.textBox("p_fieldNameInput").enterText("author")
+        testFrame.button("p_addFieldButton").click()
+
         testFrame.textBox("author")     .enterText(TX_AUTHOR)
         testFrame.textBox("title")      .enterText(TX_TITLE)
-        testFrame.textBox("editor")     .enterText(TX_EDITOR)
         testFrame.textBox("publisher")  .enterText(TX_PUBLISHER)
         testFrame.textBox("year")       .enterText(TX_YEAR)
 
         testFrame.button("p_submitButton").click()
 
-        Pause.pause(600)
+        Pause.pause(100)
     }
 
     then 'book-viite löytyy kannasta', {
@@ -116,7 +118,6 @@ scenario 'Pystyy tallentamaan book-viitteen', {
 
         entry.get("author")     .equals(TX_AUTHOR)      .shouldBe true
         entry.get("title")      .equals(TX_TITLE)       .shouldBe true
-        entry.get("editor")     .equals(TX_EDITOR)      .shouldBe true
         entry.get("publisher")  .equals(TX_PUBLISHER)   .shouldBe true
         entry.get("year")       .equals(TX_YEAR)        .shouldBe true
     }
@@ -132,7 +133,7 @@ scenario 'Pystyy tallentamaan inproceedings-viitteen', {
         testFrame.textBox("p_entryNameInput").enterText(INPROC_NAME)
         testFrame.button("p_setEntryButton").click()
 
-        Pause.pause(600)
+        Pause.pause(100)
 
         TX_AUTHOR       =    "Thorrr"
         TX_TITLE        =    "About Inproceedings"
@@ -148,7 +149,7 @@ scenario 'Pystyy tallentamaan inproceedings-viitteen', {
 
         testFrame.button("p_submitButton").click()
 
-        Pause.pause(600)
+        Pause.pause(100)
     }
 
     then 'inproceedings-viite löytyy kannasta', {
@@ -199,7 +200,7 @@ when 'inproceedings-viite luotu ja talletettu', {
         testFrame.textBox("p_entryNameInput").enterText(ARTICLE_NAME)
         testFrame.button("p_setEntryButton").click()
 
-        Pause.pause(600)
+        Pause.pause(100)
 
         TX_AUTHOR       =    "Thor 2"
         TX_TITLE        =    "Title"
@@ -242,7 +243,7 @@ when 'inproceedings-viite luotu ja talletettu', {
 
         // ja submita
         testFrame.button("p_submitButton").click()
-        Pause.pause(600)
+        Pause.pause(100)
     }
 
     then 'inproceedings-viite löytyy kannasta', {
