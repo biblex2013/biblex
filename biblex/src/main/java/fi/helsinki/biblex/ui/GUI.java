@@ -124,7 +124,12 @@ public class GUI {
         }
 
         try {
-            App.getStorage().add(p_entry);
+            if(App.getStorage().get(p_entry.getName()) != null) {
+                App.getStorage().update(p_entry.getId(), p_entry);
+            }
+            else {
+                App.getStorage().add(p_entry);
+            }
         } catch (Exception ex) {
             p_refWindow.displayError(ex.getMessage(), "Saving failed");
             return;

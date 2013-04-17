@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.io.*;
 import java.sql.*;
+import java.util.ArrayDeque;
 
 /**
  * This class implements persistent storage using SQLite
@@ -153,6 +154,28 @@ public class SQLiteStorage extends Storage {
     
 
     public boolean update(long eid, BibTexEntry entry) throws Exception {
+        //JOS ENTRYSTÄ ON POISTETTU KENTTÄ, EI POISTA DB:STÄ!
+        //EI MUUTA ENTRYN STYLEÄ!
+        PreparedStatement st = conn.prepareStatement("UPDATE Fields SET value = ? WHERE entry = ? AND name = ?;");
+        for (Map.Entry<String, String> e : entry) {
+            st.setString(1, e.getValue());
+            st.setLong(2, eid);
+            st.setString(3, e.getKey());
+            st.execute();
+            if(st.getUpdateCount() > 1) {
+                throw new Exception("SOMETHING WENT WRONG: DATABASE MIGHT BE CORRUPTED!");
+            }
+            else if(st.getUpdateCount() == 0) {
+                PreparedStatement addStatement = conn.prepareStatement("INSERT INTO Fields (entry, name, value) VALUES (?, ?, ?);");
+                addStatement.setLong(1, eid);
+                addStatement.setString(2, e.getKey());
+                addStatement.setString(3, e.getValue());
+                addStatement.executeUpdate();
+                
+            }
+        }
+        conn.commit();
+        
         return false;
     }
 
