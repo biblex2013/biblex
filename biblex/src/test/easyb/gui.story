@@ -64,11 +64,11 @@ scenario 'Pystyy tallentamaan article-viitteen', {
         Pause.pause(600)
 
         testFrame.button("p_submitButton").click()
-
     }
 
     then 'article-viite löytyy kannasta', {
         entry = storage.get(ARTICLE_NAME)
+        entry.shouldNotBe null
         entry.getName()     .equals(ARTICLE_NAME)   .shouldBe true
         entry.get("year")   .equals("year")         .shouldBe true
         entry.get("journal").equals("journal")      .shouldBe true
@@ -165,7 +165,7 @@ scenario 'Pystyy tallentamaan inproceedings-viitteen', {
 
 scenario 'New Reference -toiminto menusta tyhjentää näkymän', {
     when 'Luotu viite', {
-        BOOK_NAME = "Book2_" + System.currentTimeMillis()
+        BOOK_NAME = "Book" + System.currentTimeMillis()
 
         testFrame.comboBox().selectItem("book")
         testFrame.comboBox().requireSelection("book")

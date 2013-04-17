@@ -57,6 +57,10 @@ public class ValidationService {
             if (!entry.containsField(field)) {
                 throw new ValidationException(
                         "Field '" + field + "' is required but is missing.");
+            } else if (entry.get(field).isEmpty()) {
+                throw new ValidationException(
+                        "Field '" + field +
+                        "' is required but maps to an empty string.");
             }
         }
     }

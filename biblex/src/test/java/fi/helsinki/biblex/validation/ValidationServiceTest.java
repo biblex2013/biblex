@@ -64,6 +64,18 @@ public class ValidationServiceTest {
         service.checkEntry(e);
     }
 
+    @Test(expected = ValidationException.class)
+    public void testRequiredFieldValueMayNotBeEmptyString()
+            throws ValidationException {
+        BibTexEntry e = new BibTexEntry("namu", BibTexStyle.ARTICLE);
+        e.put("author", "Thor");
+        e.put("title", "Title");
+        e.put("year", "2013");
+        e.put("journal", "");
+        // 'journal' is empty str
+        service.checkEntry(e);
+    }
+
     @Test
     public void testDoesNotThrowOnAccept()
             throws ValidationException {
