@@ -4,9 +4,7 @@ import fi.helsinki.biblex.domain.BibTexEntry;
 
 import java.util.Iterator;
 import java.util.Map;
-import java.io.*;
 import java.sql.*;
-import java.util.ArrayDeque;
 
 /**
  * This class implements persistent storage using SQLite
@@ -151,11 +149,34 @@ public class SQLiteStorage extends Storage {
             throw e;
         }
     }
+
+
+    public boolean deleteField(long eid, String name) throws Exception {
+        try {
+            PreparedStatement st = conn.prepareStatement("DELETE FROM Fields WHERE entry = ? AND name = ?");
+            st.setLong(1, eid);
+            st.setString(2, name);
+            st.executeUpdate();
+            conn.commit();
+            return true;
+        } catch (Exception e) {
+            System.out.println("Error in SQLiteStorage.delete(long): " + e.toString());
+            throw e;
+        }
+    }
     
 
     public boolean update(long eid, BibTexEntry entry) throws Exception {
-        //JOS ENTRYSTÄ ON POISTETTU KENTTÄ, EI POISTA DB:STÄ!
         //EI MUUTA ENTRYN STYLEÄ!
+
+        // Poistetaan poistetettavat kentät
+        BibTexEntry old = get(eid);
+        for (Map.Entry<String, String> e : old) {
+            if (entry.containsField(e.getKey()))
+                continue;
+            deleteField(eid, e.getKey());
+        }
+
         PreparedStatement st = conn.prepareStatement("UPDATE Fields SET value = ? WHERE entry = ? AND name = ?;");
         for (Map.Entry<String, String> e : entry) {
             st.setString(1, e.getValue());

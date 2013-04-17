@@ -31,7 +31,8 @@ public class EntryPane extends JPanel {
      */
     public void addEntry(String name) {
         p_entryListModel.addElement(name);
-        p_scrollPane.revalidate();
+        p_entryList.revalidate();
+        p_entryList.repaint();
     }
 
 

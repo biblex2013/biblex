@@ -35,12 +35,11 @@ public class GUI {
     }
 
     public void init() {
-        // Populate EntryPane
-        populateEntryList();
-
         // Populate Window
         populateEntryStyles();
         createActions();
+
+        populateEntryList();
     }
 
 
