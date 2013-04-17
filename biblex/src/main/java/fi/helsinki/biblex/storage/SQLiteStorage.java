@@ -74,11 +74,13 @@ public class SQLiteStorage extends Storage {
 
         PreparedStatement st = conn.prepareStatement(
             "INSERT INTO Entries (name, style) VALUES (?, ?)");
+        
         st.setString(1, entry.getName());
         st.setString(2, entry.getStyle().toString());
 
         st.execute();
         long eid = st.getGeneratedKeys().getLong(1);
+        entry.setId(eid);
 
         st = conn.prepareStatement(
             "INSERT INTO Fields (entry, name, value) VALUES (?, ?, ?);");
@@ -138,13 +140,17 @@ public class SQLiteStorage extends Storage {
             st.setLong(1, eid);
             st.executeUpdate();
             conn.commit();
+            st = conn.prepareStatement("DELETE FROM Fields WHERE entry = ?");
+            st.setLong(1, eid);
+            st.executeUpdate();
+            conn.commit();
+            return true;
         } catch (Exception e) {
             System.out.println("Error in SQLiteStorage.delete(long): " + e.toString());
             throw e;
         }
-        
-        return false;
     }
+    
 
     public boolean update(long eid, BibTexEntry entry) throws Exception {
         return false;
@@ -178,6 +184,7 @@ public class SQLiteStorage extends Storage {
         String style = rs.getString("style");
 
         BibTexEntry entry = new BibTexEntry(name, style);
+        entry.setId(id);
         readFieldsFromDB(id, entry);
 
         return entry;

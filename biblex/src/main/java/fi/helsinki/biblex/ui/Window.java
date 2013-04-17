@@ -87,12 +87,11 @@ public class Window implements Iterable<Map.Entry<String, String>> {
 
         p_fieldMap = new ArrayList<Map.Entry<String, JPanel>>();
 
-        p_window.setSize(550, 550);
+        p_window.setSize(680, 470);
         p_window.setMinimumSize(new Dimension(475, 350));
         p_window.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         populate(entryPane);
-
         p_window.setVisible(true);
     }
 

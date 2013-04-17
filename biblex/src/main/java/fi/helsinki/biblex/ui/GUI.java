@@ -129,7 +129,7 @@ public class GUI {
             p_refWindow.displayError(ex.getMessage(), "Saving failed");
             return;
         }
-        System.out.println(p_entry.toString());
+        //System.out.println(p_entry.toString());
     }
 
     /**
@@ -185,7 +185,6 @@ public class GUI {
                 }
         );
 
-        // EntryPane
         p_refWindow.registerAction(
                 Window.UIAction.MENU_EXPORT,
                 new AbstractAction("Export") {
@@ -228,8 +227,11 @@ public class GUI {
 
             @Override
             public void mouseClicked(MouseEvent e) {
-                String chosenOne = (String) p_entryPane.p_entryJList.getSelectedValue();
-                openEntry(App.getStorage().get(chosenOne));
+                if(e.getClickCount() > 1) {
+                    e.consume();
+                    String chosenOne = (String) p_entryPane.p_entryJList.getSelectedValue();
+                    openEntry(App.getStorage().get(chosenOne));
+                }
             }
 
             @Override
@@ -247,6 +249,19 @@ public class GUI {
             @Override
             public void mouseExited(MouseEvent e) {
             }
+        });
+        p_entryPane.registerAction(EntryPane.UIAction.POPUP_DELETE, new AbstractAction("Delete") {
+
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    BibTexEntry selected = App.getStorage().get((String) p_entryPane.p_entryJList.getSelectedValue());
+                    App.getStorage().delete(selected.getId());
+                } catch (Exception ex) {
+                    p_refWindow.displayError(ex.toString(), "Failed to delete");
+                }
+                populateEntryList();
+            }
+
         });
     }
 }
