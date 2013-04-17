@@ -54,7 +54,7 @@ public class ValidationService {
         Set<String> req = m.get(entry.getStyle()).getSetOfRequiredFields();
 
         for (String field : req) {
-            if (entry.containsField(field)) {
+            if (!entry.containsField(field)) {
                 throw new ValidationException(
                         "Field '" + field + "' is required but is missing.");
             }
