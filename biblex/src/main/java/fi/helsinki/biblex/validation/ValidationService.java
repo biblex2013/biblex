@@ -4,6 +4,7 @@ import fi.helsinki.biblex.domain.BibTexEntry;
 import fi.helsinki.biblex.domain.BibTexStyle;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * This class defines an extensible validator.
@@ -48,6 +49,15 @@ public class ValidationService {
             checkValidity(entry.getStyle(),
                           mapping.getKey(),
                           mapping.getValue());
+        }
+
+        Set<String> req = m.get(entry.getStyle()).getSetOfRequiredFields();
+
+        for (String field : req) {
+            if (entry.containsField(field)) {
+                throw new ValidationException(
+                        "Field '" + field + "' is required but is missing.");
+            }
         }
     }
 }

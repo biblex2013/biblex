@@ -4,6 +4,7 @@
  */
 package fi.helsinki.biblex.validation;
 
+import fi.helsinki.biblex.domain.BibTexEntry;
 import fi.helsinki.biblex.domain.BibTexStyle;
 import fi.helsinki.biblex.validation.support.ArticleValidator;
 import fi.helsinki.biblex.validation.support.BookValidator;
@@ -51,6 +52,16 @@ public class ValidationServiceTest {
     @Test(expected = IllegalArgumentException.class)
     public void testThrowsOnNullValue() throws ValidationException {
         service.checkValidity(BibTexStyle.ARTICLE, "author", null);
+    }
+
+    @Test(expected = ValidationException.class)
+    public void testThrowsOnMissingRequiredField() throws ValidationException {
+        BibTexEntry e = new BibTexEntry("namu", BibTexStyle.ARTICLE);
+        e.put("author", "Thor");
+        e.put("title", "Title");
+        e.put("year", "2013");
+        // 'journal' is missing
+        service.checkEntry(e);
     }
 
     @Test
