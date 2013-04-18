@@ -5,6 +5,10 @@ import fi.helsinki.biblex.domain.BibTexEntry;
 import fi.helsinki.biblex.domain.BibTexStyle;
 import fi.helsinki.biblex.validation.AbstractValidator;
 import fi.helsinki.biblex.validation.ValidationException;
+
+import java.awt.*;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.StringSelection;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -252,6 +256,18 @@ public class GUI {
                     p_refWindow.displayError(ex.toString(), "Failed to delete");
                 }
                 populateEntryList();
+            }
+        });
+
+        p_entryPane.registerCopyToClipboardAction(new AbstractAction("Copy as BibTeX") {
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    BibTexEntry selected = App.getStorage().get(p_entryPane.getSelectedEntry());
+                    StringSelection selection = new StringSelection(selected.toString());
+                    Toolkit.getDefaultToolkit().getSystemClipboard().setContents(selection, selection);
+                } catch (NullPointerException ex) {
+                    p_refWindow.displayError("No entry selected", "Failed to copy entry");
+                }
             }
         });
     }

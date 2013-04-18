@@ -14,6 +14,7 @@ public class EntryPane extends JPanel {
     private JScrollPane p_scrollPane;
 
     private JMenuItem p_menuDeleteEntry;
+    private JMenuItem p_menuCopyEntryToClipboard;
 
 
     public EntryPane() {
@@ -57,13 +58,21 @@ public class EntryPane extends JPanel {
     }
 
 
+    public void registerCopyToClipboardAction(Action ac) {
+        p_menuCopyEntryToClipboard.setAction(ac);
+    }
+
+
     /**
      * Add UI elements to the window, and setup action handling
      */
     private void populate() {
         JPopupMenu popMenu = new JPopupMenu();
         p_menuDeleteEntry = new JMenuItem();
+        p_menuCopyEntryToClipboard = new JMenuItem();
+
         popMenu.add(p_menuDeleteEntry);
+        popMenu.add(p_menuCopyEntryToClipboard);
         p_entryList.setComponentPopupMenu(popMenu);
 
         p_scrollPane = new JScrollPane(p_entryList);
