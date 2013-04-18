@@ -20,6 +20,7 @@ public class EntryPane extends JPanel {
     public EntryPane() {
         p_entryListModel = new DefaultListModel();
         p_entryList = new JList(p_entryListModel);
+        p_entryList.setName("entryList");
 
         populate();
     }
@@ -70,6 +71,7 @@ public class EntryPane extends JPanel {
         JPopupMenu popMenu = new JPopupMenu();
         p_menuDeleteEntry = new JMenuItem();
         p_menuCopyEntryToClipboard = new JMenuItem();
+        p_menuCopyEntryToClipboard.setName("menuCopyEntryToClipboard");
 
         popMenu.add(p_menuDeleteEntry);
         popMenu.add(p_menuCopyEntryToClipboard);
