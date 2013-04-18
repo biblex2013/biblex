@@ -11,15 +11,13 @@ Ohjelmistotuotanto 2013
 1. Valinnaisen fieldin lisääminen listalta
 1. Virheellisessä muodossa olevan syötteen käsitteleminen
 1. BibTeX-muodossa olevan data lisääminen
-1. Viitteiden hakeminen
-1. Viitteen poistaminen
-1. Viitten muokkaaminen
 1. Viitteiden synkronointi
 1. Käyttäjä luo tagin
 1. Käyttäjä merkkaa viitteen tagilla
 1. Käyttäjä haluaa poistaa tagin
 1. Viitteen tuominen ACM:stä
 1. Uuden, minkä tahansa tyyppisen, viitteen lisääminen
+1. ~~Viitteiden hakeminen~~ (duplikaatti kohdasta "filtteröinti") 
 
 ### Done
 
@@ -29,6 +27,8 @@ Ohjelmistotuotanto 2013
 1. *Book*-, *article*- ja *inproceednigs*-tyyppisten viitteiden vieminen BibTeXinä
 1. Fest / EasyB testauksen lisääminen työprosessiin (Definition-of-Done)
 1. Tietokannassa olevien viitteiden listaaminen
+1. Viitteen poistaminen
+1. Viitten muokkaaminen
 
 
 ## Backlog
