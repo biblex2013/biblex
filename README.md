@@ -4,10 +4,10 @@ Ohjelmistotuotanto 2013
 
 ## Product backlog
 
-1. Lista näkymästä inhimillisempi
-1. Yksittäisten itemien copy pasta
-1. Find after enter filteröinti
-1. export filteröity
+1. Listauksesta inhimillisempi
+1. Yksittäisten viitteiden copy pasta
+1. Viitteiden filtteröinti (find after enter)
+1. Filtteröidyn viitelistauksen exporttaaminen
 1. Valinnaisen fieldin lisääminen listalta
 1. Virheellisessä muodossa olevan syötteen käsitteleminen
 1. BibTeX-muodossa olevan data lisääminen
