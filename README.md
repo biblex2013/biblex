@@ -4,9 +4,11 @@ Ohjelmistotuotanto 2013
 
 ## Product backlog
 
-1. *Book*-, *article*- ja *inproceednigs*-tyyppisten viitteiden vieminen BibTeXinä
-1. Fest / EasyB testauksen lisääminen työprosessiin (Definition-of-Done)
-1. Tietokannassa olevien viitteiden listaaminen
+1. Lista näkymästä inhimillisempi
+1. Yksittäisten itemien copy pasta
+1. Find after enter filteröinti
+1. export filteröity
+1. Valinnaisen fieldin lisääminen listalta
 1. Virheellisessä muodossa olevan syötteen käsitteleminen
 1. BibTeX-muodossa olevan data lisääminen
 1. Viitteiden hakeminen
@@ -24,6 +26,9 @@ Ohjelmistotuotanto 2013
 1. Hyvin muotoillun *article*-tyyppisen viitteen lisääminen tyypillisillä kentillä
 1. Viitteiden vieminen BibTeXinä
 1. *Inproceedings*- ja *book*-tyyppisten viitteiden lisääminen
+1. *Book*-, *article*- ja *inproceednigs*-tyyppisten viitteiden vieminen BibTeXinä
+1. Fest / EasyB testauksen lisääminen työprosessiin (Definition-of-Done)
+1. Tietokannassa olevien viitteiden listaaminen
 
 
 ## Backlog
