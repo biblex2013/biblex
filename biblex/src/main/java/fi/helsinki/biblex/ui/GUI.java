@@ -25,6 +25,8 @@ public class GUI {
     private BibTexEntry p_entry;
 
     private ExportFileChooser p_exportFileChooser;
+    private ImportFileChooser p_importFileChooser;
+
 
     public GUI() {
         p_entryPane = new EntryPane();
@@ -32,6 +34,9 @@ public class GUI {
 
         p_exportFileChooser = new ExportFileChooser();
         p_exportFileChooser.setName("exportFileChooser");
+        
+        p_importFileChooser = new ImportFileChooser();
+        p_importFileChooser.setName("importFileChooser");
     }
 
     public void init() {
@@ -220,6 +225,20 @@ public class GUI {
                     }
                 }
         );
+        
+        p_window.registerAction(
+                Window.UIAction.MENU_IMPORT,
+                new AbstractAction("Import") {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                String filename = p_importFileChooser.getFileName();
+                if (filename != null) {
+                      App.getImporter().importFromFile(filename);
+                      populateEntryList("");
+                }
+            }
+        });
 
         p_window.registerAction(
                 Window.UIAction.MENU_QUIT,

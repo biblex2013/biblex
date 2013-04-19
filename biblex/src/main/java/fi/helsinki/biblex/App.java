@@ -1,5 +1,6 @@
 package fi.helsinki.biblex;
 
+import fi.helsinki.biblex.Importer.Importer;
 import fi.helsinki.biblex.exporter.ExportToFile;
 import fi.helsinki.biblex.exporter.Exporter;
 import fi.helsinki.biblex.storage.SQLiteStorage;
@@ -19,6 +20,7 @@ public class App {
     private ValidationService p_validation;
     private Storage p_storage;
     private Exporter p_exporter;
+    private Importer p_importer;
 
     private App() {
         try {
@@ -29,6 +31,7 @@ public class App {
         }
 
         p_exporter = new ExportToFile(p_storage);
+        p_importer = new Importer(p_storage);
         p_validation = new ValidationService();
 
         // register the individual validators
@@ -80,6 +83,10 @@ public class App {
     
     public static Exporter getExporter() {
         return getInstance().p_exporter;
+    }
+    
+    public static Importer getImporter() {
+        return getInstance().p_importer;
     }
     
     public static ValidationService getValidationService() {

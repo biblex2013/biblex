@@ -8,11 +8,13 @@ import java.util.*;
 import java.util.List;
 
 /**
- * This class handles the visual appearance of the reference editor window
- * All handling of user input and actions is done elsewhere.
+ * This class handles the visual appearance of the reference editor window All
+ * handling of user input and actions is done elsewhere.
  */
 public class Window implements Iterable<Map.Entry<String, String>> {
+
     public static enum UIAction {
+
         SUBMIT,
         ADD_FIELD,
         DELETE_FIELD,
@@ -20,11 +22,12 @@ public class Window implements Iterable<Map.Entry<String, String>> {
         APPLY_FILTER,
         MENU_QUIT,
         MENU_EXPORT,
+        MENU_IMPORT,
         MENU_NEW_ENTRY
     }
 
-
     public static class EntryIterator implements Iterator<Map.Entry<String, String>> {
+
         private int p_pos;
         private Window p_win;
 
@@ -38,53 +41,43 @@ public class Window implements Iterable<Map.Entry<String, String>> {
         }
 
         public Map.Entry<String, String> next() {
-            if (!hasNext())
+            if (!hasNext()) {
                 throw new IndexOutOfBoundsException("Iterator out of bounds");
+            }
 
             Map.Entry<String, JPanel> fieldEntry = p_win.p_fieldMap.get(p_pos++);
 
             return new AbstractMap.SimpleEntry<String, String>(
                     fieldEntry.getKey(),
-                    ((JTextField) fieldEntry.getValue().getComponent(FIELD_PANE_TEXT_ID)).getText()
-            );
+                    ((JTextField) fieldEntry.getValue().getComponent(FIELD_PANE_TEXT_ID)).getText());
         }
 
-        public void remove() {}
+        public void remove() {
+        }
     }
-
-
     // Ugly way to access the correct component in the field JPanel...
     private static final int FIELD_PANE_TEXT_ID = 2;
     private static final int FIELD_PANE_BUTTON_ID = 4;
-
     private JFrame p_window;
-
     private JPanel p_pane;
     private JScrollPane p_scrollPane;
-
     private JComboBox p_entryStyleInput;
     private JTextField p_entryNameInput;
     private JTextField p_fieldNameInput;
-
     private JTextField p_filterInput;
     private JButton p_filterButton;
-
     private JMenuBar p_menu;
-
     private JButton p_submitButton;
     private JButton p_addFieldButton;
     private JButton p_setEntryButton;
-
     private JMenuItem p_menuNewEntry;
     private JMenuItem p_menuExport;
+    private JMenuItem p_menuImport;
     private JMenuItem p_menuQuit;
-
     // Need to keep track of this, as each field has it's own button
     private Action p_deleteAction;
-
     // Keep track of field name -> UI element pairs
     private List<Map.Entry<String, JPanel>> p_fieldMap;
-
 
     public Window(JPanel entryPane) {
         p_window = new JFrame();
@@ -98,7 +91,6 @@ public class Window implements Iterable<Map.Entry<String, String>> {
         populate(entryPane);
         p_window.setVisible(true);
     }
-
 
     /**
      * Register action handler for a specific UI action
@@ -140,6 +132,11 @@ public class Window implements Iterable<Map.Entry<String, String>> {
                 p_menuExport.setAction(action);
                 return;
 
+            case MENU_IMPORT:
+                p_menuImport.setName("p_menuImport");
+                p_menuImport.setAction(action);
+                return;
+
             case MENU_NEW_ENTRY:
                 p_menuNewEntry.setName("p_menuNewEntry");
                 p_menuNewEntry.setAction(action);
@@ -147,10 +144,9 @@ public class Window implements Iterable<Map.Entry<String, String>> {
 
             default:
                 // action not supported
-                assert(false);
+                assert (false);
         }
     }
-
 
     /**
      * Set window title
@@ -170,7 +166,6 @@ public class Window implements Iterable<Map.Entry<String, String>> {
         }
     }
 
-
     /**
      * Add a new style to the style selection combo-box
      *
@@ -179,7 +174,6 @@ public class Window implements Iterable<Map.Entry<String, String>> {
     public void addEntryStyle(BibTexStyle style) {
         p_entryStyleInput.addItem(style);
     }
-
 
     /**
      * Add a new field to the current entry
@@ -221,7 +215,6 @@ public class Window implements Iterable<Map.Entry<String, String>> {
         p_scrollPane.validate();
     }
 
-
     /**
      * Remove a field from the current entry
      *
@@ -244,41 +237,33 @@ public class Window implements Iterable<Map.Entry<String, String>> {
         throw new RuntimeException("Delete field failed, field not found (" + name + ")");
     }
 
-
     public String getFieldNameEntry() {
         return p_fieldNameInput.getText();
     }
-
 
     public void clearFieldNameEntry() {
         p_fieldNameInput.setText("");
     }
 
-
     public String getEntryNameInput() {
         return p_entryNameInput.getText();
     }
-
 
     public void clearEntryNameInput() {
         p_entryNameInput.setText("");
     }
 
-
     public BibTexStyle getEntryStyleInput() {
         return (BibTexStyle) p_entryStyleInput.getSelectedItem();
     }
-
 
     public String getFilterEntry() {
         return p_filterInput.getText();
     }
 
-
     public void clearFilterEntry() {
         p_filterInput.setText("");
     }
-
 
     /**
      * Display an error dialog with a given message
@@ -290,7 +275,6 @@ public class Window implements Iterable<Map.Entry<String, String>> {
         JOptionPane.showMessageDialog(p_window, err, title, JOptionPane.ERROR_MESSAGE);
     }
 
-
     /**
      * Allow iteration through the entry fields
      *
@@ -300,7 +284,6 @@ public class Window implements Iterable<Map.Entry<String, String>> {
         return new EntryIterator(this);
     }
 
-
     /**
      * Dispose of the window
      */
@@ -308,11 +291,9 @@ public class Window implements Iterable<Map.Entry<String, String>> {
         p_window.dispose();
     }
 
-
     public JFrame getWindow() {
         return p_window;
     }
-
 
     /**
      * Add UI elements to the window, and setup action handling
@@ -325,11 +306,13 @@ public class Window implements Iterable<Map.Entry<String, String>> {
         JMenu fileMenu = new JMenu("File");
         p_menuNewEntry = new JMenuItem();
         p_menuExport = new JMenuItem();
+        p_menuImport = new JMenuItem();
         p_menuQuit = new JMenuItem();
 
         fileMenu.add(p_menuNewEntry);
         fileMenu.add(new JSeparator());
         fileMenu.add(p_menuExport);
+        fileMenu.add(p_menuImport);
         fileMenu.add(new JSeparator());
         fileMenu.add(p_menuQuit);
 
@@ -419,4 +402,3 @@ public class Window implements Iterable<Map.Entry<String, String>> {
         p_window.getContentPane().add(mainPane, BorderLayout.CENTER);
     }
 }
-
