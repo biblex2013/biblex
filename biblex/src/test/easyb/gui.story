@@ -6,9 +6,13 @@ import org.fest.swing.core.GenericTypeMatcher
 import org.fest.swing.fixture.FrameFixture
 import org.fest.swing.fixture.JListFixture
 import org.fest.swing.timing.Pause
+import org.fest.swing.data.TableCell
+import org.fest.swing.fixture.JTableFixture
+import org.fest.swing.core.MouseButton
 
 import javax.swing.JList
 import java.awt.Toolkit
+import javax.swing.JTable
 
 description 'User story -testit'
 
@@ -20,11 +24,12 @@ scenario 'Pystyy tallentamaan article-viitteen', {
         app.setStorage(new SQLiteStorage(":memory:"))
 
         gui_ = app.getGUI()
+        refTable = gui_.getRefTable()
         refWindow = gui_.getWindow()
         testFrame = new FrameFixture(refWindow)
-        testList = testFrame.list(new GenericTypeMatcher<JList>(JList.class) {
-            protected boolean isMatching(JList list) {
-                return list.isShowing();
+        testList = testFrame.table(new GenericTypeMatcher<JTable>(JTable.class)  {
+            protected boolean isMatching(JTable table) {
+                return table.isShowing();
             }
         })
         storage = app.getStorage()
@@ -304,7 +309,7 @@ when 'viite luotu ja talletettu', {
         entry = storage.get(ARTICLE_NAME)
         entry.shouldNotBe null
 
-        testList.clickItem(ARTICLE_NAME)
+        testList.click(new TableCell(refTable.getModel().getRowByName(ARTICLE_NAME),0), MouseButton.LEFT_BUTTON)
         testList.showPopupMenu().menuItem("menuCopyEntryToClipboard").click()
         Toolkit.getDefaultToolkit().getSystemClipboard().getContents().toString().equals(entry.toString())
     }

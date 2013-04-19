@@ -49,15 +49,18 @@ public class GUI {
     public JFrame getWindow() {
         return p_window.getWindow();
     }
-
+    
+    public JTable getRefTable() {
+        return p_entryPane.p_entryTable;
+    }
 
     /**
      * Add all known entry styles to the style selection combo-box
      */
     private void populateEntryList(String filter) {
-        p_entryPane.clearEntryList();
+        //p_entryPane.clearEntryList();
         for (BibTexEntry entry : App.getStorage()) {
-            p_entryPane.addEntry(entry.getName());
+            p_entryPane.addEntry(entry.getName(), entry.get("title"), entry.get("author"));
         }
     }
 
@@ -113,9 +116,9 @@ public class GUI {
         }
     }
 
-    private void submitEntry() {
+    private boolean submitEntry() {
         if (p_entry == null) {
-            return;
+            return false;
         }
 
         try {
@@ -126,7 +129,7 @@ public class GUI {
             App.getValidationService().checkEntry(p_entry);
         } catch (ValidationException e) {
             p_window.displayError(e.getMessage(), "Validation failed");
-            return;
+            return false;
         }
 
         try {
@@ -138,7 +141,9 @@ public class GUI {
             }
         } catch (Exception ex) {
             p_window.displayError(ex.getMessage(), "Saving failed");
+            return false;
         }
+        return true;
     }
 
     /**
@@ -150,8 +155,11 @@ public class GUI {
                 Window.UIAction.SUBMIT,
                 new AbstractAction("Save Reference", UIManager.getIcon("FileView.hardDriveIcon")) {
                     public void actionPerformed(ActionEvent e) {
-                        submitEntry();
-                        populateEntryList("");
+                        if(submitEntry()) {
+                            p_entryPane.addEntry(p_entry.getName(), p_entry.get("title"), p_entry.get("author"));
+                            p_entryPane.refTableModel.fireTableDataChanged();
+                        }
+                        //populateEntryList("");
                     }
                 }
         );
@@ -262,7 +270,9 @@ public class GUI {
                 } catch (Exception ex) {
                     p_window.displayError(ex.toString(), "Failed to delete");
                 }
-                populateEntryList("");
+                p_entryPane.refTableModel.deleteData(p_entryPane.p_entryTable.getSelectedRow());
+                p_entryPane.clearEntryList();
+                //populateEntryList("");
             }
         });
 
