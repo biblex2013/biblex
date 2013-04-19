@@ -38,7 +38,10 @@ public class Importer {
         ArrayList<String> entries = removeEmptyStringsFromArray(fileAsString.trim().split("@"));
         for (String string : entries) {
             try {
-                storage.add(parseOneBibtexEntry(string));
+                BibTexEntry entry = parseOneBibtexEntry(string);
+                if(storage.get(entry.getName()) == null) 
+                    storage.add(parseOneBibtexEntry(string)); 
+                
             } catch (Exception ex) {
                 Logger.getLogger(Importer.class.getName()).log(Level.SEVERE, null, ex);
             }

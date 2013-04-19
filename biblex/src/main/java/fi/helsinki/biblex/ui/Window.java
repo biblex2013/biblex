@@ -58,27 +58,37 @@ public class Window implements Iterable<Map.Entry<String, String>> {
     // Ugly way to access the correct component in the field JPanel...
     private static final int FIELD_PANE_TEXT_ID = 2;
     private static final int FIELD_PANE_BUTTON_ID = 4;
+    
     private JFrame p_window;
+    
     private JPanel p_pane;
     private JScrollPane p_scrollPane;
+    
     private JComboBox p_entryStyleInput;
     private JTextField p_entryNameInput;
     private JTextField p_fieldNameInput;
+    
     private JTextField p_filterInput;
     private JButton p_filterButton;
+    
     private JMenuBar p_menu;
+    
     private JButton p_submitButton;
     private JButton p_addFieldButton;
     private JButton p_setEntryButton;
+    
     private JMenuItem p_menuNewEntry;
     private JMenuItem p_menuExport;
     private JMenuItem p_menuImport;
     private JMenuItem p_menuQuit;
+    
     // Need to keep track of this, as each field has it's own button
     private Action p_deleteAction;
+    
     // Keep track of field name -> UI element pairs
     private List<Map.Entry<String, JPanel>> p_fieldMap;
 
+    
     public Window(JPanel entryPane) {
         p_window = new JFrame();
 
