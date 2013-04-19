@@ -187,7 +187,7 @@ public class GUI {
                 Window.UIAction.SET_ENTRY,
                 new AbstractAction("Create") {
                     public void actionPerformed(ActionEvent e) {
-                        setEntry(p_window.getEntryStyleInput(), p_window.getEntryNameInput());
+                        setEntry(p_window.getEntryStyleInput(), p_window.getEntryNameInput().trim());
                         p_window.clearEntryNameInput();
                     }
                 }
