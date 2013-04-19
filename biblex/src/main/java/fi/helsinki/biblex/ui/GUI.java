@@ -285,13 +285,12 @@ public class GUI {
             public void actionPerformed(ActionEvent e) {
                 try {
                     BibTexEntry selected = App.getStorage().get(p_entryPane.getSelectedEntry());
-                    System.out.println(p_entryPane.getSelectedEntry());
                     App.getStorage().delete(selected.getId());
                 } catch (Exception ex) {
                     p_window.displayError(ex.toString(), "Failed to delete");
                 }
                 p_entryPane.getRefTableModel().deleteData(p_entryPane.getSelectedIndex());
-                p_entryPane.clearEntryList();
+                p_entryPane.getRefTableModel().fireTableStructureChanged();
             }
         });
 

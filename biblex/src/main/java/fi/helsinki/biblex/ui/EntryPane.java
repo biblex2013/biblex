@@ -49,7 +49,7 @@ public class EntryPane extends JPanel {
         refTableModel.fireTableDataChanged();
         p_entryTable.revalidate();
     }
-
+    
 
     public String getSelectedEntry() {
         //return (String) refTableModel.getValueAt(refTableModel.getRowByName(), 0);
