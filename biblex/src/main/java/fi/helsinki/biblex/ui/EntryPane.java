@@ -68,6 +68,8 @@ public class EntryPane extends JPanel {
      * Add UI elements to the window, and setup action handling
      */
     private void populate() {
+        this.setLayout(new BorderLayout());
+
         JPopupMenu popMenu = new JPopupMenu();
         p_menuDeleteEntry = new JMenuItem();
         p_menuCopyEntryToClipboard = new JMenuItem();
@@ -81,9 +83,9 @@ public class EntryPane extends JPanel {
         p_scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
         p_scrollPane.setBorder(BorderFactory.createEmptyBorder());
 
-        p_scrollPane.setMinimumSize(new Dimension(140, 390));
-        p_scrollPane.setPreferredSize(new Dimension(140, 390));
-        p_scrollPane.setMaximumSize(new Dimension(140, Integer.MAX_VALUE));
+        p_scrollPane.setMinimumSize(new Dimension(175, 390));
+        p_scrollPane.setPreferredSize(new Dimension(175, 390));
+        p_scrollPane.setMaximumSize(new Dimension(175, Integer.MAX_VALUE));
 
         this.add(p_scrollPane, BorderLayout.CENTER);
     }

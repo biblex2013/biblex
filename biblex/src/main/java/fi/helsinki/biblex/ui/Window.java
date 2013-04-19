@@ -17,6 +17,7 @@ public class Window implements Iterable<Map.Entry<String, String>> {
         ADD_FIELD,
         DELETE_FIELD,
         SET_ENTRY,
+        APPLY_FILTER,
         MENU_QUIT,
         MENU_EXPORT,
         MENU_NEW_ENTRY
@@ -65,6 +66,9 @@ public class Window implements Iterable<Map.Entry<String, String>> {
     private JTextField p_entryNameInput;
     private JTextField p_fieldNameInput;
 
+    private JTextField p_filterInput;
+    private JButton p_filterButton;
+
     private JMenuBar p_menu;
 
     private JButton p_submitButton;
@@ -105,7 +109,6 @@ public class Window implements Iterable<Map.Entry<String, String>> {
     public void registerAction(UIAction uiAction, Action action) {
         switch (uiAction) {
             case SUBMIT:
-                p_submitButton.setName("p_submitButton");
                 p_submitButton.setAction(action);
                 return;
 
@@ -121,9 +124,12 @@ public class Window implements Iterable<Map.Entry<String, String>> {
                 return;
 
             case SET_ENTRY:
-                p_setEntryButton.setName("p_setEntryButton");
                 p_setEntryButton.setAction(action);
                 return;
+
+            case APPLY_FILTER:
+                p_filterButton.setAction(action);
+                break;
 
             case MENU_QUIT:
                 p_menuQuit.setAction(action);
@@ -264,6 +270,16 @@ public class Window implements Iterable<Map.Entry<String, String>> {
     }
 
 
+    public String getFilterEntry() {
+        return p_filterInput.getText();
+    }
+
+
+    public void clearFilterEntry() {
+        p_filterInput.setText("");
+    }
+
+
     /**
      * Display an error dialog with a given message
      *
@@ -302,6 +318,7 @@ public class Window implements Iterable<Map.Entry<String, String>> {
      * Add UI elements to the window, and setup action handling
      */
     private void populate(JPanel entryPane) {
+        // Menu:
         p_menu = new JMenuBar();
         p_window.setJMenuBar(p_menu);
 
@@ -318,11 +335,13 @@ public class Window implements Iterable<Map.Entry<String, String>> {
 
         p_menu.add(fileMenu);
 
+        // Top right (create entry):
         JPanel topPane = new JPanel();
         p_entryStyleInput = new JComboBox();
         p_entryNameInput = new JTextField();
         p_entryNameInput.setName("p_entryNameInput");
         p_setEntryButton = new JButton();
+        p_setEntryButton.setName("p_setEntryButton");
 
         topPane.setLayout(new BoxLayout(topPane, BoxLayout.X_AXIS));
         topPane.setBorder(BorderFactory.createEmptyBorder(3, 3, 3, 3));
@@ -336,6 +355,7 @@ public class Window implements Iterable<Map.Entry<String, String>> {
         topPane.add(Box.createRigidArea(new Dimension(5, 0)));
         topPane.add(p_setEntryButton);
 
+        // Bottom right (add field):
         JPanel bottomSubPane = new JPanel();
         p_fieldNameInput = new JTextField();
         p_fieldNameInput.setName("p_fieldNameInput");
@@ -348,8 +368,10 @@ public class Window implements Iterable<Map.Entry<String, String>> {
         bottomSubPane.add(Box.createRigidArea(new Dimension(3, 0)));
         bottomSubPane.add(p_addFieldButton);
 
+        // Bottom right (submit):
         JPanel bottomPane = new JPanel();
         p_submitButton = new JButton();
+        p_submitButton.setName("p_submitButton");
 
         GridLayout bottomLayout = new GridLayout(0, 1);
         bottomLayout.setVgap(3);
@@ -358,6 +380,7 @@ public class Window implements Iterable<Map.Entry<String, String>> {
         bottomPane.add(bottomSubPane);
         bottomPane.add(p_submitButton);
 
+        // Main pane (entry fields):
         p_pane = new JPanel();
         p_pane.setName("p_pane");
         p_pane.setLayout(new BoxLayout(p_pane, BoxLayout.Y_AXIS));
@@ -366,6 +389,21 @@ public class Window implements Iterable<Map.Entry<String, String>> {
         p_scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
         p_scrollPane.setBorder(BorderFactory.createEmptyBorder(0, 3, 0, 3));
 
+        // Top left (filtering):
+        p_filterInput = new JTextField();
+        p_filterInput.setName("p_filterInput");
+        p_filterButton = new JButton();
+        p_filterButton.setName("p_filterButton");
+
+        JPanel filterPane = new JPanel();
+        filterPane.setLayout(new BoxLayout(filterPane, BoxLayout.X_AXIS));
+        filterPane.setBorder(BorderFactory.createEmptyBorder(3, 3, 3, 3));
+
+        filterPane.add(p_filterInput);
+        filterPane.add(Box.createRigidArea(new Dimension(3, 0)));
+        filterPane.add(p_filterButton);
+
+        // Top layer pane:
         JPanel mainPane = new JPanel();
         mainPane.setLayout(new BorderLayout());
 
@@ -374,6 +412,8 @@ public class Window implements Iterable<Map.Entry<String, String>> {
         mainPane.add(topPane, BorderLayout.NORTH);
         mainPane.add(p_scrollPane, BorderLayout.CENTER);
         mainPane.add(bottomPane, BorderLayout.SOUTH);
+
+        entryPane.add(filterPane, BorderLayout.NORTH);
 
         p_window.getContentPane().add(entryPane, BorderLayout.WEST);
         p_window.getContentPane().add(mainPane, BorderLayout.CENTER);
