@@ -40,7 +40,7 @@ public class Importer {
             try {
                 BibTexEntry entry = parseOneBibtexEntry(string);
                 if(storage.get(entry.getName()) == null) 
-                    storage.add(parseOneBibtexEntry(string)); 
+                    storage.add(entry); 
                 
             } catch (Exception ex) {
                 Logger.getLogger(Importer.class.getName()).log(Level.SEVERE, null, ex);
