@@ -62,15 +62,14 @@ public class Importer {
                 
         /*Now rest of the block should only contain fields and their values,
         so separate them from each other. */
-        String[] fieldsAndValues = rest.trim().split("[^}|^=|^\\w|^ä][\\s*]");
-        ArrayList<String> restArrayList = removeEmptyStringsFromArray(fieldsAndValues);  
+        String[] fieldAndValue = rest.trim().split("[^}|^=|^\\w|^ä][\\s*]");
+        ArrayList<String> fieldAndValueArrayList = removeEmptyStringsFromArray(fieldAndValue);  
         BibTexEntry bibEntry = new BibTexEntry(name, style);
              
-        for (String string : restArrayList) {
+        for (String string : fieldAndValueArrayList) {
             String[] nameAndValue = string.trim().split("[\\s+][=][\\s+]");
             String fieldName = nameAndValue[0];
             String value = nameAndValue[1].replaceAll("[{|}]", "");
-            nameAndValue[1] = value;
                      
             bibEntry.put(fieldName, value);
         }
