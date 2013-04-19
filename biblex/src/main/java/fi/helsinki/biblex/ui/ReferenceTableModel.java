@@ -18,6 +18,10 @@ public class ReferenceTableModel extends AbstractTableModel {
         data = new ArrayList();
     }
     
+    public void clear() {
+        data.clear();
+    }
+    
     public void addData(String name, String title, String author) {
         ArrayList<String> row = new ArrayList();
         row.add(name);

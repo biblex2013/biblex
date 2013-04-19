@@ -45,6 +45,7 @@ public class GUI {
         createActions();
 
         populateEntryList("");
+        p_window.setEntry("", "");
     }
 
 
@@ -60,6 +61,7 @@ public class GUI {
      * Add all known entry styles to the style selection combo-box
      */
     private void populateEntryList(String filter) {
+        p_entryPane.clearEntryList();
         for (BibTexEntry entry : App.getStorage()) {
             p_entryPane.addEntry(entry.getName(), entry.get("title"), entry.get("author"));
         }
@@ -69,6 +71,7 @@ public class GUI {
      * Add all known entry styles to the style selection combo-box
      */
     private void populateEntryStyles() {
+        p_entryPane.clearEntryList();
         for (BibTexStyle style : BibTexStyle.values()) {
             p_window.addEntryStyle(style);
         }

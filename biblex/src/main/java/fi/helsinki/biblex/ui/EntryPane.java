@@ -45,6 +45,7 @@ public class EntryPane extends JPanel {
 
 
     public void clearEntryList() {
+        refTableModel.clear();
         refTableModel.fireTableDataChanged();
         p_entryTable.revalidate();
     }
