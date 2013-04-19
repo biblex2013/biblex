@@ -5,7 +5,6 @@ Ohjelmistotuotanto 2013
 ## Product backlog
 
 1. Listauksesta inhimillisempi
-1. Yksittäisten viitteiden copy pasta
 1. Viitteiden filtteröinti (find after enter)
 1. Filtteröidyn viitelistauksen exporttaaminen
 1. Valinnaisen fieldin lisääminen listalta
@@ -29,6 +28,7 @@ Ohjelmistotuotanto 2013
 1. Tietokannassa olevien viitteiden listaaminen
 1. Viitteen poistaminen
 1. Viitten muokkaaminen
+1. Yksittäisten viitteiden copy pasta
 
 
 ## Backlog
