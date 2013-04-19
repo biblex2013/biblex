@@ -5,16 +5,13 @@ import fi.helsinki.biblex.domain.BibTexEntry;
 import fi.helsinki.biblex.domain.BibTexStyle;
 import fi.helsinki.biblex.validation.AbstractValidator;
 import fi.helsinki.biblex.validation.ValidationException;
-
 import java.awt.*;
 import java.awt.datatransfer.StringSelection;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.IOException;
-
 import java.util.*;
-
 import javax.swing.*;
 
 /**
@@ -51,14 +48,13 @@ public class GUI {
     }
     
     public JTable getRefTable() {
-        return p_entryPane.p_entryTable;
+        return p_entryPane.getEntryTable();
     }
 
     /**
      * Add all known entry styles to the style selection combo-box
      */
     private void populateEntryList(String filter) {
-        //p_entryPane.clearEntryList();
         for (BibTexEntry entry : App.getStorage()) {
             p_entryPane.addEntry(entry.getName(), entry.get("title"), entry.get("author"));
         }
@@ -157,9 +153,8 @@ public class GUI {
                     public void actionPerformed(ActionEvent e) {
                         if(submitEntry()) {
                             p_entryPane.addEntry(p_entry.getName(), p_entry.get("title"), p_entry.get("author"));
-                            p_entryPane.refTableModel.fireTableDataChanged();
+                            p_entryPane.getRefTableModel().fireTableDataChanged();
                         }
-                        //populateEntryList("");
                     }
                 }
         );
@@ -252,6 +247,8 @@ public class GUI {
             public void mouseClicked(MouseEvent e) {
                 if(e.getClickCount() > 1) {
                     e.consume();
+                    System.out.println(p_entryPane.getSelectedIndex());
+                    System.out.println(p_entryPane.getSelectedEntry());
                     openEntry(App.getStorage().get(p_entryPane.getSelectedEntry()));
                 }
             }
@@ -266,13 +263,13 @@ public class GUI {
             public void actionPerformed(ActionEvent e) {
                 try {
                     BibTexEntry selected = App.getStorage().get(p_entryPane.getSelectedEntry());
+                    System.out.println(p_entryPane.getSelectedEntry());
                     App.getStorage().delete(selected.getId());
                 } catch (Exception ex) {
                     p_window.displayError(ex.toString(), "Failed to delete");
                 }
-                p_entryPane.refTableModel.deleteData(p_entryPane.p_entryTable.getSelectedRow());
+                p_entryPane.getRefTableModel().deleteData(p_entryPane.getSelectedIndex());
                 p_entryPane.clearEntryList();
-                //populateEntryList("");
             }
         });
 

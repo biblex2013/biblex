@@ -3,34 +3,34 @@ package fi.helsinki.biblex.ui;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseListener;
-import javax.swing.table.TableColumn;
 
 
 /**
  * This class handles the visual appearance of the main UI window
  */
 public class EntryPane extends JPanel {
-    private DefaultListModel p_entryListModel;
-    private JList p_entryList;
     private JScrollPane p_scrollPane;
-    
-    public JTable p_entryTable;
-    public ReferenceTableModel refTableModel;
+    private JTable p_entryTable;
+    private ReferenceTableModel refTableModel;
     
     private JMenuItem p_menuDeleteEntry;
     private JMenuItem p_menuCopyEntryToClipboard;
 
 
     public EntryPane() {
-        p_entryListModel = new DefaultListModel();
-        p_entryList = new JList(p_entryListModel);
-        p_entryList.setName("entryList");
         refTableModel = new ReferenceTableModel();
         p_entryTable = new JTable(refTableModel);
 
         populate();
     }
 
+    public JTable getEntryTable() {
+        return p_entryTable;
+    }
+    
+    public ReferenceTableModel getRefTableModel() {
+        return refTableModel;
+    }
 
     /**
      * Add a new entry to the entry list
@@ -39,26 +39,28 @@ public class EntryPane extends JPanel {
      */
     public void addEntry(String name, String title, String author) {
         refTableModel.addData(name, title, author);
-        //p_entryListModel.addElement(name);
-        //p_entryList.revalidate();
-        //p_entryList.repaint();
         p_entryTable.revalidate();
         p_entryTable.repaint();
     }
 
 
     public void clearEntryList() {
+        refTableModel.fireTableDataChanged();
         p_entryTable.revalidate();
     }
 
 
     public String getSelectedEntry() {
-        return (String) refTableModel.getValueAt(p_entryTable.getSelectedRow(), 0);
+        //return (String) refTableModel.getValueAt(refTableModel.getRowByName(), 0);
+        return (String) refTableModel.getValueAt(p_entryTable.convertRowIndexToModel(p_entryTable.getSelectedRow()), 0);
+    }
+    
+    public int getSelectedIndex() {
+        return (int) p_entryTable.convertRowIndexToModel(p_entryTable.getSelectedRow());
     }
 
 
     public void addMListener(MouseListener ml) {
-        //p_entryList.addMouseListener(ml);
         p_entryTable.addMouseListener(ml);
     }
 
