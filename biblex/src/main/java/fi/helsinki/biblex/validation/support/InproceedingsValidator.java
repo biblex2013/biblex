@@ -17,8 +17,6 @@ public class InproceedingsValidator extends AbstractValidator {
 
     private static final String[] OPTIONAL_FIELDS = {
         "editor",
-        "volume",
-        "number",
         "series",
         "pages",
         "address",
@@ -29,6 +27,8 @@ public class InproceedingsValidator extends AbstractValidator {
     };
 
     private static final ExclusiveField[] EXCLUSIVE_FIELDS = {
+        // optional exclusive:
+        new ExclusiveField(false, "volume", "number"),
     };
 
     public InproceedingsValidator() {

@@ -16,7 +16,7 @@ public class BibTexEntry implements Iterable<Map.Entry<String,String>> {
     private Map<String, String> m;
 
     public BibTexEntry(String name, BibTexStyle style) {
-        if (name == null) {
+        if (name == null || name.trim().isEmpty()) {
             throw new IllegalArgumentException(
                     "Entry name may not be null.");
         }
@@ -26,7 +26,7 @@ public class BibTexEntry implements Iterable<Map.Entry<String,String>> {
                     "bibtex style may not be null.");
         }
 
-        this.name = name;
+        this.name = name.trim();
         this.style = style;
         // TreeMap guarantees lexicographic order of fields while iterating
         // over the fields.

@@ -15,20 +15,18 @@ public class BookValidator extends AbstractValidator {
     };
 
     private static final String[] OPTIONAL_FIELDS = {
-        "volume",
-        "number",
         "series",
         "address",
         "edition",
         "month",
         "note",
-        // TODO: exclusive fields shouldn't need to be listed twice...
-        "author",
-        "editor"
     };
 
     private static final ExclusiveField[] EXCLUSIVE_FIELDS = {
-        new ExclusiveField(true, "author", "editor")
+        // required exclusive:
+        new ExclusiveField(true, "author", "editor"),
+        // optional exclusive:
+        new ExclusiveField(false, "volume", "number"),
     };
 
     public BookValidator() {

@@ -88,7 +88,7 @@ public class GUI {
         }
 
         p_entry = new BibTexEntry(name, style);
-        p_window.setEntry(style.name(), name);
+        p_window.setEntry(style.name(), p_entry.getName());
 
         AbstractValidator validator = App.getValidationService().getValidator(style);
         for (String field : validator.getSetOfRequiredFields()) {
@@ -187,7 +187,7 @@ public class GUI {
                 Window.UIAction.SET_ENTRY,
                 new AbstractAction("Create") {
                     public void actionPerformed(ActionEvent e) {
-                        setEntry(p_window.getEntryStyleInput(), p_window.getEntryNameInput().trim());
+                        setEntry(p_window.getEntryStyleInput(), p_window.getEntryNameInput());
                         p_window.clearEntryNameInput();
                     }
                 }

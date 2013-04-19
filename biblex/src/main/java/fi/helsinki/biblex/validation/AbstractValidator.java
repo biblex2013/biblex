@@ -47,9 +47,17 @@ public abstract class AbstractValidator {
         requiredFieldsSet = new HashSet<String>();
         optionalFieldsSet = new HashSet<String>();
         exclusiveFieldsSet = new HashSet<ExclusiveField>();
+
         java.util.Collections.addAll(requiredFieldsSet, requiredFields);
         java.util.Collections.addAll(optionalFieldsSet, optionalFields);
         java.util.Collections.addAll(exclusiveFieldsSet, exclusiveFields);
+
+        // add exclusive fields to the set of optional fields
+        for (ExclusiveField ef : exclusiveFieldsSet) {
+            for (String field : ef.getSetOfFields()) {
+                optionalFieldsSet.add(field);
+            }
+        }
     }
 
     /**
