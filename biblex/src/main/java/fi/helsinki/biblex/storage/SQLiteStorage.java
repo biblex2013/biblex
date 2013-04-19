@@ -104,8 +104,10 @@ public class SQLiteStorage extends Storage {
                 "SELECT id,name,style FROM Entries WHERE id = ?;");
             st.setLong(1, eid);
             ResultSet rs = st.executeQuery();
-            conn.commit();
-            return entryFromResultSet(rs);
+            if(rs.next()) {
+                return entryFromResultSet(rs);
+            }
+            return null;
         } catch (Exception e) {
             System.err.println("Error in SQLiteStorage.get(long): " + e.toString());
         }
@@ -168,7 +170,9 @@ public class SQLiteStorage extends Storage {
 
     public boolean update(long eid, BibTexEntry entry) throws Exception {
         //EI MUUTA ENTRYN STYLEÄ!
-
+        if(eid == 0) {
+            throw new Exception("Entry with that name already exists. Try deleting or modifying it.");
+        }
         // Poistetaan poistetettavat kentät
         BibTexEntry old = get(eid);
         for (Map.Entry<String, String> e : old) {

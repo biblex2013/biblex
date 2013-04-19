@@ -53,6 +53,7 @@ public class ExportToFile extends Exporter {
             outWriter.write((os == OS.WIN) ? bibtexIterator.next().toString().replaceAll("[^\r]\n", endOfLine) :
                     bibtexIterator.next().toString().replaceAll("\r\n", endOfLine));
             outWriter.write(endOfLine);
+            outWriter.write(endOfLine);
         }
         outWriter.close();
     }
