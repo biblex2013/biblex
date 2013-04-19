@@ -63,7 +63,7 @@ public class GUI {
     private void populateEntryList(String filter) {
         p_entryPane.clearEntryList();
         for (BibTexEntry entry : App.getStorage()) {
-            p_entryPane.addEntry(entry.getName(), entry.get("title"), entry.get("author"));
+            p_entryPane.addEntry(entry);
         }
     }
 
@@ -160,8 +160,7 @@ public class GUI {
                 new AbstractAction("Save Reference", UIManager.getIcon("FileView.hardDriveIcon")) {
                     public void actionPerformed(ActionEvent e) {
                         if(submitEntry()) {
-                            p_entryPane.addEntry(p_entry.getName(), p_entry.get("title"), p_entry.get("author"));
-                            p_entryPane.getRefTableModel().fireTableDataChanged();
+                            p_entryPane.addEntry(p_entry);
                         }
                     }
                 }

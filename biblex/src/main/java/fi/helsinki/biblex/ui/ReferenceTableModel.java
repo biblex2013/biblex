@@ -1,7 +1,9 @@
 package fi.helsinki.biblex.ui;
 
+import fi.helsinki.biblex.domain.BibTexEntry;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map.Entry;
 import javax.swing.table.AbstractTableModel;
 
 /**
@@ -22,11 +24,18 @@ public class ReferenceTableModel extends AbstractTableModel {
         data.clear();
     }
     
-    public void addData(String name, String title, String author) {
+
+    public void addData(BibTexEntry entry) {
         ArrayList<String> row = new ArrayList();
-        row.add(name);
-        row.add(title);
-        row.add(author);
+        row.add(entry.getName());
+        row.add(entry.containsField(columnNames[1].toLowerCase()) ? entry.get(columnNames[1].toLowerCase()) : "");
+        row.add(entry.containsField(columnNames[2].toLowerCase()) ? entry.get(columnNames[2].toLowerCase()) : "");
+        for(Entry<String, String> f : entry) {
+            if(!f.getKey().equals(columnNames[1].toLowerCase()) || f.getKey().equals(columnNames[2].toLowerCase())) {
+                row.add(f.getValue());
+            }
+        }
+        System.out.println(entry.getId());
         data.add(row);
     }
     

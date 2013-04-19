@@ -1,5 +1,6 @@
 package fi.helsinki.biblex.ui;
 
+import fi.helsinki.biblex.domain.BibTexEntry;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseListener;
@@ -37,16 +38,16 @@ public class EntryPane extends JPanel {
      *
      * @param name Name/ID of the entry to add
      */
-    public void addEntry(String name, String title, String author) {
-        refTableModel.addData(name, title, author);
+    public void addEntry(BibTexEntry entry) {
+        refTableModel.addData(entry);
+        refTableModel.fireTableStructureChanged();
         p_entryTable.revalidate();
-        p_entryTable.repaint();
     }
 
 
     public void clearEntryList() {
         refTableModel.clear();
-        refTableModel.fireTableDataChanged();
+        refTableModel.fireTableStructureChanged();
         p_entryTable.revalidate();
     }
     
