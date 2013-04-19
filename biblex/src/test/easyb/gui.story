@@ -2,8 +2,13 @@ import fi.helsinki.biblex.App
 import fi.helsinki.biblex.domain.BibTexEntry
 import fi.helsinki.biblex.storage.SQLiteStorage
 import fi.helsinki.biblex.ui.*
+import org.fest.swing.core.GenericTypeMatcher
 import org.fest.swing.fixture.FrameFixture
+import org.fest.swing.fixture.JListFixture
 import org.fest.swing.timing.Pause
+
+import javax.swing.JList
+import java.awt.Toolkit
 
 description 'User story -testit'
 
@@ -17,6 +22,11 @@ scenario 'Pystyy tallentamaan article-viitteen', {
         gui_ = app.getGUI()
         refWindow = gui_.getWindow()
         testFrame = new FrameFixture(refWindow)
+        testList = testFrame.list(new GenericTypeMatcher<JList>(JList.class) {
+            protected boolean isMatching(JList list) {
+                return list.isShowing();
+            }
+        })
         storage = app.getStorage()
         testFrame.show()
     }
@@ -255,5 +265,47 @@ when 'inproceedings-viite luotu ja talletettu', {
         entry.get("title")      .equals(TX_TITLE)       .shouldBe true
         entry.get("journal")    .equals(TX_JOURNAL)     .shouldBe true
         entry.get("year")       .equals(TX_YEAR)        .shouldBe true
+    }
+}
+
+scenario 'Viitteen kopioiminen leikepöydälle BibTeX-muodossa', {
+when 'viite luotu ja talletettu', {
+        ARTICLE_NAME = "Artikkeli" + System.currentTimeMillis()
+
+        testFrame.comboBox().selectItem("article")
+        testFrame.comboBox().requireSelection("article")
+        testFrame.textBox("p_entryNameInput").enterText(ARTICLE_NAME)
+        testFrame.button("p_setEntryButton").click()
+
+        Pause.pause(100)
+
+        TX_AUTHOR       =    "Thor 2"
+        TX_TITLE        =    "Title"
+        TX_JOURNAL      =    "Bonjour"
+        TX_YEAR         =    "2013"
+
+        testFrame.textBox("author")     .enterText(TX_AUTHOR)
+        testFrame.textBox("title")      .enterText(TX_TITLE)
+        testFrame.textBox("year")       .enterText(TX_YEAR)
+
+        Pause.pause(100)
+
+        // journal:iin tekstiä
+        testFrame.textBox("journal")    .enterText(TX_JOURNAL)
+
+        Pause.pause(100)
+
+        // ja submita
+        testFrame.button("p_submitButton").click()
+        Pause.pause(100)
+    }
+
+    then 'kopioiminen leikepöydälle BibTeX-muodossa onnistuu', {
+        entry = storage.get(ARTICLE_NAME)
+        entry.shouldNotBe null
+
+        testList.clickItem(ARTICLE_NAME)
+        testList.showPopupMenu().menuItem("menuCopyEntryToClipboard").click()
+        Toolkit.getDefaultToolkit().getSystemClipboard().getContents().toString().equals(entry.toString())
     }
 }
