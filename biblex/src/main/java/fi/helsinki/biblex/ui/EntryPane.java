@@ -99,7 +99,6 @@ public class EntryPane extends JPanel {
 
         p_scrollPane.setMinimumSize(new Dimension(175, 390));
         p_scrollPane.setPreferredSize(new Dimension(175, 390));
-        p_scrollPane.setMaximumSize(new Dimension(175, Integer.MAX_VALUE));
 
         this.add(p_scrollPane, BorderLayout.CENTER);
     }

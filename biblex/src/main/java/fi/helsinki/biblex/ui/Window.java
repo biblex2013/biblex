@@ -14,7 +14,6 @@ import java.util.List;
 public class Window implements Iterable<Map.Entry<String, String>> {
 
     public static enum UIAction {
-
         SUBMIT,
         ADD_FIELD,
         DELETE_FIELD,
@@ -27,7 +26,6 @@ public class Window implements Iterable<Map.Entry<String, String>> {
     }
 
     public static class EntryIterator implements Iterator<Map.Entry<String, String>> {
-
         private int p_pos;
         private Window p_win;
 
@@ -55,6 +53,7 @@ public class Window implements Iterable<Map.Entry<String, String>> {
         public void remove() {
         }
     }
+
     // Ugly way to access the correct component in the field JPanel...
     private static final int FIELD_PANE_TEXT_ID = 2;
     private static final int FIELD_PANE_BUTTON_ID = 4;
@@ -76,7 +75,7 @@ public class Window implements Iterable<Map.Entry<String, String>> {
     private JButton p_submitButton;
     private JButton p_addFieldButton;
     private JButton p_setEntryButton;
-    
+
     private JMenuItem p_menuNewEntry;
     private JMenuItem p_menuExport;
     private JMenuItem p_menuImport;
@@ -408,7 +407,11 @@ public class Window implements Iterable<Map.Entry<String, String>> {
 
         entryPane.add(filterPane, BorderLayout.NORTH);
 
-        p_window.getContentPane().add(entryPane, BorderLayout.WEST);
-        p_window.getContentPane().add(mainPane, BorderLayout.CENTER);
+        JSplitPane splitPane = new JSplitPane();
+        splitPane.setOrientation(JSplitPane.HORIZONTAL_SPLIT);
+
+        splitPane.add(entryPane, JSplitPane.LEFT);
+        splitPane.add(mainPane, JSplitPane.RIGHT);
+        p_window.getContentPane().add(splitPane, BorderLayout.CENTER);
     }
 }

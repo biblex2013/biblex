@@ -34,7 +34,7 @@ public class GUI {
 
         p_exportFileChooser = new ExportFileChooser();
         p_exportFileChooser.setName("exportFileChooser");
-        
+
         p_importFileChooser = new ImportFileChooser();
         p_importFileChooser.setName("importFileChooser");
     }
@@ -52,7 +52,7 @@ public class GUI {
     public JFrame getWindow() {
         return p_window.getWindow();
     }
-    
+
     public JTable getRefTable() {
         return p_entryPane.getEntryTable();
     }
@@ -228,7 +228,7 @@ public class GUI {
                     }
                 }
         );
-        
+
         p_window.registerAction(
                 Window.UIAction.MENU_IMPORT,
                 new AbstractAction("Import") {
