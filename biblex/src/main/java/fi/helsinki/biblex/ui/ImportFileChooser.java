@@ -6,6 +6,7 @@ public class ImportFileChooser extends GenericFileChooser {
     public ImportFileChooser() {
         this.setFileSelectionMode(JFileChooser.FILES_ONLY);
 				this.setApproveButtonMnemonic('e');
+        this.setFileFilter(new BibTexFile());
     }
 
     public String getFileName() {
