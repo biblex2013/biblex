@@ -31,7 +31,7 @@ public class ReferenceTableModel extends AbstractTableModel {
         row.add(entry.containsField(columnNames[1].toLowerCase()) ? entry.get(columnNames[1].toLowerCase()) : "");
         row.add(entry.containsField(columnNames[2].toLowerCase()) ? entry.get(columnNames[2].toLowerCase()) : "");
         for(Entry<String, String> f : entry) {
-            if(!f.getKey().equals(columnNames[1].toLowerCase()) || f.getKey().equals(columnNames[2].toLowerCase())) {
+            if(!f.getKey().equals(columnNames[1].toLowerCase()) || !f.getKey().equals(columnNames[2].toLowerCase())) {
                 row.add(f.getValue());
             }
         }
