@@ -66,10 +66,14 @@ public class Importer {
         /*Now rest of the block should only contain fields and their values,
         so separate them from each other. */
         String[] fieldsAndValues = rest.trim()
+                
                 /*Remove all } that are NOT followed by , from the block so we 
                  * dont have entry "}" in the array (because atm we only need "},").*/
                 .replaceAll("}(?!,)", "") 
+                
                 .split("[^}|^=|^\\w|^\\,.][\\s*]|},"); //
+        
+        
         ArrayList<String> fieldAndValueArrayList = removeEmptyStringsFromArray(fieldsAndValues);  
         BibTexEntry bibEntry = new BibTexEntry(name, style);       
         
