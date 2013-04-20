@@ -59,16 +59,20 @@ public class Importer {
         String rest = styleAndRest[1];
         
         //Separate name from rest of the block
-        String[] nameAndRest = rest.trim().split("[^\\w*]", 2);
+        String[] nameAndRest = rest.trim().split("[^\\w*]|,", 2);
         String name = nameAndRest[0];
         rest = nameAndRest[1];
                 
         /*Now rest of the block should only contain fields and their values,
         so separate them from each other. */
-        String[] fieldsAndValues = rest.trim().split("[^}|^=|^\\w|^ä][\\s*]");
+        String[] fieldsAndValues = rest.trim()
+                /*Remove all } that are NOT followed by , from the block so we 
+                 * dont have entry "}" in the array (because atm we only need "},").*/
+                .replaceAll("}(?!,)", "") 
+                .split("[^}|^=|^\\w|^\\,.][\\s*]|},"); //
         ArrayList<String> fieldAndValueArrayList = removeEmptyStringsFromArray(fieldsAndValues);  
-        BibTexEntry bibEntry = new BibTexEntry(name, style);
-             
+        BibTexEntry bibEntry = new BibTexEntry(name, style);       
+        
         for (String string : fieldAndValueArrayList) {
             String[] nameAndValue = string.trim().split("[\\s+][=][\\s+]");
             String fieldName = nameAndValue[0];
