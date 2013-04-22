@@ -45,7 +45,9 @@ public class GUI {
         createActions();
 
         populateEntryList("");
-        p_window.setEntry("", "");
+        newEntry();
+
+        p_window.setVisible(true);
     }
 
 
@@ -271,8 +273,6 @@ public class GUI {
             public void mouseClicked(MouseEvent e) {
                 if(e.getClickCount() > 1) {
                     e.consume();
-                    System.out.println(p_entryPane.getSelectedIndex());
-                    System.out.println(p_entryPane.getSelectedEntry());
                     openEntry(App.getStorage().get(p_entryPane.getSelectedEntry()));
                 }
             }
