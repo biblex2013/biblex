@@ -57,19 +57,6 @@ public class Window implements Iterable<Map.Entry<String, String>> {
         }
     }
 
-    private class PopupAction extends AbstractAction {
-        private String fieldNameToAdd;
-
-        PopupAction(String fieldNameToAdd) {
-            this.fieldNameToAdd = fieldNameToAdd;
-        }
-
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            Window.this.addField(fieldNameToAdd, "");
-        }
-    }
-
     // Ugly way to access the correct component in the field JPanel...
     private static final int FIELD_PANE_TEXT_ID = 2;
     private static final int FIELD_PANE_BUTTON_ID = 4;
@@ -81,7 +68,7 @@ public class Window implements Iterable<Map.Entry<String, String>> {
 
     private JComboBox p_entryStyleInput;
     private JTextField p_entryNameInput;
-    private JTextField p_fieldNameInput;
+    private AutoSuggestComboBox p_fieldNameInput;
 
     private JTextField p_filterInput;
     private JButton p_filterButton;
@@ -133,6 +120,7 @@ public class Window implements Iterable<Map.Entry<String, String>> {
 
             case ADD_FIELD:
                 p_addFieldButton.setAction(action);
+                p_fieldNameInput.getActionMap().put("enterPressed", action);
                 return;
 
             case DELETE_FIELD:
@@ -265,11 +253,11 @@ public class Window implements Iterable<Map.Entry<String, String>> {
     }
 
     public String getFieldNameEntry() {
-        return p_fieldNameInput.getText();
+        return p_fieldNameInput.getEntry();
     }
 
     public void clearFieldNameEntry() {
-        p_fieldNameInput.setText("");
+        p_fieldNameInput.clearEntry();
     }
 
     public String getEntryNameInput() {
@@ -322,7 +310,7 @@ public class Window implements Iterable<Map.Entry<String, String>> {
         return p_window;
     }
 
-    public void showAddableFieldPopup() {
+    public void populateFieldEntryBox() {
         Set<String> presentFieldNames = new HashSet<String>();
 
         for (Map.Entry<String, String> e : this) {
@@ -377,26 +365,17 @@ public class Window implements Iterable<Map.Entry<String, String>> {
             return;
         }
 
-        JPopupMenu popup = new JPopupMenu();
+        ArrayList<String> fields = new ArrayList<String>();
 
         for (String requiredFieldName : popupRequiredFieldNames) {
-            JMenuItem item = new JMenuItem(requiredFieldName);
-            Action a = new PopupAction(requiredFieldName);
-            a.putValue(Action.NAME, requiredFieldName);
-            item.setAction(a);
-            item.setForeground(Color.RED);
-            popup.add(item);
+            fields.add(requiredFieldName);
         }
 
         for (String optionalFieldName : popupOptionalFieldNames) {
-            JMenuItem item = new JMenuItem(optionalFieldName);
-            Action a = new PopupAction(optionalFieldName);
-            a.putValue(Action.NAME, optionalFieldName);
-            item.setAction(a);
-            popup.add(item);
+            fields.add(optionalFieldName);
         }
 
-        popup.show(p_addFieldButton, 0, 0);
+        p_fieldNameInput.setContent(fields);
     }
 
     /**
@@ -425,6 +404,7 @@ public class Window implements Iterable<Map.Entry<String, String>> {
         // Top right (create entry):
         JPanel topPane = new JPanel();
         p_entryStyleInput = new JComboBox();
+        p_entryStyleInput.setName("p_entryStyleInput");
         p_entryNameInput = new JTextField();
         p_entryNameInput.setName("p_entryNameInput");
         p_setEntryButton = new JButton();
@@ -444,8 +424,9 @@ public class Window implements Iterable<Map.Entry<String, String>> {
 
         // Bottom right (add field):
         JPanel bottomSubPane = new JPanel();
-        p_fieldNameInput = new JTextField();
+        p_fieldNameInput = new AutoSuggestComboBox();
         p_fieldNameInput.setName("p_fieldNameInput");
+        p_fieldNameInput.setMaximumSize(new Dimension(Integer.MAX_VALUE, 30));
         p_addFieldButton = new JButton();
         p_addFieldButton.setName("p_addFieldButton");
 

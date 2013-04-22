@@ -83,8 +83,8 @@ public class GuiTest {
 
     @Test
     public void BBrequireErrorMessageWhenTextBoxEmptyTest() {
-        testFrame.comboBox().selectItem("inproceedings");
-        testFrame.comboBox().requireSelection("inproceedings");
+        testFrame.comboBox("p_entryStyleInput").selectItem("inproceedings");
+        testFrame.comboBox("p_entryStyleInput").requireSelection("inproceedings");
         testFrame.button("p_setEntryButton").click();
         testFrame.optionPane().requireErrorMessage();
         testFrame.optionPane().button().click();
@@ -93,8 +93,8 @@ public class GuiTest {
 
     @Test
     public void CCrequireErrorMessageWhenClickingCreateWithEmptyFields() {
-        testFrame.comboBox().selectItem("article");
-        testFrame.comboBox().requireSelection("article");
+        testFrame.comboBox("p_entryStyleInput").selectItem("article");
+        testFrame.comboBox("p_entryStyleInput").requireSelection("article");
         testFrame.textBox("p_entryNameInput").enterText("omgtesti");
         testFrame.button("p_setEntryButton").click();
         testFrame.button("p_submitButton").click();
@@ -105,7 +105,7 @@ public class GuiTest {
 
     @Test
     public void DDallIsWellWhenFieldsAreFull() {
-        testFrame.comboBox().selectItem("article");
+        testFrame.comboBox("p_entryStyleInput").selectItem("article");
         testFrame.textBox("p_entryNameInput").enterText("tester");
         testFrame.button("p_setEntryButton").click();
         testFrame.textBox("year").enterText("tester");
@@ -158,7 +158,7 @@ public class GuiTest {
 
         if (storage.get("article1") == null) {
             testFrame.focus();
-            testFrame.comboBox().selectItem("article");
+            testFrame.comboBox("p_entryStyleInput").selectItem("article");
             testFrame.textBox("p_entryNameInput").enterText("article1");
             testFrame.button("p_setEntryButton").click();
             testFrame.textBox("year").enterText("year");
@@ -171,7 +171,7 @@ public class GuiTest {
 
         if (storage.get("article2") == null) {
             testFrame.focus();
-            testFrame.comboBox().selectItem("article");
+            testFrame.comboBox("p_entryStyleInput").selectItem("article");
             testFrame.textBox("p_entryNameInput").enterText("article2");
             testFrame.button("p_setEntryButton").click();
             testFrame.textBox("year").enterText("year22");

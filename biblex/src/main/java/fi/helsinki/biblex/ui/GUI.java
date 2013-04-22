@@ -174,18 +174,16 @@ public class GUI {
                 Window.UIAction.ADD_FIELD,
                 new AbstractAction("Add Field") {
                     public void actionPerformed(ActionEvent e) {
-                        String name = p_window.getFieldNameEntry();
-                        if (name.trim().isEmpty()) {
-                            if (GUI.this.p_entry != null) {
-                                p_window.showAddableFieldPopup();
-                            }
-
+                        if (p_entry == null)
                             return;
-                        }
+
+                        String name = p_window.getFieldNameEntry();
 
                         p_window.addField(name, "");
                         p_entry.put(name, "");
+
                         p_window.clearFieldNameEntry();
+                        p_window.populateFieldEntryBox();
                     }
                 }
         );
@@ -196,6 +194,8 @@ public class GUI {
                     public void actionPerformed(ActionEvent e) {
                         p_window.deleteField(e.getActionCommand());
                         p_entry.remove(e.getActionCommand());
+
+                        p_window.populateFieldEntryBox();
                     }
                 }
         );
@@ -206,6 +206,7 @@ public class GUI {
                     public void actionPerformed(ActionEvent e) {
                         setEntry(p_window.getEntryStyleInput(), p_window.getEntryNameInput());
                         p_window.clearEntryNameInput();
+                        p_window.populateFieldEntryBox();
                     }
                 }
         );
@@ -265,6 +266,8 @@ public class GUI {
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         newEntry();
+                        p_window.clearEntryNameInput();
+                        p_window.populateFieldEntryBox();
                     }
                 }
         );
@@ -276,6 +279,9 @@ public class GUI {
                 if(e.getClickCount() > 1) {
                     e.consume();
                     openEntry(App.getStorage().get(p_entryPane.getSelectedEntry()));
+
+                    p_window.clearEntryNameInput();
+                    p_window.populateFieldEntryBox();
                 }
             }
 

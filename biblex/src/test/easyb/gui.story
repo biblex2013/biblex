@@ -40,8 +40,8 @@ scenario 'Pystyy tallentamaan article-viitteen', {
         ARTICLE_NAME = "Artikkeli" + System.currentTimeMillis()
         EXPORT_FILE  = "export-" + System.currentTimeMillis() + ".bib"
 
-        testFrame.comboBox().selectItem("article")
-        testFrame.comboBox().requireSelection("article")
+        testFrame.comboBox("p_entryStyleInput").selectItem("article")
+        testFrame.comboBox("p_entryStyleInput").requireSelection("article")
         testFrame.textBox("p_entryNameInput").enterText(ARTICLE_NAME)
         testFrame.button("p_setEntryButton").click()
 
@@ -62,7 +62,7 @@ scenario 'Pystyy tallentamaan article-viitteen', {
         testFrame.textBox("title").enterText("title")
 
         // luo 'badone'-kenttä ja yritä submitata
-        testFrame.textBox("p_fieldNameInput").enterText("badone")
+        testFrame.comboBox("p_fieldNameInput").enterText("badone")
         testFrame.button("p_addFieldButton").click()
         testFrame.button("p_submitButton").click()
 
@@ -73,7 +73,7 @@ scenario 'Pystyy tallentamaan article-viitteen', {
 
         // poista 'badone'-kenttä, lisää 'volume' ja submittaa
         testFrame.button("btnDeleteField:badone").click()
-        testFrame.textBox("p_fieldNameInput").enterText("volume")
+        testFrame.comboBox("p_fieldNameInput").enterText("volume")
         testFrame.button("p_addFieldButton").click()
 
         Pause.pause(100)
@@ -100,8 +100,8 @@ scenario 'Pystyy tallentamaan book-viitteen', {
     when 'book-viite luotu ja talletettu', {
         BOOK_NAME = "Kirja" + System.currentTimeMillis()
 
-        testFrame.comboBox().selectItem("book")
-        testFrame.comboBox().requireSelection("book")
+        testFrame.comboBox("p_entryStyleInput").selectItem("book")
+        testFrame.comboBox("p_entryStyleInput").requireSelection("book")
         testFrame.textBox("p_entryNameInput").enterText(BOOK_NAME)
         testFrame.button("p_setEntryButton").click()
 
@@ -113,7 +113,7 @@ scenario 'Pystyy tallentamaan book-viitteen', {
         TX_YEAR =      "354"
 
         // book requires author or editor, but not both, so add author
-        testFrame.textBox("p_fieldNameInput").enterText("author")
+        testFrame.comboBox("p_fieldNameInput").enterText("author")
         testFrame.button("p_addFieldButton").click()
 
         testFrame.textBox("author")     .enterText(TX_AUTHOR)
@@ -143,8 +143,8 @@ scenario 'Pystyy tallentamaan inproceedings-viitteen', {
     when 'inproceedings-viite luotu ja talletettu', {
         INPROC_NAME = "Inproc" + System.currentTimeMillis()
 
-        testFrame.comboBox().selectItem("inproceedings")
-        testFrame.comboBox().requireSelection("inproceedings")
+        testFrame.comboBox("p_entryStyleInput").selectItem("inproceedings")
+        testFrame.comboBox("p_entryStyleInput").requireSelection("inproceedings")
         testFrame.textBox("p_entryNameInput").enterText(INPROC_NAME)
         testFrame.button("p_setEntryButton").click()
 
@@ -183,8 +183,8 @@ scenario 'New Reference -toiminto menusta tyhjentää näkymän', {
     when 'Luotu viite', {
         BOOK_NAME = "Book" + System.currentTimeMillis()
 
-        testFrame.comboBox().selectItem("book")
-        testFrame.comboBox().requireSelection("book")
+        testFrame.comboBox("p_entryStyleInput").selectItem("book")
+        testFrame.comboBox("p_entryStyleInput").requireSelection("book")
         testFrame.textBox("p_entryNameInput").enterText(BOOK_NAME)
         testFrame.button("p_setEntryButton").click()
     }
@@ -210,8 +210,8 @@ scenario 'Puuttuva pakollinen kenttä aiheuttaa virhevaroituksen', {
 when 'inproceedings-viite luotu ja talletettu', {
         ARTICLE_NAME = "Artikkeli" + System.currentTimeMillis()
 
-        testFrame.comboBox().selectItem("article")
-        testFrame.comboBox().requireSelection("article")
+        testFrame.comboBox("p_entryStyleInput").selectItem("article")
+        testFrame.comboBox("p_entryStyleInput").requireSelection("article")
         testFrame.textBox("p_entryNameInput").enterText(ARTICLE_NAME)
         testFrame.button("p_setEntryButton").click()
 
@@ -241,7 +241,7 @@ when 'inproceedings-viite luotu ja talletettu', {
         Pause.pause(300)
 
         // luo uudestaan 'journal'-kenttä
-        testFrame.textBox("p_fieldNameInput").enterText("journal")
+        testFrame.comboBox("p_fieldNameInput").enterText("journal")
         testFrame.button("p_addFieldButton").click()
 
         Pause.pause(300)
@@ -277,8 +277,8 @@ scenario 'Viitteen kopioiminen leikepöydälle BibTeX-muodossa', {
 when 'viite luotu ja talletettu', {
         ARTICLE_NAME = "Artikkeli" + System.currentTimeMillis()
 
-        testFrame.comboBox().selectItem("article")
-        testFrame.comboBox().requireSelection("article")
+        testFrame.comboBox("p_entryStyleInput").selectItem("article")
+        testFrame.comboBox("p_entryStyleInput").requireSelection("article")
         testFrame.textBox("p_entryNameInput").enterText(ARTICLE_NAME)
         testFrame.button("p_setEntryButton").click()
 
