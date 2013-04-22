@@ -45,7 +45,9 @@ public class GUI {
         createActions();
 
         populateEntryList("");
-        p_window.setEntry("", "");
+        newEntry();
+
+        p_window.setVisible(true);
     }
 
 

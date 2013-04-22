@@ -113,7 +113,10 @@ public class Window implements Iterable<Map.Entry<String, String>> {
         p_window.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         populate(entryPane);
-        p_window.setVisible(true);
+    }
+
+    public void setVisible(boolean visible) {
+        p_window.setVisible(visible);
     }
 
     /**
