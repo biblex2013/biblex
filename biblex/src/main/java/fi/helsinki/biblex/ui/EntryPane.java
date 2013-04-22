@@ -1,9 +1,9 @@
 package fi.helsinki.biblex.ui;
 
 import fi.helsinki.biblex.domain.BibTexEntry;
-import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseListener;
+import javax.swing.*;
 
 
 /**
@@ -41,19 +41,22 @@ public class EntryPane extends JPanel {
     public void addEntry(BibTexEntry entry) {
         refTableModel.addData(entry);
         refTableModel.fireTableStructureChanged();
-        p_entryTable.revalidate();
     }
 
+    public void addEntry(Iterable<BibTexEntry> entries) {
+        for (BibTexEntry e : entries) {
+            refTableModel.addData(e);
+        }
+        refTableModel.fireTableDataChanged();
+    }
 
     public void clearEntryList() {
         refTableModel.clear();
         refTableModel.fireTableStructureChanged();
-        p_entryTable.revalidate();
     }
     
 
     public String getSelectedEntry() {
-        //return (String) refTableModel.getValueAt(refTableModel.getRowByName(), 0);
         return (String) refTableModel.getValueAt(p_entryTable.convertRowIndexToModel(p_entryTable.getSelectedRow()), 0);
     }
     

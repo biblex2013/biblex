@@ -62,9 +62,7 @@ public class GUI {
      */
     private void populateEntryList(String filter) {
         p_entryPane.clearEntryList();
-        for (BibTexEntry entry : App.getStorage()) {
-            p_entryPane.addEntry(entry);
-        }
+        p_entryPane.addEntry(App.getStorage());
     }
 
     /**
@@ -271,8 +269,6 @@ public class GUI {
             public void mouseClicked(MouseEvent e) {
                 if(e.getClickCount() > 1) {
                     e.consume();
-                    System.out.println(p_entryPane.getSelectedIndex());
-                    System.out.println(p_entryPane.getSelectedEntry());
                     openEntry(App.getStorage().get(p_entryPane.getSelectedEntry()));
                 }
             }

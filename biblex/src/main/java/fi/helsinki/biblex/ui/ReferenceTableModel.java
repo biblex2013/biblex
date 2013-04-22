@@ -35,7 +35,6 @@ public class ReferenceTableModel extends AbstractTableModel {
                 row.add(f.getValue());
             }
         }
-        System.out.println(entry.getId());
         data.add(row);
     }
     
