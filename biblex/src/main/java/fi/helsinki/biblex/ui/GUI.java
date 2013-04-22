@@ -139,6 +139,7 @@ public class GUI {
         try {
             if(App.getStorage().get(p_entry.getName()) != null) {
                 App.getStorage().update(p_entry.getId(), p_entry);
+                return false;
             }
             else {
                 App.getStorage().add(p_entry);
@@ -161,6 +162,9 @@ public class GUI {
                     public void actionPerformed(ActionEvent e) {
                         if(submitEntry()) {
                             p_entryPane.addEntry(p_entry);
+                        }
+                        else {
+                            p_entryPane.getRefTableModel().fireTableDataChanged();
                         }
                     }
                 }
