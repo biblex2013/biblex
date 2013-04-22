@@ -96,6 +96,7 @@ public class GUI {
 
         p_entry = new BibTexEntry(name, style);
         p_window.setEntry(style.name(), p_entry.getName());
+        p_window.setEntryPresenceStatus(true);
 
         AbstractValidator validator = App.getValidationService().getValidator(style);
         for (String field : validator.getSetOfRequiredFields()) {
@@ -172,7 +173,10 @@ public class GUI {
                     public void actionPerformed(ActionEvent e) {
                         String name = p_window.getFieldNameEntry();
                         if (name.trim().isEmpty()) {
-                            p_window.displayError("Field name cannot be empty", "Failed to add field");
+                            if (GUI.this.p_entry != null) {
+                                p_window.showAddableFieldPopup();
+                            }
+
                             return;
                         }
 

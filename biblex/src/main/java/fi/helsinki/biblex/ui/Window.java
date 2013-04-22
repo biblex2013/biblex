@@ -1,9 +1,12 @@
 package fi.helsinki.biblex.ui;
 
+import fi.helsinki.biblex.App;
 import fi.helsinki.biblex.domain.BibTexStyle;
+import fi.helsinki.biblex.validation.AbstractValidator;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.util.*;
 import java.util.List;
 
@@ -54,24 +57,37 @@ public class Window implements Iterable<Map.Entry<String, String>> {
         }
     }
 
+    private class PopupAction extends AbstractAction {
+        private String fieldNameToAdd;
+
+        PopupAction(String fieldNameToAdd) {
+            this.fieldNameToAdd = fieldNameToAdd;
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            Window.this.addField(fieldNameToAdd, "");
+        }
+    }
+
     // Ugly way to access the correct component in the field JPanel...
     private static final int FIELD_PANE_TEXT_ID = 2;
     private static final int FIELD_PANE_BUTTON_ID = 4;
-    
+
     private JFrame p_window;
-    
+
     private JPanel p_pane;
     private JScrollPane p_scrollPane;
-    
+
     private JComboBox p_entryStyleInput;
     private JTextField p_entryNameInput;
     private JTextField p_fieldNameInput;
-    
+
     private JTextField p_filterInput;
     private JButton p_filterButton;
-    
+
     private JMenuBar p_menu;
-    
+
     private JButton p_submitButton;
     private JButton p_addFieldButton;
     private JButton p_setEntryButton;
@@ -80,14 +96,13 @@ public class Window implements Iterable<Map.Entry<String, String>> {
     private JMenuItem p_menuExport;
     private JMenuItem p_menuImport;
     private JMenuItem p_menuQuit;
-    
+
     // Need to keep track of this, as each field has it's own button
     private Action p_deleteAction;
-    
+
     // Keep track of field name -> UI element pairs
     private List<Map.Entry<String, JPanel>> p_fieldMap;
 
-    
     public Window(JPanel entryPane) {
         p_window = new JFrame();
 
@@ -302,6 +317,83 @@ public class Window implements Iterable<Map.Entry<String, String>> {
 
     public JFrame getWindow() {
         return p_window;
+    }
+
+    public void showAddableFieldPopup() {
+        Set<String> presentFieldNames = new HashSet<String>();
+
+        for (Map.Entry<String, String> e : this) {
+            presentFieldNames.add(e.getKey());
+        }
+
+        Set<String> popupRequiredFieldNames = new TreeSet<String>();
+        Set<String> popupOptionalFieldNames = new TreeSet<String>();
+
+        AbstractValidator validator =
+                App.getValidationService().getValidator(getEntryStyleInput());
+
+        for (String reqField : validator.getSetOfRequiredFields()) {
+            if (presentFieldNames.contains(reqField) == false) {
+                popupRequiredFieldNames.add(reqField);
+            }
+        }
+
+        outer:
+        for (AbstractValidator.ExclusiveField ef :
+                validator.getSetOfExclusiveFields()) {
+            if (Collections.disjoint(ef.getSetOfFields(),
+                                     presentFieldNames) == false) {
+                continue outer;
+            }
+
+            String[] tmp1 = new String[ef.getSetOfFields().size()];
+
+            Collections.addAll((ef.isRequired() ?
+                    popupRequiredFieldNames :
+                    popupOptionalFieldNames),
+                    ef.getSetOfFields().toArray(tmp1));
+        }
+
+        // Need to check this as ascence added all exclusive fields to optional.
+        loop2:
+        for (String optField : validator.getSetOfOptionalFields()) {
+            for (AbstractValidator.ExclusiveField ef :
+                    validator.getSetOfExclusiveFields()) {
+                if (ef.getSetOfFields().contains(optField)) {
+                    continue loop2;
+                }
+            }
+
+            if (presentFieldNames.contains(optField) == false) {
+                popupOptionalFieldNames.add(optField);
+            }
+        }
+
+        if (popupRequiredFieldNames.isEmpty()
+                && popupOptionalFieldNames.isEmpty()) {
+            return;
+        }
+
+        JPopupMenu popup = new JPopupMenu();
+
+        for (String requiredFieldName : popupRequiredFieldNames) {
+            JMenuItem item = new JMenuItem(requiredFieldName);
+            Action a = new PopupAction(requiredFieldName);
+            a.putValue(Action.NAME, requiredFieldName);
+            item.setAction(a);
+            item.setForeground(Color.RED);
+            popup.add(item);
+        }
+
+        for (String optionalFieldName : popupOptionalFieldNames) {
+            JMenuItem item = new JMenuItem(optionalFieldName);
+            Action a = new PopupAction(optionalFieldName);
+            a.putValue(Action.NAME, optionalFieldName);
+            item.setAction(a);
+            popup.add(item);
+        }
+
+        popup.show(p_addFieldButton, 0, 0);
     }
 
     /**
