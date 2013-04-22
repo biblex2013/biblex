@@ -1,10 +1,10 @@
 package fi.helsinki.biblex.ui;
 
 import javax.swing.*;
+import javax.swing.plaf.metal.MetalComboBoxEditor;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.util.Collections;
 import java.util.List;
 
 public class AutoSuggestComboBox extends JComboBox{
@@ -33,7 +33,8 @@ public class AutoSuggestComboBox extends JComboBox{
 
             } else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
                 String text = ((JTextField) e.getSource()).getText();
-                for (String str : p_box.p_content) {
+                for (JLabel label : p_box.p_content) {
+                    String str = label.getText();
                     if (str.startsWith(text)) {
                         ((JTextField) e.getSource()).setText(str);
                         return;
@@ -46,22 +47,46 @@ public class AutoSuggestComboBox extends JComboBox{
         public void keyReleased(final KeyEvent e) {}
     }
 
-    private String[] p_content;
+    private class JLabelCellRenderer implements ListCellRenderer {
+        private DefaultListCellRenderer p_defaultRenderer = new DefaultListCellRenderer();
+
+        public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+            JLabel renderer = (JLabel) p_defaultRenderer.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+            JLabel label = (JLabel) value;
+
+            renderer.setText(label.getText());
+            renderer.setForeground(label.getForeground());
+
+            return renderer;
+        }
+    }
+
+    private JLabel[] p_content;
 
 
     public AutoSuggestComboBox() {
-        p_content = new String[0];
+        p_content = new JLabel[0];
         updateSuggestionModel("");
 
         this.setEditable(true);
+
+        this.setRenderer(new JLabelCellRenderer());
+        this.setEditor(new MetalComboBoxEditor() {
+            @Override
+            public void setItem(Object item) {
+                if (JLabel.class.isInstance(item)) {
+                    super.setItem(((JLabel) item).getText());
+                } else {
+                    super.setItem(item);
+                }
+            }
+        });
         this.getEditor().getEditorComponent().addKeyListener(new AutoSuggestKeyHandler(this));
     }
 
 
-    public void setContent(List<String> content) {
-        Collections.sort(content);
-
-        p_content = new String[content.size()];
+    public void setContent(List<JLabel> content) {
+        p_content = new JLabel[content.size()];
         content.toArray(p_content);
 
         updateSuggestionModel(
@@ -81,11 +106,12 @@ public class AutoSuggestComboBox extends JComboBox{
 
 
     private void updateSuggestionModel(String text) {
-        DefaultComboBoxModel model = new DefaultComboBoxModel();
+        DefaultComboBoxModel<JLabel> model = new DefaultComboBoxModel<JLabel>();
 
-        for (String str : p_content) {
+        for (JLabel label : p_content) {
+            String str = label.getText();
             if (str.startsWith(text)) {
-                model.addElement(str);
+                model.addElement(label);
             }
         }
 

@@ -365,14 +365,17 @@ public class Window implements Iterable<Map.Entry<String, String>> {
             return;
         }
 
-        ArrayList<String> fields = new ArrayList<String>();
+        ArrayList<JLabel> fields = new ArrayList<JLabel>();
 
         for (String requiredFieldName : popupRequiredFieldNames) {
-            fields.add(requiredFieldName);
+            JLabel fieldLabel = new JLabel(requiredFieldName);
+            fieldLabel.setForeground(Color.RED);
+            fields.add(fieldLabel);
         }
 
         for (String optionalFieldName : popupOptionalFieldNames) {
-            fields.add(optionalFieldName);
+            JLabel fieldLabel = new JLabel(optionalFieldName);
+            fields.add(fieldLabel);
         }
 
         p_fieldNameInput.setContent(fields);
