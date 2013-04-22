@@ -96,7 +96,6 @@ public class GUI {
 
         p_entry = new BibTexEntry(name, style);
         p_window.setEntry(style.name(), p_entry.getName());
-        p_window.setEntryPresenceStatus(true);
 
         AbstractValidator validator = App.getValidationService().getValidator(style);
         for (String field : validator.getSetOfRequiredFields()) {
