@@ -3,6 +3,7 @@ package fi.helsinki.biblex.ui;
 import fi.helsinki.biblex.App;
 import fi.helsinki.biblex.domain.BibTexEntry;
 import fi.helsinki.biblex.domain.BibTexStyle;
+import fi.helsinki.biblex.exporter.ExportToFile;
 import fi.helsinki.biblex.validation.AbstractValidator;
 import fi.helsinki.biblex.validation.ValidationException;
 import java.awt.*;
@@ -229,6 +230,22 @@ public class GUI {
                             String filename = p_exportFileChooser.getFileName();
                             if (filename != null)
                                 App.getExporter().write(filename);
+                        } catch (IOException ex) {
+                            p_window.displayError(ex.getMessage(), "Export failed");
+                        }
+                    }
+                }
+        );
+
+        p_window.registerAction(
+                Window.UIAction.MENU_EXPORT_FILTERED,
+                new AbstractAction("Export Filtered") {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        try {
+                            String filename = p_exportFileChooser.getFileName();
+                            if (filename != null)
+                                new ExportToFile(p_entryPane.getRefTableModel()).write(filename);
                         } catch (IOException ex) {
                             p_window.displayError(ex.getMessage(), "Export failed");
                         }

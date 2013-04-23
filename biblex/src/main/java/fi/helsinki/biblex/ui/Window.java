@@ -6,7 +6,6 @@ import fi.helsinki.biblex.validation.AbstractValidator;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.util.*;
 import java.util.List;
 
@@ -24,6 +23,7 @@ public class Window implements Iterable<Map.Entry<String, String>> {
         APPLY_FILTER,
         MENU_QUIT,
         MENU_EXPORT,
+        MENU_EXPORT_FILTERED,
         MENU_IMPORT,
         MENU_NEW_ENTRY
     }
@@ -81,6 +81,7 @@ public class Window implements Iterable<Map.Entry<String, String>> {
 
     private JMenuItem p_menuNewEntry;
     private JMenuItem p_menuExport;
+    private JMenuItem p_menuExportFiltered;
     private JMenuItem p_menuImport;
     private JMenuItem p_menuQuit;
 
@@ -143,17 +144,18 @@ public class Window implements Iterable<Map.Entry<String, String>> {
                 return;
 
             case MENU_EXPORT:
-                p_menuExport.setName("p_menuExport");
                 p_menuExport.setAction(action);
                 return;
 
+            case MENU_EXPORT_FILTERED:
+                p_menuExportFiltered.setAction(action);
+                return;
+
             case MENU_IMPORT:
-                p_menuImport.setName("p_menuImport");
                 p_menuImport.setAction(action);
                 return;
 
             case MENU_NEW_ENTRY:
-                p_menuNewEntry.setName("p_menuNewEntry");
                 p_menuNewEntry.setAction(action);
                 return;
 
@@ -276,10 +278,6 @@ public class Window implements Iterable<Map.Entry<String, String>> {
         return p_filterInput.getText();
     }
 
-    public void clearFilterEntry() {
-        p_filterInput.setText("");
-    }
-
     /**
      * Display an error dialog with a given message
      *
@@ -391,14 +389,21 @@ public class Window implements Iterable<Map.Entry<String, String>> {
 
         JMenu fileMenu = new JMenu("File");
         p_menuNewEntry = new JMenuItem();
-        p_menuExport = new JMenuItem();
+        p_menuNewEntry.setName("p_menuNewEntry");
         p_menuImport = new JMenuItem();
+        p_menuImport.setName("p_menuImport");
+        p_menuExport = new JMenuItem();
+        p_menuExport.setName("p_menuExport");
+        p_menuExportFiltered = new JMenuItem();
+        p_menuExportFiltered.setName("p_menuExportFiltered");
         p_menuQuit = new JMenuItem();
+        p_menuImport.setName("p_menuQuit");
 
         fileMenu.add(p_menuNewEntry);
         fileMenu.add(new JSeparator());
-        fileMenu.add(p_menuExport);
         fileMenu.add(p_menuImport);
+        fileMenu.add(p_menuExport);
+        fileMenu.add(p_menuExportFiltered);
         fileMenu.add(new JSeparator());
         fileMenu.add(p_menuQuit);
 

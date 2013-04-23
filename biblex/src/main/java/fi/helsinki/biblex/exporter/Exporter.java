@@ -1,6 +1,6 @@
 package fi.helsinki.biblex.exporter;
 
-import fi.helsinki.biblex.storage.Storage;
+import fi.helsinki.biblex.domain.BibTexEntry;
 import java.io.File;
 import java.io.IOException;
 
@@ -10,13 +10,13 @@ import java.io.IOException;
  */
 public abstract class Exporter {
     
-    protected Storage storage;
+    protected Iterable<BibTexEntry> storage;
         
     /**
      * Create Exporter with storage.
      * @param s storage object
      */
-    public Exporter(Storage s) {
+    public Exporter(Iterable<BibTexEntry> s) {
         storage = s;
     }
     

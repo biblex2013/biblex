@@ -2,6 +2,7 @@ package fi.helsinki.biblex.ui;
 
 import fi.helsinki.biblex.domain.BibTexEntry;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map.Entry;
 import javax.swing.table.AbstractTableModel;
@@ -10,18 +11,21 @@ import javax.swing.table.AbstractTableModel;
  *
  * @author danefl
  */
-public class ReferenceTableModel extends AbstractTableModel {
+public class ReferenceTableModel extends AbstractTableModel implements Iterable<BibTexEntry> {
 
     private String[] columnNames;
     private List<List<String>> data;
+    private List<BibTexEntry> entries;
 
     public ReferenceTableModel() {
         columnNames = new String[]{"Name", "Title", "Author"};
         data = new ArrayList();
+        entries = new ArrayList<BibTexEntry>();
     }
     
     public void clear() {
         data.clear();
+        entries.clear();
     }
     
 
@@ -36,6 +40,7 @@ public class ReferenceTableModel extends AbstractTableModel {
             }
         }
         data.add(row);
+        entries.add(entry);
     }
     
     public int getRowByName(String name) {
@@ -52,7 +57,12 @@ public class ReferenceTableModel extends AbstractTableModel {
     public void deleteData(int row) {
         data.remove(row);
     }
-    
+
+    @Override
+    public Iterator<BibTexEntry> iterator() {
+        return entries.iterator();
+    }
+
     @Override
     public String getColumnName(int col) {
         return columnNames[col];

@@ -1,7 +1,6 @@
 package fi.helsinki.biblex.exporter;
 
 import fi.helsinki.biblex.domain.BibTexEntry;
-import fi.helsinki.biblex.storage.Storage;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -24,7 +23,7 @@ public class ExportToFile extends Exporter {
     private OS os;
 
     
-    public ExportToFile(Storage s) {
+    public ExportToFile(Iterable<BibTexEntry> s) {
         super(s);
         endOfLine = System.getProperty("line.separator");
         os = endOfLine.equals("\r\n") ? OS.WIN : OS.UNIX;
@@ -74,7 +73,6 @@ public class ExportToFile extends Exporter {
     
     /**
      * Here for test cases. Hooray.
-     * @return 
      */
     public String getNewLineFormat() {
         return endOfLine;

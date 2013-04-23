@@ -36,7 +36,7 @@ public class EntryPane extends JPanel {
     /**
      * Add a new entry to the entry list
      *
-     * @param name Name/ID of the entry to add
+     * @param entry Name/ID of the entry to add
      */
     public void addEntry(BibTexEntry entry) {
         refTableModel.addData(entry);
@@ -64,7 +64,7 @@ public class EntryPane extends JPanel {
     }
     
     public int getSelectedIndex() {
-        return (int) p_entryTable.convertRowIndexToModel(p_entryTable.getSelectedRow());
+        return p_entryTable.convertRowIndexToModel(p_entryTable.getSelectedRow());
     }
 
 
