@@ -43,7 +43,7 @@ public class Importer {
                     storage.add(entry); 
                 
             } catch (Exception ex) {
-                Logger.getLogger(Importer.class.getName()).log(Level.SEVERE, null, ex);
+                System.err.println("Exception: " + ex);
             }
         }
     }

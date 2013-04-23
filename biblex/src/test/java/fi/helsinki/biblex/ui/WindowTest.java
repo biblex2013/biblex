@@ -100,7 +100,9 @@ public class WindowTest {
         try {
             win.deleteField("\tOddName ");
             fail("No exception on deleteField() with invalid name");
-        } catch (RuntimeException e) {}
+        } catch (RuntimeException e) {
+            System.err.println("Error: " + e);
+        }
 
         // test deleting field with sanitized name
         win.deleteField("oddname");

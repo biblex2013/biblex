@@ -49,9 +49,6 @@ public class SQLiteStorage extends Storage {
             this.close();
 
         this.open(filename);
-        if (this.checkDB())
-            ; // EEXISTS
-
         this.initialize();
     }
 
@@ -59,6 +56,7 @@ public class SQLiteStorage extends Storage {
         try {
             conn.close();
         } catch (Exception e) {
+            System.err.println("Error: " + e);
         }
     }
 
