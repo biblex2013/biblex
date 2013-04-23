@@ -1,4 +1,4 @@
-# biblex
+﻿# biblex
 
 Ohjelmistotuotanto 2013
 
@@ -40,3 +40,6 @@ https://docs.google.com/spreadsheet/ccc?key=0Ap3BGGgjHEP8dHBmUDA2dk1USGFSQzhpSWJ
 
 http://t-jtmikkon.users.cs.helsinki.fi/jenkins/
 
+
+## Loppuraportti
+https://docs.google.com/document/d/11kPQ-RukMtN2a7WmytOVka9w9zNwuSuvTGJ4n5rlNKE/edit?usp=sharing
