@@ -64,7 +64,7 @@ public class GUI {
      */
     private void populateEntryList(String filter) {
         p_entryPane.clearEntryList();
-        p_entryPane.addEntry(App.getStorage());
+        p_entryPane.addEntry(App.getStorage(), filter);
     }
 
     /**

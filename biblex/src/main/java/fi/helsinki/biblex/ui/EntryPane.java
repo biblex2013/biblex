@@ -43,9 +43,12 @@ public class EntryPane extends JPanel {
         refTableModel.fireTableStructureChanged();
     }
 
-    public void addEntry(Iterable<BibTexEntry> entries) {
+    public void addEntry(Iterable<BibTexEntry> entries, String filter) {
+        
+        
         for (BibTexEntry e : entries) {
-            refTableModel.addData(e);
+            if(e.dataToString().contains(filter.toLowerCase()))
+                refTableModel.addData(e);
         }
         refTableModel.fireTableDataChanged();
     }

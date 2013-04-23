@@ -72,6 +72,18 @@ public class BibTexEntry implements Iterable<Map.Entry<String,String>> {
     public BibTexStyle getStyle() {
         return style;
     }
+    
+    public String dataToString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(name);
+
+        for (Map.Entry<String, String> e : this) {
+            sb.append(e.getKey());
+            sb.append(e.getValue());
+        }
+
+        return sb.toString().toLowerCase();
+    }
 
     public String toString() {
         StringBuilder sb = new StringBuilder();

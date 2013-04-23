@@ -51,6 +51,25 @@ public class BibTexEntryTest {
                       + "}";
         assertEquals(e.toString(), target);
     }
+    
+    @Test
+    public void testDataToString() {       
+        assertTrue(e.dataToString().contains("king"));
+        assertTrue(e.dataToString().contains("stephen king"));
+        assertTrue(e.dataToString().contains("ear dist")); //On Fear Distribution
+    }
+    
+    @Test
+    public void testDataToStringÄäkköset() {
+        assertTrue("Äö etc should print to string.", e.dataToString().contains("äöå!")); 
+        System.out.println(e.dataToString());
+    }
+    
+    @Test
+    public void testDataToStringIsLowCase() {
+        assertFalse("String should be in low case.", e.dataToString().contains("Stephen King"));
+ 
+    }
 
     @Test(expected = IllegalArgumentException.class)
     public void nullNameThrowsException() {
