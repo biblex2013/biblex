@@ -61,13 +61,12 @@ public class BibTexEntryTest {
     
     @Test
     public void testDataToStringÄäkköset() {
-        assertTrue("Äö etc should print to string.", e.dataToString().contains("äöå!")); 
-        System.out.println(e.dataToString());
+        assertTrue("äöå etc should print to string.", e.dataToString().contains("äöå!")); 
     }
     
     @Test
     public void testDataToStringIsLowCase() {
-        assertFalse("String should be in low case.", e.dataToString().contains("Stephen King"));
+        assertFalse("String should be in lowercase.", e.dataToString().contains("Stephen King"));
  
     }
 
