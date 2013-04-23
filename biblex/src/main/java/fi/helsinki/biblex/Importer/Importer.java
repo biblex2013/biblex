@@ -59,28 +59,28 @@ public class Importer {
         String rest = styleAndRest[1];
         
         //Separate name from rest of the block
-        String[] nameAndRest = rest.trim().split("[^\\w*]|,", 2);
+        String[] nameAndRest = rest.trim().split("[^\\w*]", 2);
         String name = nameAndRest[0];
         rest = nameAndRest[1];
+        System.out.println("Name: " + name);
+        System.out.println("Rest: " + rest);
                 
         /*Now rest of the block should only contain fields and their values,
         so separate them from each other. */
-        String[] fieldsAndValues = rest.trim()
-                
-                /*Remove all } that are NOT followed by , from the block so we 
-                 * dont have entry "}" in the array (because atm we only need "},").*/
-                .replaceAll("}(?!,)", "") 
-                
-                .split("[^}|^=|^\\w|^\\,.][\\s*]|},"); //
-        
+        String[] fieldsAndValues = rest.trim().split("[^}|^=\\wä:,.][\\s*]");        
         
         ArrayList<String> fieldAndValueArrayList = removeEmptyStringsFromArray(fieldsAndValues);  
         BibTexEntry bibEntry = new BibTexEntry(name, style);       
         
         for (String string : fieldAndValueArrayList) {
+            System.out.println("String: " + string);
+            System.out.println("Pituus" + fieldAndValueArrayList.size());
             String[] nameAndValue = string.trim().split("[\\s+][=][\\s+]");
             String fieldName = nameAndValue[0];
+            System.out.println("Fieldname: " + fieldName);
+            
             String value = nameAndValue[1].replaceAll("[{|}]", "");
+            System.out.println("Value:" + value);
                      
             bibEntry.put(fieldName, value);
         }
