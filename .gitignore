@@ -13,3 +13,6 @@ nb-configuration.xml
 testi.txt
 database.dat
 database.dat-journal
+biblex/.classpath
+biblex/.project
+biblex/.settings/

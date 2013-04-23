@@ -255,6 +255,7 @@ public class GUI {
                 new AbstractAction("Quit") {
                     @Override
                     public void actionPerformed(ActionEvent e) {
+                    	p_window.dispose();
                         System.exit(0);
                     }
                 }
