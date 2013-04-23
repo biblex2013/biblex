@@ -49,7 +49,7 @@ public class ExportToFile extends Exporter {
         Iterator<BibTexEntry> bibtexIterator = storage.iterator();
         
         while(bibtexIterator.hasNext()) {
-            outWriter.write((os == OS.WIN) ? bibtexIterator.next().toString().replaceAll("[^\r]\n", endOfLine) :
+            outWriter.write((os == OS.WIN) ? bibtexIterator.next().toString().replaceAll("[\\r]?\\n", endOfLine) :
                     bibtexIterator.next().toString().replaceAll("\r\n", endOfLine));
             outWriter.write(endOfLine);
             outWriter.write(endOfLine);
