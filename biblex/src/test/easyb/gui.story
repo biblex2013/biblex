@@ -274,7 +274,7 @@ when 'inproceedings-viite luotu ja talletettu', {
 }
 
 scenario 'Viitteen kopioiminen leikepöydälle BibTeX-muodossa', {
-when 'viite luotu ja talletettu', {
+    when 'viite luotu ja talletettu', {
         ARTICLE_NAME = "Artikkeli" + System.currentTimeMillis()
 
         testFrame.comboBox("p_entryStyleInput").selectItem("article")
@@ -312,5 +312,57 @@ when 'viite luotu ja talletettu', {
         testList.click(new TableCell(refTable.getModel().getRowByName(ARTICLE_NAME),0), MouseButton.LEFT_BUTTON)
         testList.showPopupMenu().menuItem("menuCopyEntryToClipboard").click()
         Toolkit.getDefaultToolkit().getSystemClipboard().getContents().toString().equals(entry.toString())
+    }
+}
+
+scenario 'Viitteen lisättäessä Add field -comboboxista voi noutaa puuttuvia kenttiä', {
+    when 'Uusi book-viite luotu', {
+        BOOK_NAME = "Book" + System.currentTimeMillis()
+
+        testFrame.comboBox("p_entryStyleInput").selectItem("book")
+        testFrame.comboBox("p_entryStyleInput").requireSelection("book")
+        testFrame.textBox("p_entryNameInput").enterText(BOOK_NAME)
+        testFrame.button("p_setEntryButton").click()
+
+        Pause.pause(600)
+    }
+
+    then 'Comboboxista löytyy author-, editor- ja volume-kentät', {
+        ascb = testFrame.comboBox("p_fieldNameInput") // autosuggestcombobox
+
+        ascb.shouldNotBe null
+
+        cont = ascb.contents()
+
+        authorFound = false
+        volumeFound = false
+        editorFound = false
+
+        for (String s : cont) {
+            if (s.equals("author")) {
+                authorFound = true;
+            } else if (s.equals("volume")) {
+                volumeFound = true;
+            } else if (s.equals("editor")) {
+                editorFound = true;
+            }
+        }
+
+        authorFound.shouldBe true
+        volumeFound.shouldBe true
+        editorFound.shouldBe true
+
+        editor = ascb.selectItem("editor")
+        editor.shouldNotBe null
+
+        testFrame.button("p_addFieldButton").click()
+
+        Pause.pause(600)
+    }
+
+    and
+
+    then 'editor-kenttä löytyy näkymästä', {
+        testFrame.textBox("editor").shouldNotBe null
     }
 }
